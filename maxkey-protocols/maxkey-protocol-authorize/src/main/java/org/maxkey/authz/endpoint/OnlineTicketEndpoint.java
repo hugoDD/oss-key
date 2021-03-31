@@ -26,10 +26,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-
-@Api(tags = "在线ticket文档模块")
 @Controller
 @RequestMapping(value={"/onlineticket"})
 public class OnlineTicketEndpoint {
@@ -38,7 +34,6 @@ public class OnlineTicketEndpoint {
     @Qualifier("onlineTicketServices")
     protected OnlineTicketServices onlineTicketServices;
     
-    @ApiOperation(value = "在线ticket验证接口", notes = "",httpMethod="GET")
     @ResponseBody
     @RequestMapping(value="/validate") 
     public String ticketValidate(

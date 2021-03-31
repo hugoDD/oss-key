@@ -17,9 +17,6 @@
 
 package org.maxkey.authz.cas.endpoint.ticket;
 
-import org.maxkey.domain.apps.AppsCasDetails;
-import org.springframework.security.core.Authentication;
-
 /**
  * The {@link ProxyTicketImpl} is a concrete implementation of the {@link ProxyTicket}.
  *
@@ -47,10 +44,5 @@ public class ProxyTicketImpl extends ServiceTicketImpl implements Ticket {
     public ProxyTicketImpl(final String id,  final Service service,
                            final boolean credentialProvided) {
 
-    }
-    
-    public ProxyTicketImpl(Authentication authentication,  AppsCasDetails casDetails) {
-    	this.authentication=authentication;
-    	this.casDetails=casDetails;
     }
 }

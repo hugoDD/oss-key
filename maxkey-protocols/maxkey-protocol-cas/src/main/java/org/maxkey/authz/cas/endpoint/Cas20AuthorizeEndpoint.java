@@ -22,13 +22,11 @@ package org.maxkey.authz.cas.endpoint;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import org.maxkey.authn.SigninPrincipal;
 import org.maxkey.authz.cas.endpoint.response.ProxyServiceResponseBuilder;
 import org.maxkey.authz.cas.endpoint.response.ServiceResponseBuilder;
 import org.maxkey.authz.cas.endpoint.ticket.CasConstants;
-import org.maxkey.authz.cas.endpoint.ticket.ProxyGrantingTicketIOUImpl;
-import org.maxkey.authz.cas.endpoint.ticket.ProxyGrantingTicketImpl;
-import org.maxkey.authz.cas.endpoint.ticket.ProxyTicketImpl;
 import org.maxkey.authz.cas.endpoint.ticket.Ticket;
 import org.maxkey.authz.endpoint.adapter.AbstractAuthorizeAdapter;
 import org.maxkey.constants.Boolean;
@@ -40,14 +38,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
 
 /**
  * @author Crystal.Sea
  * https://apereo.github.io/cas/6.2.x/protocol/CAS-Protocol-V2-Specification.html
  */
-@Api(tags = "CAS API文档模块")
 @Controller
 public class Cas20AuthorizeEndpoint  extends CasBaseAuthorizeEndpoint{
 
@@ -168,7 +163,6 @@ INTERNAL_ERROR - an internal error occurred during ticket validation
 
 For all error codes, it is RECOMMENDED that CAS provide a more detailed message as the body of the \<cas:authenticationFailure\> block of the XML response.
 	 */
-	@ApiOperation(value = "CAS 2.0 ticket验证接口", notes = "通过ticket获取当前登录用户信息",httpMethod="POST")
 	@RequestMapping("/authz/cas/serviceValidate")
 	@ResponseBody
 	public String serviceValidate(
@@ -190,13 +184,11 @@ For all error codes, it is RECOMMENDED that CAS provide a more detailed message 
 	    setContentType(request,response,format);
 	    
 		Ticket storedTicket=null;
-		if(ticket.startsWith(CasConstants.PREFIX.SERVICE_TICKET_PREFIX)) {
-			try {
-				storedTicket = ticketServices.consumeTicket(ticket);
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+		try {
+			storedTicket = ticketServices.consumeTicket(ticket);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		ServiceResponseBuilder serviceResponseBuilder=new ServiceResponseBuilder();
 		
@@ -205,18 +197,6 @@ For all error codes, it is RECOMMENDED that CAS provide a more detailed message 
 			String principal=authentication.getUsername();
 			_logger.debug("principal "+principal);
 			serviceResponseBuilder.success().setUser(principal);
-			if(pgtUrl != null && !pgtUrl.equalsIgnoreCase("")) {
-				ProxyGrantingTicketIOUImpl proxyGrantingTicketIOUImpl =new ProxyGrantingTicketIOUImpl();
-				String proxyGrantingTicketIOU=casProxyGrantingTicketServices.createTicket(proxyGrantingTicketIOUImpl);
-				
-				ProxyGrantingTicketImpl proxyGrantingTicketImpl=new ProxyGrantingTicketImpl(storedTicket.getAuthentication(),storedTicket.getCasDetails());
-				String proxyGrantingTicket=casProxyGrantingTicketServices.createTicket(proxyGrantingTicketImpl);
-				
-				serviceResponseBuilder.success().setTicket(proxyGrantingTicketIOU);
-				serviceResponseBuilder.success().setProxy(pgtUrl);
-			
-				postMessage(pgtUrl+"?pgtId="+proxyGrantingTicket+"&pgtIou="+proxyGrantingTicketIOU,null);		
-			}
 			
 			if(Boolean.isTrue(storedTicket.getCasDetails().getIsAdapter())){
 				AbstractAuthorizeAdapter adapter =(AbstractAuthorizeAdapter)Instance.newInstance(storedTicket.getCasDetails().getAdapter());
@@ -292,8 +272,6 @@ Response on ticket validation failure:
   }
 }
 	 */
-	
-	@ApiOperation(value = "CAS 2.0 ticket代理验证接口", notes = "通过ticket获取当前登录用户信息",httpMethod="POST")
 	@RequestMapping("/authz/cas/proxyValidate")
 	@ResponseBody
 	public String proxy(
@@ -314,26 +292,16 @@ Response on ticket validation failure:
 	    setContentType(request,response,format);
 		
 		Ticket storedTicket=null;
-		if(ticket.startsWith(CasConstants.PREFIX.PROXY_TICKET_PREFIX)) {
-			try {
-					storedTicket = ticketServices.consumeTicket(ticket);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+		try {
+			storedTicket = ticketServices.consumeTicket(ticket);
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 		ServiceResponseBuilder serviceResponseBuilder=new ServiceResponseBuilder();
 		
 		if(storedTicket!=null){
-		    SigninPrincipal authentication = ((SigninPrincipal)storedTicket.getAuthentication().getPrincipal());
-			String principal=authentication.getUsername();
-			_logger.debug("principal "+principal);
-			serviceResponseBuilder.success().setUser(principal);
-			
-			if(Boolean.isTrue(storedTicket.getCasDetails().getIsAdapter())){
-				AbstractAuthorizeAdapter adapter =(AbstractAuthorizeAdapter)Instance.newInstance(storedTicket.getCasDetails().getAdapter());
-				UserInfo userInfo = (UserInfo) userInfoService.loadByUsername(principal);
-				adapter.generateInfo(authentication,userInfo, serviceResponseBuilder);
-			}
+			serviceResponseBuilder.success()
+				.setUser(storedTicket.getAuthentication().getPrincipal().toString());
 		}else{
 			serviceResponseBuilder.failure()
 				.setCode(CasConstants.ERROR_CODE.INVALID_TICKET)
@@ -410,13 +378,7 @@ For all error codes, it is RECOMMENDED that CAS provide a more detailed message 
                 +" , format " + format
         );
 	    setContentType(request,response,format);
-	    ProxyGrantingTicketImpl proxyGrantingTicketImpl = (ProxyGrantingTicketImpl)casProxyGrantingTicketServices.get(pgt);
-	    if(proxyGrantingTicketImpl != null) {
-	    	ProxyTicketImpl ProxyTicketImpl = new ProxyTicketImpl(proxyGrantingTicketImpl.getAuthentication(),proxyGrantingTicketImpl.getCasDetails());
-	    	String proxyTicket =ticketServices.createTicket(ProxyTicketImpl);
-	    	ProxyServiceResponseBuilder proxyServiceResponseBuilder=new ProxyServiceResponseBuilder();
-	 		return proxyServiceResponseBuilder.success().setTicket(proxyTicket).setFormat(format).serviceResponseBuilder();
-	    }
+	    
 	    ProxyServiceResponseBuilder proxyServiceResponseBuilder=new ProxyServiceResponseBuilder();
 		return proxyServiceResponseBuilder.success().setTicket("").setFormat(format).serviceResponseBuilder();
 	}
