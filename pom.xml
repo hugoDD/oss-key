@@ -2,8 +2,8 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>org.maxkey</groupId>
-	<artifactId>MaxKey</artifactId>
+	<groupId>com.rains</groupId>
+	<artifactId>OssKey</artifactId>
 	<version>1.0</version>
 	<packaging>pom</packaging>
 	<description>主目录</description>
@@ -24,13 +24,13 @@
 	</properties>
 
 	<modules>
-		<module>maxkey-core</module>
-		<module>maxkey-authentications</module>
-		<module>maxkey-identitys</module>
-		<module>maxkey-persistence</module>
-		<module>maxkey-protocols</module>
-		<module>maxkey-web-manage</module>
-		<module>maxkey-web-maxkey</module>
+		<module>osskey-core</module>
+		<module>osskey-authentications</module>
+		<module>osskey-identitys</module>
+		<module>osskey-persistence</module>
+		<module>osskey-protocols</module>
+		<module>osskey-web-manage</module>
+		<module>osskey-web-maxkey</module>
 	</modules>
 
 	<!-- <dependencyManagement> -->
