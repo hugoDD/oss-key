@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.rains</groupId>
+		<artifactId>OssKey</artifactId>
+		<version>1.0</version>
+    </parent>
+
+
+	<artifactId>osskey-protocols</artifactId>
+	<packaging>pom</packaging>
+
+	<description>认证协议实现</description>
+
+	<modules>
+		<module>osskey-protocol-authorize</module>
+		<module>osskey-protocol-cas</module>
+		<module>osskey-protocol-desktop</module>
+		<module>osskey-protocol-extendapi</module>
+		<module>osskey-protocol-formbased</module>
+		<module>osskey-protocol-jwt</module>
+		<module>osskey-protocol-oauth-2.0</module>
+		<module>osskey-protocol-saml-2.0</module>
+		<module>osskey-protocol-tokenbased</module>
+	</modules>
+
+
+</project>
