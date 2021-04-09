@@ -20,13 +20,14 @@ package org.maxkey.authz.token.endpoint.adapter;
 import java.util.Date;
 import java.util.HashMap;
 
+import org.maxkey.authn.SigninPrincipal;
 import org.maxkey.authz.endpoint.adapter.AbstractAuthorizeAdapter;
-import org.maxkey.constants.Boolean;
 import org.maxkey.domain.UserInfo;
 import org.maxkey.domain.apps.AppsTokenBasedDetails;
 import org.maxkey.util.DateUtils;
 import org.maxkey.util.JsonUtils;
 import org.maxkey.util.StringGenerator;
+import org.maxkey.web.WebConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.servlet.ModelAndView;
@@ -34,35 +35,44 @@ import org.springframework.web.servlet.ModelAndView;
 public class TokenBasedDefaultAdapter extends AbstractAuthorizeAdapter {
 	final static Logger _logger = LoggerFactory.getLogger(TokenBasedDefaultAdapter.class);
 	@Override
-	public String generateInfo(UserInfo userInfo,Object app) {
+	public String generateInfo(SigninPrincipal authentication,UserInfo userInfo,Object app) {
 		AppsTokenBasedDetails details=(AppsTokenBasedDetails)app;
 		HashMap<String,String> beanMap=new HashMap<String,String>();
 		
 		beanMap.put("randomId",(new StringGenerator()).uuidGenerate());
-		
-		if(Boolean.isTrue(details.getUid())){
-			beanMap.put("uid",userInfo.getId());
-		}
-		if(Boolean.isTrue(details.getUsername())){
-			beanMap.put("username", userInfo.getUsername());	
-		}
-		if(Boolean.isTrue(details.getEmail())){
-			beanMap.put("email", userInfo.getEmail());
-		}
-		if(Boolean.isTrue(details.getWindowsAccount())){
-			beanMap.put("windowsAccount", userInfo.getWindowsAccount());
-		}
-		if(Boolean.isTrue(details.getEmployeeNumber())){
-			beanMap.put("employeeNumber", userInfo.getEmployeeNumber());
-		}
-		if(Boolean.isTrue(details.getDepartmentId())){
-			beanMap.put("departmentId", userInfo.getDepartmentId());
-		}
-		if(Boolean.isTrue(details.getDepartment())){
-			beanMap.put("department", userInfo.getDepartment());
+		if(details.getUserPropertys()!=null && !details.getUserPropertys().equals("")) {
+		    
+    		if(details.getUserPropertys().indexOf("uid")>-1){
+                beanMap.put("uid",userInfo.getId());
+            }
+    		
+    		if(details.getUserPropertys().indexOf("username")>-1){
+                beanMap.put("username",userInfo.getUsername());
+            }
+    		
+    		if(details.getUserPropertys().indexOf("email")>-1){
+                beanMap.put("email",userInfo.getEmail());
+            }
+    		
+    		if(details.getUserPropertys().indexOf("windowsAccount")>-1){
+                beanMap.put("windowsAccount",userInfo.getWindowsAccount());
+            }
+    		
+    		if(details.getUserPropertys().indexOf("employeeNumber")>-1){
+                beanMap.put("employeeNumber",userInfo.getEmployeeNumber());
+            }
+    		
+    		if(details.getUserPropertys().indexOf("department")>-1){
+                beanMap.put("department",userInfo.getDepartment());
+            }
+    		
+    		if(details.getUserPropertys().indexOf("departmentId")>-1){
+                beanMap.put("departmentId",userInfo.getDepartmentId());
+            }
 		}
 		
 		beanMap.put("displayName", userInfo.getDisplayName());
+		beanMap.put(WebConstants.ONLINE_TICKET_NAME, authentication.getOnlineTicket().getTicketId());
 		
 		/*
 		 * use UTC date time format

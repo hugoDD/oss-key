@@ -25,6 +25,7 @@
 
 	<modules>
 		<module>osskey-core</module>
+		<module>osskey-client-sdk</module>
 		<module>osskey-authentications</module>
 		<module>osskey-identitys</module>
 		<module>osskey-persistence</module>

@@ -28,6 +28,12 @@
 
 		<dependency>
 			<groupId>com.rains</groupId>
+			<artifactId>osskey-client-sdk</artifactId>
+			<version>1.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.rains</groupId>
 			<artifactId>osskey-persistence</artifactId>
 			<version>1.0</version>
 		</dependency>

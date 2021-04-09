@@ -19,8 +19,8 @@ package org.maxkey.authz.token.endpoint.adapter;
 
 import java.util.Date;
 
+import org.maxkey.authn.SigninPrincipal;
 import org.maxkey.authz.endpoint.adapter.AbstractAuthorizeAdapter;
-import org.maxkey.constants.Boolean;
 import org.maxkey.domain.UserInfo;
 import org.maxkey.domain.apps.AppsTokenBasedDetails;
 import org.maxkey.util.DateUtils;
@@ -31,25 +31,29 @@ import org.springframework.web.servlet.ModelAndView;
 public class TokenBasedSimpleAdapter extends AbstractAuthorizeAdapter {
 	final static Logger _logger = LoggerFactory.getLogger(TokenBasedSimpleAdapter.class);
 	@Override
-	public String generateInfo(UserInfo userInfo,Object app) {
+	public String generateInfo(SigninPrincipal authentication,UserInfo userInfo,Object app) {
 		AppsTokenBasedDetails details=(AppsTokenBasedDetails)app;
 	
-		String tokenUsername="";
+		String tokenUsername = userInfo.getUsername();
 		
-		if(Boolean.isTrue(details.getUid())){
-			tokenUsername=userInfo.getId();
-		}else if(Boolean.isTrue(details.getUsername())){
-			tokenUsername= userInfo.getUsername();	
-		}else if(Boolean.isTrue(details.getEmail())){
-			tokenUsername=userInfo.getEmail();
-		}else if(Boolean.isTrue(details.getWindowsAccount())){
-			tokenUsername= userInfo.getWindowsAccount();
-		}else if(Boolean.isTrue(details.getEmployeeNumber())){
-			tokenUsername=userInfo.getEmployeeNumber();
-		}else if(Boolean.isTrue(details.getDepartmentId())){
-			tokenUsername= userInfo.getDepartmentId();
+		if(details.getUserPropertys()!=null && !details.getUserPropertys().equals("")) {
+    		if(details.getUserPropertys().indexOf("uid")>-1){
+    			tokenUsername=userInfo.getId();
+    		}else if(details.getUserPropertys().indexOf("username")>-1){
+    			tokenUsername= userInfo.getUsername();	
+    		}else if(details.getUserPropertys().indexOf("email")>-1){
+    			tokenUsername=userInfo.getEmail();
+    		}else if(details.getUserPropertys().indexOf("windowsAccount")>-1){
+    			tokenUsername= userInfo.getWindowsAccount();
+    		}else if(details.getUserPropertys().indexOf("employeeNumber")>-1){
+    			tokenUsername=userInfo.getEmployeeNumber();
+    		}else if(details.getUserPropertys().indexOf("department")>-1){
+    			tokenUsername= userInfo.getDepartmentId();
+    		}else if(details.getUserPropertys().indexOf("departmentId")>-1){
+                tokenUsername= userInfo.getDepartment();
+            }
 		}
-		
+
 		/*
 		 * use UTC date time format
 		 */
