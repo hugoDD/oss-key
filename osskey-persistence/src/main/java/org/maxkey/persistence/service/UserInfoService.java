@@ -18,22 +18,12 @@
 package org.maxkey.persistence.service;
 
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.List;
-import java.util.TreeSet;
-import java.util.stream.Collectors;
-
-import org.apache.mybatis.jpa.persistence.JpaBaseService;
+import com.baomidou.mybatisplus.core.conditions.query.Query;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.google.common.collect.Lists;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.CellType;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.maxkey.constants.ConstantsStatus;
 import org.maxkey.crypto.ReciprocalUtils;
@@ -57,46 +47,60 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.google.common.collect.Lists;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.*;
+import java.util.stream.Collectors;
 
 
 /**
  * @author Crystal.Sea
- *
  */
 @Service
-public class UserInfoService extends JpaBaseService<UserInfo> {
-	final static Logger _logger = LoggerFactory.getLogger(UserInfoService.class);
+public class UserInfoService extends ServiceImpl<UserInfoMapper, UserInfo> {
+    final static Logger _logger = LoggerFactory.getLogger(UserInfoService.class);
 
-	final static  String UPDATE_GRIDLIST_SQL = "UPDATE MXK_USERINFO SET GRIDLIST = ? WHERE ID = ?";
-	@Autowired
-	private PasswordEncoder passwordEncoder;
-
-	@Autowired
+    final static String UPDATE_GRIDLIST_SQL = "UPDATE MXK_USERINFO SET GRIDLIST = ? WHERE ID = ?";
+    @Autowired
+    protected JdbcTemplate jdbcTemplate;
+    @Autowired
     PasswordPolicyValidator passwordPolicyValidator;
 
-	@Autowired
-	KafkaPersistService kafkaPersistService;
+    @Autowired
+    KafkaPersistService kafkaPersistService;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
-	 @Autowired
-	 protected JdbcTemplate jdbcTemplate;
+    /**
+     * 根据数据格式返回数据
+     *
+     * @param cell
+     * @return
+     */
+    public static String getValue(Cell cell) {
+        if (cell == null) {
+            return "";
+        } else if (cell.getCellType() == CellType.BOOLEAN) {
+            return String.valueOf(cell.getBooleanCellValue());
+        } else if (cell.getCellType() == CellType.NUMERIC) {
+            cell.setBlank();
+            return String.valueOf(cell.getStringCellValue().trim());
+        } else {
+            return String.valueOf(cell.getStringCellValue().trim());
+        }
+    }
 
-	public UserInfoService() {
-		super(UserInfoMapper.class);
-	}
-
-	/* (non-Javadoc)
-	 * @see com.connsec.db.service.BaseService#getMapper()
-	 */
-	@Override
-	public UserInfoMapper getMapper() {
-		return (UserInfoMapper)super.getMapper();
-	}
+    public UserInfo queryUserInfoByEmail(String email) {
+        QueryWrapper<UserInfo> queryWrapper = new QueryWrapper<>();
+        queryWrapper.lambda().eq(UserInfo::getEmail, email);
+        List<UserInfo> listUserInfo = baseMapper.selectList(queryWrapper);
+        return listUserInfo.size() > 0 ? listUserInfo.get(0) : null;
+    }
 
     public boolean insert(UserInfo userInfo) {
         userInfo = passwordEncoder(userInfo);
-        if (super.insert(userInfo)) {
-        	kafkaPersistService.send(
+        if (insert(userInfo)) {
+            kafkaPersistService.send(
                     KafkaIdentityTopic.USERINFO_TOPIC,
                     userInfo,
                     KafkaIdentityAction.CREATE_ACTION);
@@ -108,8 +112,8 @@ public class UserInfoService extends JpaBaseService<UserInfo> {
 
     public boolean update(UserInfo userInfo) {
         userInfo = passwordEncoder(userInfo);
-        if (super.update(userInfo)) {
-        	kafkaPersistService.send(
+        if (update(userInfo)) {
+            kafkaPersistService.send(
                     KafkaIdentityTopic.USERINFO_TOPIC,
                     userInfo,
                     KafkaIdentityAction.UPDATE_ACTION);
@@ -120,164 +124,136 @@ public class UserInfoService extends JpaBaseService<UserInfo> {
         return false;
     }
 
-	public boolean delete(UserInfo userInfo) {
-		if( super.delete(userInfo)){
-			kafkaPersistService.send(
-		            KafkaIdentityTopic.USERINFO_TOPIC,
-		            userInfo,
-		            KafkaIdentityAction.DELETE_ACTION);
-			 return true;
-		}
-		return false;
-	}
+    public boolean delete(UserInfo userInfo) {
+        if (delete(userInfo)) {
+            kafkaPersistService.send(
+                    KafkaIdentityTopic.USERINFO_TOPIC,
+                    userInfo,
+                    KafkaIdentityAction.DELETE_ACTION);
+            return true;
+        }
+        return false;
+    }
 
-	public boolean updateGridList(String gridList) {
-	    try {
-    	    if (gridList != null && !gridList.equals("")) {
+    public boolean updateGridList(String gridList) {
+        try {
+            if (gridList != null && !gridList.equals("")) {
                 int intGridList = Integer.parseInt(gridList);
                 jdbcTemplate.update(UPDATE_GRIDLIST_SQL, intGridList,
                         WebContext.getUserInfo().getId());
                 WebContext.getUserInfo().setGridList(intGridList);
             }
-	    }catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
             return false;
         }
-	    return true;
-	}
+        return true;
+    }
 
+    public boolean updateProtectedApps(UserInfo userinfo) {
+        try {
+            if (WebContext.getUserInfo() != null) {
+                userinfo.setModifiedBy(WebContext.getUserInfo().getId());
+            }
+            userinfo.setModifiedDate(DateUtils.getCurrentDateTimeAsString());
+            return baseMapper.updateProtectedApps(userinfo) > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 
-	public boolean updateProtectedApps(UserInfo userinfo) {
-		try {
-			if(WebContext.getUserInfo() != null) {
-				userinfo.setModifiedBy(WebContext.getUserInfo().getId());
-			}
-			userinfo.setModifiedDate(DateUtils.getCurrentDateTimeAsString());
-			return getMapper().updateProtectedApps(userinfo) > 0;
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return false;
-	}
+    public UserInfo loadByUsername(String username) {
 
-	public UserInfo loadByUsername(String username) {
-		return getMapper().loadByUsername(username);
-	}
+        return baseMapper.loadByUsername(username);
+    }
 
-	public UserInfo loadByAppIdAndUsername(String appId,String username){
-		try {
-			UserInfo userinfo = new UserInfo();
-			userinfo.setUsername(username);
-			return getMapper().loadByAppIdAndUsername(userinfo) ;
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return null;
-	}
-
-
-	public void logisticDeleteAllByCid(String cid){
-		try {
-			 getMapper().logisticDeleteAllByCid(cid);
-		} catch(Exception e) {
-			e.printStackTrace();
-		}
-	}
-
-	public UserInfo passwordEncoder(UserInfo userInfo) {
-	    //密码不为空，则需要进行加密处理
-	    if(userInfo.getPassword()!=null && !userInfo.getPassword().equals("")) {
-    	    String password = passwordEncoder.encode(userInfo.getPassword());
+    public UserInfo passwordEncoder(UserInfo userInfo) {
+        //密码不为空，则需要进行加密处理
+        if (userInfo.getPassword() != null && !userInfo.getPassword().equals("")) {
+            String password = passwordEncoder.encode(userInfo.getPassword());
             userInfo.setDecipherable(ReciprocalUtils.encode(PasswordReciprocal.getInstance().rawPassword(userInfo.getUsername(), userInfo.getPassword())));
-            _logger.debug("decipherable : "+userInfo.getDecipherable());
+            _logger.debug("decipherable : " + userInfo.getDecipherable());
             userInfo.setPassword(password);
             userInfo.setPasswordLastSetTime(DateUtils.getCurrentDateTimeAsString());
 
             userInfo.setModifiedDate(DateUtils.getCurrentDateTimeAsString());
-	    }
-        return userInfo;
-	}
-
-
-	public boolean changePassword(String oldPassword,
-            String newPassword,
-            String confirmPassword) {
-		try {
-		    WebContext.setAttribute(PasswordPolicyValidator.PASSWORD_POLICY_VALIDATE_RESULT, "");
-	        UserInfo userInfo = WebContext.getUserInfo();
-	        UserInfo changeUserInfo = new UserInfo();
-	        changeUserInfo.setUsername(userInfo.getUsername());
-	        changeUserInfo.setPassword(newPassword);
-	        changeUserInfo.setId(userInfo.getId());
-	        changeUserInfo.setDecipherable(userInfo.getDecipherable());
-
-	        if(newPassword.equals(confirmPassword)){
-	            if(oldPassword==null ||
-	                    passwordEncoder.matches(oldPassword, userInfo.getPassword())){
-	                if(changePassword(changeUserInfo) ){
-	                    userInfo.setPassword(changeUserInfo.getPassword());
-                        userInfo.setDecipherable(changeUserInfo.getDecipherable());
-	                    return true;
-	                }
-	                return false;
-	            }else {
-	                if(oldPassword!=null &&
-	                        passwordEncoder.matches(newPassword, userInfo.getPassword())) {
-	                    WebContext.setAttribute(PasswordPolicyValidator.PASSWORD_POLICY_VALIDATE_RESULT,
-	                            WebContext.getI18nValue("PasswordPolicy.OLD_PASSWORD_MATCH"));
-	                }else {
-	                    WebContext.setAttribute(PasswordPolicyValidator.PASSWORD_POLICY_VALIDATE_RESULT,
-	                        WebContext.getI18nValue("PasswordPolicy.OLD_PASSWORD_NOT_MATCH"));
-	                }
-	            }
-	        }else {
-	            WebContext.setAttribute(PasswordPolicyValidator.PASSWORD_POLICY_VALIDATE_RESULT,
-	                    WebContext.getI18nValue("PasswordPolicy.CONFIRMPASSWORD_NOT_MATCH"));
-	        }
-		 } catch (Exception e) {
-             e.printStackTrace();
-         }
-
-		return false;
-	}
-
-    public boolean changePassword(UserInfo changeUserInfo) {
-        try {
-            _logger.debug("decipherable old : " + changeUserInfo.getDecipherable());
-            _logger.debug("decipherable new : " + ReciprocalUtils.encode(PasswordReciprocal.getInstance()
-                    .rawPassword(changeUserInfo.getUsername(), changeUserInfo.getPassword())));
-
-            if (passwordPolicyValidator.validator(changeUserInfo) == false) {
-                return false;
-            }
-
-            if (WebContext.getUserInfo() != null) {
-                changeUserInfo.setModifiedBy(WebContext.getUserInfo().getId());
-
-            }
-
-            changeUserInfo = passwordEncoder(changeUserInfo);
-
-            if (getMapper().changePassword(changeUserInfo) > 0) {
-                changePasswordProvisioning(changeUserInfo);
-                return true;
-            }
-            return false;
-
-        } catch (Exception e) {
-            e.printStackTrace();
         }
+        return userInfo;
+    }
+
+    public boolean changePassword(String oldPassword,
+                                  String newPassword,
+                                  String confirmPassword) {
+
+        WebContext.setAttribute(PasswordPolicyValidator.PASSWORD_POLICY_VALIDATE_RESULT, "");
+        UserInfo userInfo = WebContext.getUserInfo();
+        UserInfo changeUserInfo = new UserInfo();
+        changeUserInfo.setUsername(userInfo.getUsername());
+        changeUserInfo.setPassword(newPassword);
+        changeUserInfo.setId(userInfo.getId());
+        changeUserInfo.setDecipherable(userInfo.getDecipherable());
+
+        if (newPassword.equals(confirmPassword)) {
+            if (oldPassword == null ||
+                    passwordEncoder.matches(oldPassword, userInfo.getPassword())) {
+                if (changePassword(changeUserInfo)) {
+                    userInfo.setPassword(changeUserInfo.getPassword());
+                    userInfo.setDecipherable(changeUserInfo.getDecipherable());
+                    return true;
+                }
+                return false;
+            } else {
+                if (oldPassword != null &&
+                        passwordEncoder.matches(newPassword, userInfo.getPassword())) {
+                    WebContext.setAttribute(PasswordPolicyValidator.PASSWORD_POLICY_VALIDATE_RESULT,
+                            WebContext.getI18nValue("PasswordPolicy.OLD_PASSWORD_MATCH"));
+                } else {
+                    WebContext.setAttribute(PasswordPolicyValidator.PASSWORD_POLICY_VALIDATE_RESULT,
+                            WebContext.getI18nValue("PasswordPolicy.OLD_PASSWORD_NOT_MATCH"));
+                }
+            }
+        } else {
+            WebContext.setAttribute(PasswordPolicyValidator.PASSWORD_POLICY_VALIDATE_RESULT,
+                    WebContext.getI18nValue("PasswordPolicy.CONFIRMPASSWORD_NOT_MATCH"));
+        }
+
 
         return false;
     }
 
-	public String randomPassword() {
-	    return passwordPolicyValidator.generateRandomPassword();
-	}
+    public boolean changePassword(UserInfo changeUserInfo) {
+        _logger.debug("decipherable old : " + changeUserInfo.getDecipherable());
+        _logger.debug("decipherable new : " + ReciprocalUtils.encode(PasswordReciprocal.getInstance()
+                .rawPassword(changeUserInfo.getUsername(), changeUserInfo.getPassword())));
 
-	public void changePasswordProvisioning(UserInfo userInfo) {
-	    if(userInfo.getPassword()!=null && !userInfo.getPassword().equals("")) {
-    	    ChangePassword changePassword=new ChangePassword();
+        if (passwordPolicyValidator.validator(changeUserInfo) == false) {
+            return false;
+        }
+
+        if (WebContext.getUserInfo() != null) {
+            changeUserInfo.setModifiedBy(WebContext.getUserInfo().getId());
+
+        }
+
+        changeUserInfo = passwordEncoder(changeUserInfo);
+
+        if (baseMapper.changePassword(changeUserInfo) > 0) {
+            changePasswordProvisioning(changeUserInfo);
+            return true;
+        }
+        return false;
+
+
+    }
+
+    public String randomPassword() {
+        return passwordPolicyValidator.generateRandomPassword();
+    }
+
+    public void changePasswordProvisioning(UserInfo userInfo) {
+        if (userInfo.getPassword() != null && !userInfo.getPassword().equals("")) {
+            ChangePassword changePassword = new ChangePassword();
             changePassword.setId(userInfo.getId());
             changePassword.setUid(userInfo.getId());
             changePassword.setUsername(userInfo.getUsername());
@@ -287,72 +263,61 @@ public class UserInfoService extends JpaBaseService<UserInfo> {
                     KafkaIdentityTopic.PASSWORD_TOPIC,
                     changePassword,
                     KafkaIdentityAction.PASSWORD_ACTION);
-	    }
-	}
+        }
+    }
 
-	public boolean changeAppLoginPassword(UserInfo userinfo) {
-		try {
-			if(WebContext.getUserInfo() != null) {
-				userinfo.setModifiedBy(WebContext.getUserInfo().getId());
-			}
-			userinfo.setModifiedDate(DateUtils.getCurrentDateTimeAsString());
-			return getMapper().changeAppLoginPassword(userinfo) > 0;
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return false;
-	}
+    public boolean changeAppLoginPassword(UserInfo userinfo) {
+        if (WebContext.getUserInfo() != null) {
+            userinfo.setModifiedBy(WebContext.getUserInfo().getId());
+        }
+        userinfo.setModifiedDate(DateUtils.getCurrentDateTimeAsString());
+        return updateById(userinfo);
 
+    }
 
-	/**
-	 * 锁定用户：islock：1 用户解锁 2 用户锁定
-	 * @param userInfo
-	 */
-	public void locked(UserInfo userInfo) {
-		try {
-			if(userInfo != null && StringUtils.isNotEmpty(userInfo.getId())) {
-				userInfo.setIsLocked(ConstantsStatus.STOP);
-				getMapper().locked(userInfo);
-			}
-		} catch(Exception e) {
-			e.printStackTrace();
-		}
-	}
+    /**
+     * 锁定用户：islock：1 用户解锁 2 用户锁定
+     *
+     * @param userInfo
+     */
+    public void locked(UserInfo userInfo) {
+        if (userInfo != null && StringUtils.isNotEmpty(userInfo.getId())) {
+            userInfo.setIsLocked(ConstantsStatus.STOP);
+            baseMapper.updateById(userInfo);
+        }
 
-	/**
-	 * 用户登录成功后，重置错误密码次数和解锁用户
-	 * @param userInfo
-	 */
-	public void unlock(UserInfo userInfo) {
-		try {
-			if(userInfo != null && StringUtils.isNotEmpty(userInfo.getId())) {
-				userInfo.setIsLocked(ConstantsStatus.START);
-				userInfo.setBadPasswordCount(0);
-				getMapper().unlock(userInfo);
-			}
-		} catch(Exception e) {
-			e.printStackTrace();
-		}
-	}
+    }
 
-	/**
-	 * 更新错误密码次数
-	 * @param userInfo
-	 */
-	public void updateBadPasswordCount(UserInfo userInfo) {
-		try {
-			if(userInfo != null && StringUtils.isNotEmpty(userInfo.getId())) {
-				int updateBadPWDCount = userInfo.getBadPasswordCount() + 1;
-				userInfo.setBadPasswordCount(updateBadPWDCount);
-				getMapper().updateBadPWDCount(userInfo);
-			}
-		} catch(Exception e) {
-			e.printStackTrace();
-		}
-	}
+    /**
+     * 用户登录成功后，重置错误密码次数和解锁用户
+     *
+     * @param userInfo
+     */
+    public void unlock(UserInfo userInfo) {
+        if (userInfo != null && StringUtils.isNotEmpty(userInfo.getId())) {
+            userInfo.setIsLocked(ConstantsStatus.START);
+            userInfo.setBadPasswordCount(0);
+            baseMapper.updateById(userInfo);
+        }
+
+    }
+
+    /**
+     * 更新错误密码次数
+     *
+     * @param userInfo
+     */
+    public void updateBadPasswordCount(UserInfo userInfo) {
+        if (userInfo != null && StringUtils.isNotEmpty(userInfo.getId())) {
+            int updateBadPWDCount = userInfo.getBadPasswordCount() + 1;
+            userInfo.setBadPasswordCount(updateBadPWDCount);
+            baseMapper.updateById(userInfo);
+        }
+
+    }
 
     public boolean importing(MultipartFile file) {
-        if(file ==null){
+        if (file == null) {
             return false;
         }
         InputStream is = null;
@@ -383,7 +348,7 @@ public class UserInfoService extends JpaBaseService<UserInfo> {
                 for (int j = 1; j < rowSize; j++) {
                     Row row = sheet.getRow(j);
                     //略过空行和前3行
-                    if (row == null || j <3 ) {
+                    if (row == null || j < 3) {
                         continue;
                     } else {
                         //其他行是数据行
@@ -423,7 +388,7 @@ public class UserInfoService extends JpaBaseService<UserInfo> {
                                 // 性别
                                 Cell cell = row.getCell(k);
                                 String gender = getValue(cell);
-                                userInfo.setGender(gender.equals("")? 1 : Integer.valueOf(getValue(cell)));
+                                userInfo.setGender(gender.equals("") ? 1 : Integer.valueOf(getValue(cell)));
                             } else if (k == 8) {
                                 // 语言偏好
                                 Cell cell = row.getCell(k);
@@ -444,87 +409,87 @@ public class UserInfoService extends JpaBaseService<UserInfo> {
                                 // AD域账号
                                 Cell cell = row.getCell(k);
                                 userInfo.setWindowsAccount(getValue(cell));
-                            }else if (k == 13) {
+                            } else if (k == 13) {
                                 // 所属机构
                                 Cell cell = row.getCell(k);
                                 userInfo.setOrganization(getValue(cell));
-                            }else if (k == 14) {
+                            } else if (k == 14) {
                                 // 分支机构
                                 Cell cell = row.getCell(k);
                                 userInfo.setDivision(getValue(cell));
-                            }else if (k == 15) {
+                            } else if (k == 15) {
                                 // 部门编号
                                 Cell cell = row.getCell(k);
                                 userInfo.setDepartmentId(getValue(cell));
-                            }else if (k == 16) {
+                            } else if (k == 16) {
                                 // 部门名称
                                 Cell cell = row.getCell(k);
                                 userInfo.setDepartment(getValue(cell));
-                            }else if (k == 17) {
+                            } else if (k == 17) {
                                 // 成本中心
                                 Cell cell = row.getCell(k);
                                 userInfo.setCostCenter(getValue(cell));
-                            }else if (k == 18) {
+                            } else if (k == 18) {
                                 // 职位
                                 Cell cell = row.getCell(k);
                                 userInfo.setJobTitle(getValue(cell));
-                            }else if (k == 19) {
+                            } else if (k == 19) {
                                 // 级别
                                 Cell cell = row.getCell(k);
                                 userInfo.setJobLevel(getValue(cell));
-                            }else if (k == 20) {
+                            } else if (k == 20) {
                                 // 上级经理
                                 Cell cell = row.getCell(k);
                                 userInfo.setManager(getValue(cell));
-                            }else if (k == 21) {
+                            } else if (k == 21) {
                                 // 助理
                                 Cell cell = row.getCell(k);
                                 userInfo.setAssistant(getValue(cell));
-                            }else if (k == 22) {
+                            } else if (k == 22) {
                                 // 入职时间
                                 Cell cell = row.getCell(k);
                                 userInfo.setEntryDate(getValue(cell));
-                            }else if (k == 23) {
+                            } else if (k == 23) {
                                 // 离职时间
                                 Cell cell = row.getCell(k);
                                 userInfo.setQuitDate(getValue(cell));
-                            }else if (k == 24) {
+                            } else if (k == 24) {
                                 // 工作-国家
                                 Cell cell = row.getCell(k);
                                 userInfo.setWorkCountry(getValue(cell));
-                            }else if (k == 25) {
+                            } else if (k == 25) {
                                 // 工作-省
                                 Cell cell = row.getCell(k);
                                 userInfo.setWorkRegion(getValue(cell));
-                            }else if (k == 26) {
+                            } else if (k == 26) {
                                 // 工作-城市
                                 Cell cell = row.getCell(k);
                                 userInfo.setTimeZone(getValue(cell));
-                            }else if (k == 27) {
+                            } else if (k == 27) {
                                 // 工作-地址
                                 Cell cell = row.getCell(k);
                                 userInfo.setWorkLocality(getValue(cell));
-                            }else if (k == 28) {
+                            } else if (k == 28) {
                                 // 邮编
                                 Cell cell = row.getCell(k);
                                 userInfo.setWorkPostalCode(getValue(cell));
-                            }else if (k == 29) {
+                            } else if (k == 29) {
                                 // 传真
                                 Cell cell = row.getCell(k);
                                 userInfo.setWorkFax(getValue(cell));
-                            }else if (k == 30) {
+                            } else if (k == 30) {
                                 // 工作电话
                                 Cell cell = row.getCell(k);
                                 userInfo.setWorkPhoneNumber(getValue(cell));
-                            }else if (k == 31) {
+                            } else if (k == 31) {
                                 // 工作邮件
                                 Cell cell = row.getCell(k);
                                 userInfo.setWorkEmail(getValue(cell));
-                            }else if (k == 32) {
+                            } else if (k == 32) {
                                 // 证件类型 todo 现在数据库中存储的是tinyint
 //                                Cell cell = row.getCell(k);
 //                                userInfo.setIdType(getValue(cell));
-                            }else if (k == 33) {
+                            } else if (k == 33) {
                                 // 证件号码
                                 Cell cell = row.getCell(k);
                                 userInfo.setIdCardNo(getValue(cell));
@@ -532,51 +497,51 @@ public class UserInfoService extends JpaBaseService<UserInfo> {
                                 // 出生日期
                                 Cell cell = row.getCell(k);
                                 userInfo.setBirthDate(getValue(cell));
-                            }else if (k == 35) {
+                            } else if (k == 35) {
                                 // 婚姻状态 todo 现在数据字段类型是 tinyint
 //                                Cell cell = row.getCell(k);
 //                                userInfo.setMarried(getValue(cell));
-                            }else if (k == 36) {
+                            } else if (k == 36) {
                                 // 开始工作时间
                                 Cell cell = row.getCell(k);
                                 userInfo.setStartWorkDate(getValue(cell));
-                            }else if (k == 37) {
+                            } else if (k == 37) {
                                 // 个人主页
                                 Cell cell = row.getCell(k);
                                 userInfo.setWebSite(getValue(cell));
-                            }else if (k == 38) {
+                            } else if (k == 38) {
                                 // 即时通讯
                                 Cell cell = row.getCell(k);
                                 userInfo.setDefineIm(getValue(cell));
-                            }else if (k == 39) {
+                            } else if (k == 39) {
                                 // 国家
                                 Cell cell = row.getCell(k);
                                 userInfo.setHomeCountry(getValue(cell));
-                            }else if (k == 40) {
+                            } else if (k == 40) {
                                 // 省
                                 Cell cell = row.getCell(k);
                                 userInfo.setHomeRegion(getValue(cell));
-                            }else if (k == 41) {
+                            } else if (k == 41) {
                                 // 城市
                                 Cell cell = row.getCell(k);
                                 userInfo.setHomeLocality(getValue(cell));
-                            }else if (k == 42) {
+                            } else if (k == 42) {
                                 // 家庭地址
                                 Cell cell = row.getCell(k);
                                 userInfo.setHomeStreetAddress(getValue(cell));
-                            }else if (k == 43) {
+                            } else if (k == 43) {
                                 // 家庭邮编
                                 Cell cell = row.getCell(k);
                                 userInfo.setHomePostalCode(getValue(cell));
-                            }else if (k == 44) {
+                            } else if (k == 44) {
                                 // 家庭传真
                                 Cell cell = row.getCell(k);
                                 userInfo.setHomeFax(getValue(cell));
-                            }else if (k == 45) {
+                            } else if (k == 45) {
                                 // 家庭电话
                                 Cell cell = row.getCell(k);
                                 userInfo.setHomePhoneNumber(getValue(cell));
-                            }else if (k == 46) {
+                            } else if (k == 46) {
                                 // 家庭邮箱
                                 Cell cell = row.getCell(k);
                                 userInfo.setHomeEmail(getValue(cell));
@@ -588,13 +553,13 @@ public class UserInfoService extends JpaBaseService<UserInfo> {
                 }
             }
             // 数据去重
-            if(CollectionUtils.isEmpty(userInfoList)){
+            if (CollectionUtils.isEmpty(userInfoList)) {
                 userInfoList = userInfoList.stream().collect(Collectors.collectingAndThen(Collectors.toCollection(() -> new TreeSet<>(Comparator.comparing(o -> o.getUsername()))), ArrayList::new));
             }
 
         } catch (IOException e) {
-            e.printStackTrace();
-        }finally {
+            _logger.error(e.getMessage(),e);
+        } finally {
             if (is != null) {
                 try {
                     is.close();
@@ -602,7 +567,7 @@ public class UserInfoService extends JpaBaseService<UserInfo> {
                     e.printStackTrace();
                 }
             }
-            if(wb != null) {
+            if (wb != null) {
                 try {
                     wb.close();
                 } catch (IOException e) {
@@ -611,60 +576,39 @@ public class UserInfoService extends JpaBaseService<UserInfo> {
             }
         }
 
-        return batchInsert(userInfoList);
+        return saveBatch(userInfoList);
     }
 
-
-    /**
-             *       根据数据格式返回数据
-     *
-     * @param cell
-     * @return
-     */
-    public static String getValue(Cell cell) {
-        if (cell == null) {
-            return "";
-        } else if (cell.getCellType() == CellType.BOOLEAN) {
-            return String.valueOf(cell.getBooleanCellValue());
-        } else if (cell.getCellType() == CellType.NUMERIC) {
-            cell.setBlank();
-            return String.valueOf(cell.getStringCellValue().trim());
-        } else {
-            return String.valueOf(cell.getStringCellValue().trim());
-        }
+    public boolean changeSharedSecret(UserInfo userInfo) {
+        return baseMapper.updateById(userInfo) > 0;
     }
 
-	public boolean changeSharedSecret(UserInfo userInfo){
-		return getMapper().changeSharedSecret(userInfo)>0;
-	}
+    public boolean changePasswordQuestion(UserInfo userInfo) {
+        return updateById(userInfo);
+    }
 
-	public boolean changePasswordQuestion(UserInfo userInfo){
-		return getMapper().changePasswordQuestion(userInfo)>0;
-	}
+    public boolean changeAuthnType(UserInfo userInfo) {
+        return updateById(userInfo) ;
+    }
 
-	public boolean changeAuthnType(UserInfo userInfo){
-		return getMapper().changeAuthnType(userInfo)>0;
-	}
+    public boolean changeEmail(UserInfo userInfo) {
+        return updateById(userInfo);
+    }
 
-	public boolean changeEmail(UserInfo userInfo){
-		return getMapper().changeEmail(userInfo)>0;
-	}
-
-	public boolean changeMobile(UserInfo userInfo){
-		return getMapper().changeMobile(userInfo)>0;
-	}
+    public boolean changeMobile(UserInfo userInfo) {
+        return updateById(userInfo);
+    }
 
     public UserInfo queryUserInfoByEmailMobile(String emailMobile) {
-        return getMapper().queryUserInfoByEmailMobile(emailMobile);
+        QueryWrapper<UserInfo> queryWrapper = new QueryWrapper<>();
+        queryWrapper.lambda().eq(UserInfo::getEmail,emailMobile).or().eq(UserInfo::getMobile,emailMobile);
+        return baseMapper.queryUserInfoByEmailMobile(emailMobile);
     }
 
-    public int updateProfile(UserInfo userInfo){
+    public int updateProfile(UserInfo userInfo) {
 
-        return getMapper().updateProfile(userInfo);
+        return baseMapper.updateById(userInfo);
     }
 
-    public void setPasswordPolicyValidator(PasswordPolicyValidator passwordPolicyValidator) {
-        this.passwordPolicyValidator = passwordPolicyValidator;
-    }
 
 }

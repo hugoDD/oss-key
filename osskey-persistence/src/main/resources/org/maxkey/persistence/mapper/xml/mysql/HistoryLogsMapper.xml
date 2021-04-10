@@ -5,7 +5,7 @@
 	<sql id="where_statement">
     	<if test="id != null and id != ''">
 			AND	ID	=	#{id}
-		</if> 
+		</if>
 		<if test="serviceName != null and serviceName != '' ">
 			AND	 LOWER(SERVICENAME) LIKE LOWER(CONCAT('%',#{serviceName},'%'))
 		</if>
@@ -29,10 +29,10 @@
 			AND	OPERATETYPE	=	#{operateType}
 		</if>
     </sql>
-	
-    
-     <select id="queryPageResults" parameterType="HistoryLogs" resultType="HistoryLogs">
-    	SELECT 
+
+
+     <select id="queryPageResults" parameterType="HistoryLogs" resultType="org.maxkey.domain.HistoryLogs">
+    	SELECT
 			ID,
 			TID,
 			TNAME,
@@ -45,11 +45,11 @@
 			USERNAME,
 			CREATEDDATE,
 			CREATEDBY
-    	FROM MXK_HISTORY_LOGS 
+    	FROM MXK_HISTORY_LOGS
     	WHERE	1	=	1
     	<include refid="where_statement"/>
-    	
+
     	ORDER BY CREATEDDATE DESC
     </select>
-  
+
 </mapper>

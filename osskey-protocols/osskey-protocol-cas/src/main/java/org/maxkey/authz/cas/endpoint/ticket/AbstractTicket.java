@@ -1,22 +1,24 @@
 /*
  * Copyright [2020] [MaxKey of copyright http://www.maxkey.top]
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
 
 package org.maxkey.authz.cas.endpoint.ticket;
 
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.maxkey.domain.apps.AppsCasDetails;
 import org.springframework.security.core.Authentication;
@@ -50,28 +52,27 @@ public abstract class AbstractTicket implements Ticket {
 
 
     /** The unique identifier for this ticket. */
-    @Id
-    @Column(name="ID", nullable=false)
+    @TableId("ID")
     protected String id;
 
     /** The last time this ticket was used. */
-    @Column(name="LAST_TIME_USED")
+    @TableField("LAST_TIME_USED")
     protected ZonedDateTime lastTimeUsed;
 
     /** The previous last time this ticket was used. */
-    @Column(name="PREVIOUS_LAST_TIME_USED")
+    @TableField("PREVIOUS_LAST_TIME_USED")
     protected ZonedDateTime previousLastTimeUsed;
 
     /** The time the ticket was created. */
-    @Column(name="CREATION_TIME")
+    @TableField("CREATION_TIME")
     protected ZonedDateTime creationTime;
 
     /** The number of times this was used. */
-    @Column(name="NUMBER_OF_TIMES_USED")
+    @TableField("NUMBER_OF_TIMES_USED")
     protected int countOfUses;
 
     protected Authentication authentication;
-    
+
     protected AppsCasDetails casDetails;
     /**
      * Instantiates a new abstract ticket.
@@ -85,7 +86,6 @@ public abstract class AbstractTicket implements Ticket {
      * be null) and a specified Expiration Policy.
      *
      * @param id the unique identifier for the ticket
-     * @param expirationPolicy the expiration policy for the ticket.
      * @throws IllegalArgumentException if the id or expiration policy is null.
      */
     public AbstractTicket(final String id) {
@@ -152,13 +152,13 @@ public abstract class AbstractTicket implements Ticket {
 		// TODO Auto-generated method stub
 		return this.casDetails;
 	}
-	
+
 	@Override
 	public Authentication getAuthentication() {
 		// TODO Auto-generated method stub
 		return this.authentication;
 	}
-	
+
     @Override
     public int compareTo(final Ticket o) {
         return getId().compareTo(o.getId());

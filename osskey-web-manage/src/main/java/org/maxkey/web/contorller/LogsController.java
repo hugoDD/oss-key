@@ -21,6 +21,7 @@ import org.apache.mybatis.jpa.persistence.JpaPageResults;
 import org.maxkey.domain.HistoryLogin;
 import org.maxkey.domain.HistoryLoginApps;
 import org.maxkey.domain.HistoryLogs;
+import org.maxkey.domain.param.PageSearchFilter;
 import org.maxkey.persistence.service.HistoryLoginAppsService;
 import org.maxkey.persistence.service.HistoryLoginService;
 import org.maxkey.persistence.service.HistoryLogsService;
@@ -67,9 +68,9 @@ final static Logger _logger = LoggerFactory.getLogger(LogsController.class);
 	 */
 	@RequestMapping(value={"/grid"})
 	@ResponseBody
-	public JpaPageResults<HistoryLogs> logsDataGrid(@ModelAttribute("logs") HistoryLogs logs){
+	public JpaPageResults<HistoryLogs> logsDataGrid(PageSearchFilter search, @ModelAttribute("logs") HistoryLogs logs){
 		_logger.debug("logs/datagrid/ logsGrid() "+logs);
-		return logsService.queryPageResults(logs);
+		return logsService.queryPageResults(search.newPage(),logs);
 	}
 
 
@@ -84,14 +85,15 @@ final static Logger _logger = LoggerFactory.getLogger(LogsController.class);
 	}
 
 	/**
-	 * @param HistoryLogin
+	 * @param search
+	 * @param loginHistory
 	 * @return
 	 */
 	@RequestMapping(value={"/loginHistory/grid"})
 	@ResponseBody
-	public JpaPageResults<HistoryLogin> logAuthsGrid(@ModelAttribute("loginHistory") HistoryLogin loginHistory){
+	public JpaPageResults<HistoryLogin> logAuthsGrid(PageSearchFilter search,@ModelAttribute("loginHistory") HistoryLogin loginHistory){
 		_logger.debug("logs/loginHistory/datagrid/ logsGrid() "+loginHistory);
-		return loginHistoryService.queryPageResults(loginHistory);
+		return loginHistoryService.queryPageResults(search.newPage(),loginHistory);
 	}
 
 
@@ -108,10 +110,10 @@ final static Logger _logger = LoggerFactory.getLogger(LogsController.class);
 	 */
 	@RequestMapping(value={"/loginAppsHistory/grid"})
 	@ResponseBody
-	public JpaPageResults<HistoryLoginApps> loginAppsHistoryGrid(@ModelAttribute("loginAppsHistory") HistoryLoginApps loginAppsHistory){
+	public JpaPageResults<HistoryLoginApps> loginAppsHistoryGrid(PageSearchFilter search,@ModelAttribute("loginAppsHistory") HistoryLoginApps loginAppsHistory){
 		_logger.debug("logs/loginAppsHistory/datagrid/ logsGrid() "+loginAppsHistory);
 		loginAppsHistory.setId(null);
-		return loginAppsHistoryService.queryPageResults(loginAppsHistory);
+		return loginAppsHistoryService.queryPageResults(search.newPage(),loginAppsHistory);
 	}
 
 

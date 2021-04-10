@@ -5,36 +5,36 @@
 	<sql id="dao_where_statement">
     	<if test="id != null and id != ''">
 			AND	ID	=	#{id}
-		</if> 
+		</if>
 		<if test="sessionId != null and sessionId != ''">
 			AND	SESSIONID	=	#{sessionId}
-		</if> 
+		</if>
 		<if test="appId != null and appId != ''">
 			AND	APPID	=	#{appId}
 		</if>
 		<if test="appName != null and appName != ''">
 			AND	APPNAME	LIKE CONCAT('%',#{appName},'%')
-		</if> 
+		</if>
 		<if test="uid != null and uid != ''">
 			AND	UID	=	#{uid}
-		</if> 
+		</if>
 		<if test="username != null and username != ''">
 			AND	USERNAME	LIKE CONCAT('%',#{username},'%')
-		</if> 
+		</if>
 		<if test="displayName != null and displayName != ''">
 			AND	DISPLAYNAME	LIKE CONCAT('%',#{displayName},'%')
-		</if> 
+		</if>
 		<if test="startDate != null and startDate != ''">
 			AND	LOGINTIME	>=	#{startDate}
 		</if>
 		<if test="endDate != null and endDate != ''">
 			AND	 #{endDate}	>=	LOGINTIME
 		</if>
-		
+
     </sql>
-    
-     <select id="queryPageResults" parameterType="HistoryLoginApps" resultType="HistoryLoginApps">
-    	SELECT 
+
+     <select id="queryPageResults" parameterType="HistoryLoginApps" resultType="org.maxkey.domain.HistoryLoginApps">
+    	SELECT
 			ID,
 			SESSIONID,
 			APPID,
@@ -43,13 +43,13 @@
 			USERNAME,
 			DISPLAYNAME,
 			DATE_FORMAT(LOGINTIME, '%Y-%m-%d  %H:%i:%s') AS LOGINTIME
-			 
+
     	FROM MXK_HISTORY_LOGIN_APPS
     	WHERE	1	=	1
     	<include refid="dao_where_statement"/>
-    	
+
     	ORDER BY LOGINTIME DESC
     </select>
-  
-    
+
+
 </mapper>

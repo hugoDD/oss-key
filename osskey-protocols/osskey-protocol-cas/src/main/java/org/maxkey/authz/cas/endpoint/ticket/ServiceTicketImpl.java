@@ -1,28 +1,29 @@
 /*
  * Copyright [2020] [MaxKey of copyright http://www.maxkey.top]
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
 
 package org.maxkey.authz.cas.endpoint.ticket;
 
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableName;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.maxkey.authz.cas.endpoint.ticket.pgt.ProxyGrantingTicket;
 import org.maxkey.domain.apps.AppsCasDetails;
 import org.springframework.security.core.Authentication;
 
-import javax.persistence.Column;
 
 /**
  * Domain object representing a Service Ticket. A service ticket grants specific
@@ -35,7 +36,7 @@ import javax.persistence.Column;
  */
 
 public class ServiceTicketImpl extends AbstractTicket  implements ServiceTicket{
-    
+
     private static final long serialVersionUID = -4223319704861765405L;
 
 
@@ -43,16 +44,16 @@ public class ServiceTicketImpl extends AbstractTicket  implements ServiceTicket{
      * The service this ticket is valid for.
      */
 
-    @Column(name = "SERVICE", nullable = false, length = Integer.MAX_VALUE)
+    @TableField("SERVICE")
     private Service service;
 
     /**
      * Is this service ticket the result of a new login.
      */
-    @Column(name = "FROM_NEW_LOGIN", nullable = false)
+    @TableField("FROM_NEW_LOGIN")
     private boolean fromNewLogin;
 
-    @Column(name = "TICKET_ALREADY_GRANTED", nullable = false)
+    @TableField("TICKET_ALREADY_GRANTED")
     private Boolean grantedTicketAlready = Boolean.FALSE;
 
     /**
@@ -69,7 +70,7 @@ public class ServiceTicketImpl extends AbstractTicket  implements ServiceTicket{
         // exists for JPA purposes
     	this.authentication=authentication;
     }
-    
+
     /**
      * Instantiates a new service ticket impl.
      */
@@ -104,7 +105,7 @@ public class ServiceTicketImpl extends AbstractTicket  implements ServiceTicket{
         if (object == this) {
             return true;
         }
-       
+
 
         final Ticket ticket = (Ticket) object;
 

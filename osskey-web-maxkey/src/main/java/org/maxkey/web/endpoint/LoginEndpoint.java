@@ -1,19 +1,19 @@
 /*
  * Copyright [2020] [MaxKey of copyright http://www.maxkey.top]
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
 
 package org.maxkey.web.endpoint;
 
@@ -50,31 +50,31 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class LoginEndpoint {
 	private static Logger _logger = LoggerFactory.getLogger(LoginEndpoint.class);
-	
+
 	@Autowired
   	@Qualifier("applicationConfig")
   	ApplicationConfig applicationConfig;
- 	
+
 	@Autowired
 	@Qualifier("authenticationProvider")
 	AbstractAuthenticationProvider authenticationProvider ;
-	
+
 	@Autowired
 	@Qualifier("socialSignOnProviderService")
 	SocialSignOnProviderService socialSignOnProviderService;
-	
+
 	@Autowired
 	@Qualifier("kerberosService")
 	KerberosService kerberosService;
-	
+
 	@Autowired
 	@Qualifier("userInfoService")
 	UserInfoService userInfoService;
-	
+
 	@Autowired
     @Qualifier("tfaOtpAuthn")
     protected AbstractOtpAuthn tfaOtpAuthn;
-	
+
 	/**
 	 * init login
 	 * @return
@@ -83,13 +83,13 @@ public class LoginEndpoint {
 	public ModelAndView login() {
 		_logger.debug("LoginController /login.");
 		boolean isAuthenticated= WebContext.isAuthenticated();
-		
+
 		if(isAuthenticated){
 			return  WebContext.redirect("/forwardindex");
 		}
-		
+
 		_logger.trace("Session Timeout MaxInactiveInterval " + WebContext.getRequest().getSession().getMaxInactiveInterval());
-		
+
 		//for normal login
 		ModelAndView modelAndView = new ModelAndView("login");
 		modelAndView.addObject("isRemeberMe", applicationConfig.getLoginConfig().isRemeberMe());
@@ -99,7 +99,7 @@ public class LoginEndpoint {
 		    modelAndView.addObject("otpType", tfaOtpAuthn.getOtpType());
 		    modelAndView.addObject("otpInterval", tfaOtpAuthn.getInterval());
 		}
-		
+
 		if( applicationConfig.getLoginConfig().isKerberos()){
 			modelAndView.addObject("userDomainUrlJson", kerberosService.buildKerberosProxys());
 		}
@@ -111,13 +111,13 @@ public class LoginEndpoint {
 			_logger.debug("Load Social Sign On Providers ");
 			modelAndView.addObject("ssopList", socialSignOnProviderService.getSocialSignOnProviders());
 		}
-		
+
 		Object loginErrorMessage=WebContext.getAttribute(WebConstants.LOGIN_ERROR_SESSION_MESSAGE);
         modelAndView.addObject("loginErrorMessage", loginErrorMessage==null?"":loginErrorMessage);
         WebContext.removeAttribute(WebConstants.LOGIN_ERROR_SESSION_MESSAGE);
 		return modelAndView;
 	}
- 	
+
  	@RequestMapping(value={"/logon.do"})
 	public ModelAndView logon(
 	                    HttpServletRequest request,
@@ -131,24 +131,24 @@ public class LoginEndpoint {
         } else {
             return WebContext.redirect("/login");
         }
- 		
+
  	}
-	
- 	
+
+
  	@RequestMapping("/login/{username}")
 	@ResponseBody
 	public HashMap <String,Object> queryLoginUserAuth(@PathVariable("username") String username) {
- 		UserInfo userInfo=new UserInfo();
- 		userInfo.setUsername(username);
- 		userInfo=userInfoService.load(userInfo);
- 		
+// 		UserInfo userInfo=new UserInfo();
+// 		userInfo.setUsername(username);
+		UserInfo userInfo=userInfoService.loadByUsername(username);
+
  		HashMap <String,Object> authnType=new HashMap <String,Object>();
  		authnType.put("authnType", userInfo.getAuthnType());
  		authnType.put("appLoginAuthnType", userInfo.getAppLoginAuthnType());
- 		
+
  		return authnType;
  	}
- 	
+
  	@RequestMapping("/login/otp/{username}")
     @ResponseBody
     public String produceOtp(@PathVariable("username") String username) {
@@ -159,7 +159,7 @@ public class LoginEndpoint {
         	tfaOtpAuthn.produce(queryUserInfo);
             return "ok";
         }
-        
+
         return "fail";
     }
 

@@ -1,19 +1,19 @@
 /*
  * Copyright [2020] [MaxKey of copyright http://www.maxkey.top]
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
 
 package org.maxkey.authz.oauth2.provider.approval.controller;
 
@@ -54,7 +54,7 @@ public class OAuth20AccessConfirmationController {
     @Autowired
     @Qualifier("appsService")
     protected AppsService appsService;
-    
+
     @Autowired
     @Qualifier("oauth20JdbcClientDetailsService")
     private ClientDetailsService clientDetailsService;
@@ -71,7 +71,7 @@ public class OAuth20AccessConfirmationController {
      * getAccessConfirmation.
      * @param model  Map
      * @return
-     * throws Exception  
+     * throws Exception
      */
     @RequestMapping("/oauth/v20/approval_confirm")
     public ModelAndView getAccessConfirmation(
@@ -81,19 +81,19 @@ public class OAuth20AccessConfirmationController {
         for (Object key : model.keySet()) {
             modelRequest.put(key.toString(), model.get(key).toString());
         }
-        
+
         // Map<String, Object> model
-        AuthorizationRequest clientAuth = 
+        AuthorizationRequest clientAuth =
                 (AuthorizationRequest) WebContext.getAttribute("authorizationRequest");
         ClientDetails client = clientDetailsService.loadClientByClientId(clientAuth.getClientId());
         Apps  app = (Apps)WebContext.getAttribute(WebConstants.AUTHORIZE_SIGN_ON_APP);
         //session中为空或者id不一致重新加载
         if (app == null || !app.getId().equalsIgnoreCase(clientAuth.getClientId())) {
-            app = appsService.get(clientAuth.getClientId()); 
+            app = appsService.getById(clientAuth.getClientId());
             WebContext.setAttribute(WebConstants.AUTHORIZE_SIGN_ON_APP, app);
             WebContext.setAttribute(app.getId(), app.getIcon());
         }
-       
+
         model.put("auth_request", clientAuth);
         model.put("client", client);
         model.put("app", app);
@@ -102,7 +102,7 @@ public class OAuth20AccessConfirmationController {
         for (String scope : clientAuth.getScope()) {
             scopes.put(OAuth2Utils.SCOPE_PREFIX + scope, "false");
         }
-        String principal = 
+        String principal =
                 ((SigninPrincipal) WebContext.getAuthentication().getPrincipal()).getUsername();
         for (Approval approval : approvalStore.getApprovals(principal, client.getClientId())) {
             if (clientAuth.getScope().contains(approval.getScope())) {

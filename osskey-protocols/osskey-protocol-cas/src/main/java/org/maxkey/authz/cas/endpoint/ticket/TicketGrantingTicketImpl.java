@@ -1,22 +1,24 @@
 /*
  * Copyright [2020] [MaxKey of copyright http://www.maxkey.top]
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
 
 package org.maxkey.authz.cas.endpoint.ticket;
 
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -48,52 +50,41 @@ import java.util.Map;
  * @author Scott Battaglia
  * @since 3.0.0
  */
-@Entity
-@Table(name = "TICKETGRANTINGTICKET")
-@DiscriminatorColumn(name = "TYPE")
-@DiscriminatorValue(TicketGrantingTicket.PREFIX)
-@JsonIgnoreProperties(ignoreUnknown = true)
-@JsonTypeInfo(use = JsonTypeInfo.Id.CLASS)
-
+//@TableName("TICKETGRANTINGTICKET")
 public class TicketGrantingTicketImpl extends AbstractTicket implements TicketGrantingTicket {
 
     /**
      * Unique Id for serialization.
      */
     private static final long serialVersionUID = -8608149809180911599L;
-    
+
     /**
      * Service that produced a proxy-granting ticket.
      */
-    @Lob
-    @Column(name = "PROXIED_BY", length = Integer.MAX_VALUE)
+
     private Service proxiedBy;
 
     /**
      * The services associated to this ticket.
      */
-    @Lob
-    @Column(name = "SERVICES_GRANTED_ACCESS_TO", nullable = false, length = Integer.MAX_VALUE)
+
     private HashMap<String, Service> services = new HashMap<>();
 
     /**
      * The {@link TicketGrantingTicket} this is associated with.
      */
-    @ManyToOne(targetEntity = TicketGrantingTicketImpl.class)
     private TicketGrantingTicket ticketGrantingTicket;
 
     /**
      * The PGTs associated to this ticket.
      */
-    @Lob
-    @Column(name = "PROXY_GRANTING_TICKETS", nullable = false, length = Integer.MAX_VALUE)
+
     private HashMap<String, Service> proxyGrantingTickets = new HashMap<>();
 
     /**
      * The ticket ids which are tied to this ticket.
      */
-    @Lob
-    @Column(name = "DESCENDANT_TICKETS", nullable = false, length = Integer.MAX_VALUE)
+
     private HashSet<String> descendantTickets = new HashSet<>();
 
     /**
@@ -129,7 +120,7 @@ public class TicketGrantingTicketImpl extends AbstractTicket implements TicketGr
     public TicketGrantingTicketImpl(final String id, final Authentication authentication, final ExpirationPolicy policy) {
         this(id, null, null, authentication, policy);
     }
-    
+
     @Override
     public synchronized ServiceTicket grantServiceTicket(final String id, final Service service, AppsCasDetails casDetails,final ExpirationPolicy expirationPolicy,
                                                          final boolean credentialProvided, final boolean onlyTrackMostRecentSession) {
@@ -142,7 +133,7 @@ public class TicketGrantingTicketImpl extends AbstractTicket implements TicketGr
      *
      * @param service the service to normalize
      * @return the normalized path
-     
+
     private static String normalizePath(final Service service) {
         String path = service.getId();
         path = StringUtils.substringBefore(path, "?");

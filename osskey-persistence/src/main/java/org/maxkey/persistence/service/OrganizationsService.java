@@ -1,37 +1,26 @@
 /*
  * Copyright [2020] [MaxKey of copyright http://www.maxkey.top]
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
 
 package org.maxkey.persistence.service;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.TreeSet;
-import java.util.stream.Collectors;
-
-import org.apache.mybatis.jpa.persistence.JpaBaseService;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.google.common.collect.Lists;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.CellType;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.maxkey.domain.Organizations;
 import org.maxkey.persistence.kafka.KafkaIdentityAction;
@@ -43,54 +32,49 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.google.common.collect.Lists;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.TreeSet;
+import java.util.stream.Collectors;
 
 @Service
-public class OrganizationsService  extends JpaBaseService<Organizations>{
+public class OrganizationsService  extends ServiceImpl<OrganizationsMapper,Organizations> {
 
     @Autowired
     KafkaPersistService kafkaPersistService;
-    
-	public OrganizationsService() {
-		super(OrganizationsMapper.class);
-	}
 
-	/* (non-Javadoc)
-	 * @see com.connsec.db.service.BaseService#getMapper()
-	 */
-	@Override
-	public OrganizationsMapper getMapper() {
-		// TODO Auto-generated method stub
-		return (OrganizationsMapper)super.getMapper();
-	}
-	
+
+
 	 public boolean insert(Organizations organization) {
-	     if(super.insert(organization)){
+	     if(save(organization)){
 	    	 kafkaPersistService.send(
                      KafkaIdentityTopic.ORG_TOPIC, organization, KafkaIdentityAction.CREATE_ACTION);
              return true;
          }
          return false;
 	 }
-	 
+
 	 public boolean update(Organizations organization) {
-	     if(super.update(organization)){
+	     if(update(organization)){
 	    	 kafkaPersistService.send(
                      KafkaIdentityTopic.ORG_TOPIC, organization, KafkaIdentityAction.UPDATE_ACTION);
              return true;
          }
          return false;
      }
- 
+
 	 public boolean delete(Organizations organization) {
-	     if(super.delete(organization)){
+	     if(delete(organization)){
 	    	 kafkaPersistService.send(
                      KafkaIdentityTopic.ORG_TOPIC, organization, KafkaIdentityAction.DELETE_ACTION);
              return true;
          }
          return false;
 	 }
-	 
+
 	    public boolean importing(MultipartFile file) {
 	        if(file ==null){
 	            return false;
@@ -100,7 +84,7 @@ public class OrganizationsService  extends JpaBaseService<Organizations>{
 	        List<Organizations> orgsList = null;
 	        try {
 	            is = file.getInputStream();
-	            
+
 	            String xls = ".xls";
 	            String xlsx = ".xlsx";
 	            int columnSize = 46;
@@ -221,14 +205,14 @@ public class OrganizationsService  extends JpaBaseService<Organizations>{
 	                        organization.setStatus("1");
 	                        orgsList.add(organization);
 	                    }
-	                    
+
 	                }
 	            }
 	            // 数据去重
 	            if(CollectionUtils.isEmpty(orgsList)){
 	                orgsList = orgsList.stream().collect(Collectors.collectingAndThen(Collectors.toCollection(() -> new TreeSet<>(Comparator.comparing(o -> o.getId()))), ArrayList::new));
 	            }
-	           
+
 	        } catch (IOException e) {
 	            e.printStackTrace();
 	        }finally {
@@ -247,8 +231,8 @@ public class OrganizationsService  extends JpaBaseService<Organizations>{
 	                }
 	            }
 	        }
-	       
-	        return batchInsert(orgsList);
+
+	        return saveBatch(orgsList);
 	    }
 
 	 /**

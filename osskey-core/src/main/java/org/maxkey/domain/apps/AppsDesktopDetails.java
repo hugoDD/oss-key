@@ -1,28 +1,29 @@
 /*
  * Copyright [2020] [MaxKey of copyright http://www.maxkey.top]
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
 
 /**
- * 
+ *
  */
 package org.maxkey.domain.apps;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
+import com.baomidou.mybatisplus.annotation.TableName;
 import org.maxkey.domain.Accounts;
 
 
@@ -31,49 +32,48 @@ import org.maxkey.domain.Accounts;
  *
  */
 
-@Entity
-@Table(name = "MXK_APPS_DESKTOP_DETAILS")  
+@TableName("MXK_APPS_DESKTOP_DETAILS")
 public class AppsDesktopDetails extends Apps {
 
 
 	public static final class ParameterType{
-		
+
 		public static final String PARAMETER="PARAMETER";
 		public static final String SIMULATION="SIMULATION";
-		
+
 	};
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = 6691566522839823638L;
-	
+
 	private String programPath;
-	
+
 	//PARAMETER,SIMULATION
 	private String parameter;
-	
+
 	private String preUsername;
-	
+
 	private String usernameType;//PARAMETER,SIMULATION
-	
+
 	private String usernameParameter;
-	
+
 	private String prePassword;
-	
+
 	private String passwordType;//PARAMETER,SIMULATION
-	
+
 	private String passwordParameter;
-	
-	
+
+
 	private String preSubmit;
 	//Enter or key
 	private String submitType;
-	
+
 	private String submitKey;
 
 	Accounts appUser;
 	/**
-	 * 
+	 *
 	 */
 	public AppsDesktopDetails() {
 

@@ -5,28 +5,28 @@
 	<sql id="where_statement">
     	<if test="id != null and id != ''">
 			AND	ID	=	#{id}
-		</if> 
+		</if>
 		<if test="appId != null and appId != ''">
 			AND	APPID	=	#{appId}
-		</if> 
+		</if>
 		<if test="username != null and username != ''">
 			AND	USERNAME	=	#{username}
-		</if> 
+		</if>
 		<if test="relatedUsername != null and relatedUsername != ''">
 			AND	RELATEDUSERNAME	=	#{relatedUsername}
-		</if> 
+		</if>
     </sql>
-    
-	
-	
-	<select id="queryPageResults" parameterType="Accounts" resultType="Accounts">
-		SELECT
-			*
-		FROM
-			MXK_ACCOUNTS
-		WHERE
-			 (1=1)	
-		<include refid="where_statement"/>
-	</select>
-	
+
+
+
+<!--	<select id="queryPageResults" parameterType="Accounts" resultType="Accounts">-->
+<!--		SELECT-->
+<!--			*-->
+<!--		FROM-->
+<!--			MXK_ACCOUNTS-->
+<!--		WHERE-->
+<!--			 (1=1)	-->
+<!--		<include refid="where_statement"/>-->
+<!--	</select>-->
+
 </mapper>

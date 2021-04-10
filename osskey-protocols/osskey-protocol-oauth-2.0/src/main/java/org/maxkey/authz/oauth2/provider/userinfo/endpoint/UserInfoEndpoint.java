@@ -133,7 +133,7 @@ public class UserInfoEndpoint {
 
 				 String client_id= oAuth2Authentication.getOAuth2Request().getClientId();
 				 UserInfo userInfo=queryUserInfo(principal);
-				 Apps app=appsService.get(client_id);
+				 Apps app=appsService.getById(client_id);
 
 				 AbstractAuthorizeAdapter adapter;
 				 if(Boolean.isTrue(app.getIsAdapter())){

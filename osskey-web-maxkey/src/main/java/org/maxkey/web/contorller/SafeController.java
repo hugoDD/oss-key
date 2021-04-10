@@ -17,9 +17,6 @@
 
 package org.maxkey.web.contorller;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.maxkey.constants.ConstantsOperateMessage;
 import org.maxkey.constants.ConstantsPasswordSetType;
 import org.maxkey.constants.ConstantsTimeInterval;
@@ -36,153 +33,154 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 @Controller
-@RequestMapping(value={"/safe"})
+@RequestMapping(value = {"/safe"})
 public class SafeController {
-	final static Logger _logger = LoggerFactory.getLogger(SafeController.class);
+    final static Logger _logger = LoggerFactory.getLogger(SafeController.class);
 
-	@Autowired
-	private UserInfoService userInfoService;
+    @Autowired
+    private UserInfoService userInfoService;
 
-	@ResponseBody
-	@RequestMapping(value="/forward/changePasswod")
-	public ModelAndView fowardChangePasswod() {
-			ModelAndView modelAndView=new ModelAndView("safe/changePassword");
-			modelAndView.addObject("model", WebContext.getUserInfo());
-			return modelAndView;
-	}
+    @ResponseBody
+    @RequestMapping(value = "/forward/changePasswod")
+    public ModelAndView fowardChangePasswod() {
+        ModelAndView modelAndView = new ModelAndView("safe/changePassword");
+        modelAndView.addObject("model", WebContext.getUserInfo());
+        return modelAndView;
+    }
 
-	@ResponseBody
-	@RequestMapping(value="/changePassword")
-	public Message changePasswod(
-			@RequestParam(value ="oldPassword",required = true) String oldPassword,
-			@RequestParam("newPassword") String newPassword,
-			@RequestParam("confirmPassword") String confirmPassword) {
+    @ResponseBody
+    @RequestMapping(value = "/changePassword")
+    public Message changePasswod(
+            @RequestParam(value = "oldPassword") String oldPassword,
+            @RequestParam("newPassword") String newPassword,
+            @RequestParam("confirmPassword") String confirmPassword) {
 
-			if(userInfoService.changePassword(oldPassword,newPassword,confirmPassword)) {
-				return  new Message(WebContext.getI18nValue(ConstantsOperateMessage.UPDATE_SUCCESS),MessageType.success);
-			}else {
-				return  new Message(
-				        WebContext.getI18nValue(ConstantsOperateMessage.UPDATE_ERROR)+"<br>"
-				        +WebContext.getAttribute(PasswordPolicyValidator.PASSWORD_POLICY_VALIDATE_RESULT),
-				        MessageType.error);
-			}
-	}
+        if (userInfoService.changePassword(oldPassword, newPassword, confirmPassword)) {
+            return new Message(WebContext.getI18nValue(ConstantsOperateMessage.UPDATE_SUCCESS), MessageType.success);
+        } else {
+            return new Message(
+                    WebContext.getI18nValue(ConstantsOperateMessage.UPDATE_ERROR) + "<br>"
+                            + WebContext.getAttribute(PasswordPolicyValidator.PASSWORD_POLICY_VALIDATE_RESULT),
+                    MessageType.error);
+        }
+    }
 
-	@RequestMapping(value="/changeExpiredPassword")
-	public ModelAndView changeExpiredPassword(
-			@RequestParam(value ="oldPassword" ,required = false) String oldPassword,
-			@RequestParam(value ="newPassword",required = false) String newPassword,
-			@RequestParam(value ="confirmPassword",required = false) String confirmPassword) {
-			ModelAndView modelAndView=new ModelAndView("passwordExpired");
-	        if(newPassword ==null ||newPassword.equals("")) {
+    @RequestMapping(value = "/changeExpiredPassword")
+    public ModelAndView changeExpiredPassword(
+            @RequestParam(value = "oldPassword", required = false) String oldPassword,
+            @RequestParam(value = "newPassword", required = false) String newPassword,
+            @RequestParam(value = "confirmPassword", required = false) String confirmPassword) {
+        ModelAndView modelAndView = new ModelAndView("passwordExpired");
+        if (userInfoService.changePassword(oldPassword, newPassword, confirmPassword)) {
+            WebContext.getSession().setAttribute(WebConstants.CURRENT_LOGIN_USER_PASSWORD_SET_TYPE, ConstantsPasswordSetType.PASSWORD_NORMAL);
+            return WebContext.redirect("/index");
+        }
 
-	        }else if(userInfoService.changePassword(oldPassword,newPassword,confirmPassword)){
-	            WebContext.getSession().setAttribute(WebConstants.CURRENT_LOGIN_USER_PASSWORD_SET_TYPE,ConstantsPasswordSetType.PASSWORD_NORMAL);
-				return WebContext.redirect("/index");
-			}
-
-			Object errorMessage=WebContext.getAttribute(PasswordPolicyValidator.PASSWORD_POLICY_VALIDATE_RESULT);
-			UserInfo userInfo=WebContext.getUserInfo();
-            modelAndView.addObject("model", userInfo);
-            modelAndView.addObject("errorMessage", errorMessage==null?"":errorMessage);
-			return modelAndView;
-	}
+        Object errorMessage = WebContext.getAttribute(PasswordPolicyValidator.PASSWORD_POLICY_VALIDATE_RESULT);
+        UserInfo userInfo = WebContext.getUserInfo();
+        modelAndView.addObject("model", userInfo);
+        modelAndView.addObject("errorMessage", errorMessage == null ? "" : errorMessage);
+        return modelAndView;
+    }
 
 
-	@RequestMapping(value="/changeInitPassword")
-	public ModelAndView changeInitPassword(
-			@RequestParam(value ="oldPassword",required = false) String oldPassword,
-			@RequestParam(value ="newPassword",required = false) String newPassword,
-			@RequestParam(value ="confirmPassword",required = false) String confirmPassword) {
-		ModelAndView modelAndView=new ModelAndView("passwordInitial");
-        if(newPassword ==null ||newPassword.equals("")) {
+    @RequestMapping(value = "/changeInitPassword")
+    public ModelAndView changeInitPassword(
+            @RequestParam(value = "oldPassword", required = false) String oldPassword,
+            @RequestParam(value = "newPassword", required = false) String newPassword,
+            @RequestParam(value = "confirmPassword", required = false) String confirmPassword) {
+        ModelAndView modelAndView = new ModelAndView("passwordInitial");
+        Assert.notNull(newPassword, "新密码不能为空");
 
-        }else if(userInfoService.changePassword(oldPassword,newPassword,confirmPassword)){
-            WebContext.getSession().setAttribute(WebConstants.CURRENT_LOGIN_USER_PASSWORD_SET_TYPE,ConstantsPasswordSetType.PASSWORD_NORMAL);
-			return WebContext.redirect("/index");
-		}
+        if (userInfoService.changePassword(oldPassword, newPassword, confirmPassword)) {
+            WebContext.getSession().setAttribute(WebConstants.CURRENT_LOGIN_USER_PASSWORD_SET_TYPE, ConstantsPasswordSetType.PASSWORD_NORMAL);
+            return WebContext.redirect("/index");
+        }
 
-        Object errorMessage=WebContext.getAttribute(PasswordPolicyValidator.PASSWORD_POLICY_VALIDATE_RESULT);
-        modelAndView.addObject("errorMessage", errorMessage==null?"":errorMessage);
-        UserInfo userInfo=WebContext.getUserInfo();
+        Object errorMessage = WebContext.getAttribute(PasswordPolicyValidator.PASSWORD_POLICY_VALIDATE_RESULT);
+        modelAndView.addObject("errorMessage", errorMessage == null ? "" : errorMessage);
+        UserInfo userInfo = WebContext.getUserInfo();
         modelAndView.addObject("model", userInfo);
         return modelAndView;
-	}
+    }
 
 
-	@ResponseBody
-	@RequestMapping(value="/forward/changeAppLoginPasswod")
-	public ModelAndView fowardChangeAppLoginPasswod() {
-			ModelAndView modelAndView=new ModelAndView("safe/changeAppLoginPasswod");
-			modelAndView.addObject("model", WebContext.getUserInfo());
-			return modelAndView;
-	}
+    @ResponseBody
+    @RequestMapping(value = "/forward/changeAppLoginPasswod")
+    public ModelAndView fowardChangeAppLoginPasswod() {
+        ModelAndView modelAndView = new ModelAndView("safe/changeAppLoginPasswod");
+        modelAndView.addObject("model", WebContext.getUserInfo());
+        return modelAndView;
+    }
 
-	@ResponseBody
-	@RequestMapping(value="/changeAppLoginPasswod")
-	public Message changeAppLoginPasswod(
-			@RequestParam("oldPassword") String oldPassword,
-			@RequestParam("newPassword") String newPassword,
-			@RequestParam("confirmPassword") String confirmPassword) {
+    @ResponseBody
+    @RequestMapping(value = "/changeAppLoginPasswod")
+    public Message changeAppLoginPasswod(
+            @RequestParam("oldPassword") String oldPassword,
+            @RequestParam("newPassword") String newPassword,
+            @RequestParam("confirmPassword") String confirmPassword) {
 
-		UserInfo userInfo =WebContext.getUserInfo();
-		_logger.debug("App Login Password : "+userInfo.getAppLoginPassword());
-		_logger.debug("App Login new Password : "+ReciprocalUtils.encode(newPassword));
-		if(newPassword.equals(confirmPassword)){
-			if(StringUtils.isNullOrBlank(userInfo.getAppLoginPassword())||userInfo.getAppLoginPassword().equals(ReciprocalUtils.encode(oldPassword))){
-				userInfo.setAppLoginPassword(ReciprocalUtils.encode(newPassword));
-				boolean change= userInfoService.changeAppLoginPassword(userInfo);
-				_logger.debug(""+change);
-				return  new Message(WebContext.getI18nValue(ConstantsOperateMessage.UPDATE_SUCCESS),MessageType.prompt);
-			}
-		}
+        UserInfo userInfo = WebContext.getUserInfo();
+        _logger.debug("App Login Password : " + userInfo.getAppLoginPassword());
+        _logger.debug("App Login new Password : " + ReciprocalUtils.encode(newPassword));
+        if (newPassword.equals(confirmPassword)) {
+            if (StringUtils.isNullOrBlank(userInfo.getAppLoginPassword()) || userInfo.getAppLoginPassword().equals(ReciprocalUtils.encode(oldPassword))) {
+                userInfo.setAppLoginPassword(ReciprocalUtils.encode(newPassword));
+                boolean change = userInfoService.changeAppLoginPassword(userInfo);
+                _logger.debug("" + change);
+                return new Message(WebContext.getI18nValue(ConstantsOperateMessage.UPDATE_SUCCESS), MessageType.prompt);
+            }
+        }
 
-		return  new Message(WebContext.getI18nValue(ConstantsOperateMessage.UPDATE_ERROR),MessageType.error);
+        return new Message(WebContext.getI18nValue(ConstantsOperateMessage.UPDATE_ERROR), MessageType.error);
 
-	}
+    }
 
 
-	@RequestMapping(value="/forward/setting")
-	public ModelAndView fowardSetting() {
-			ModelAndView modelAndView=new ModelAndView("safe/setting");
-			modelAndView.addObject("model", WebContext.getUserInfo());
-			return modelAndView;
-	}
+    @RequestMapping(value = "/forward/setting")
+    public ModelAndView fowardSetting() {
+        ModelAndView modelAndView = new ModelAndView("safe/setting");
+        modelAndView.addObject("model", WebContext.getUserInfo());
+        return modelAndView;
+    }
 
-	@ResponseBody
-	@RequestMapping(value="/setting")
-	public Message setting(
-	        HttpServletRequest request,
+    @ResponseBody
+    @RequestMapping(value = "/setting")
+    public Message setting(
             HttpServletResponse response,
-			@RequestParam("authnType") String authnType,
-			@RequestParam("mobile") String mobile,
-			@RequestParam("mobileVerify") String mobileVerify,
-			@RequestParam("email") String email,
-			@RequestParam("emailVerify") String emailVerify,
-			@RequestParam("theme") String theme) {
-		UserInfo userInfo =WebContext.getUserInfo();
-		userInfo.setAuthnType(Integer.parseInt(authnType));
-		userInfoService.changeAuthnType(userInfo);
+            @RequestParam("authnType") String authnType,
+            @RequestParam("mobile") String mobile,
+            @RequestParam("mobileVerify") String mobileVerify,
+            @RequestParam("email") String email,
+            @RequestParam("emailVerify") String emailVerify,
+            @RequestParam("theme") String theme) {
+        UserInfo userInfo = WebContext.getUserInfo();
+        userInfo.setAuthnType(Integer.parseInt(authnType));
+        userInfoService.changeAuthnType(userInfo);
 
-		userInfo.setMobile(mobile);
-		userInfoService.changeMobile(userInfo);
+        userInfo.setMobile(mobile);
+        userInfoService.changeMobile(userInfo);
 
-		userInfo.setEmail(email);
+        userInfo.setEmail(email);
 
         userInfo.setTheme(theme);
-        WebContext.setCookie(response,null, WebConstants.THEME_COOKIE_NAME, theme, ConstantsTimeInterval.ONE_WEEK);
+        WebContext.setCookie(response, null, WebConstants.THEME_COOKIE_NAME, theme, ConstantsTimeInterval.ONE_WEEK);
 
-		userInfoService.changeEmail(userInfo);
+        userInfoService.changeEmail(userInfo);
 
 
-		return  new Message(WebContext.getI18nValue(ConstantsOperateMessage.UPDATE_SUCCESS),MessageType.success);
+        return new Message(WebContext.getI18nValue(ConstantsOperateMessage.UPDATE_SUCCESS), MessageType.success);
 
-	}
+    }
 
 }

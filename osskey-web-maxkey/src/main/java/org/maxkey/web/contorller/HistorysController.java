@@ -1,28 +1,30 @@
 /*
  * Copyright [2020] [MaxKey of copyright http://www.maxkey.top]
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
 
 package org.maxkey.web.contorller;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
 import org.apache.mybatis.jpa.persistence.JpaPageResults;
 import org.maxkey.domain.HistoryLogin;
 import org.maxkey.domain.HistoryLoginApps;
 import org.maxkey.domain.HistoryLogs;
+import org.maxkey.domain.param.PageSearchFilter;
 import org.maxkey.persistence.service.HistoryLoginAppsService;
 import org.maxkey.persistence.service.HistoryLoginService;
 import org.maxkey.persistence.service.HistoryLogsService;
@@ -41,7 +43,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
  * 登录日志和操作日志查询.
- * 
+ *
  * @author Crystal.sea
  *
  */
@@ -67,15 +69,15 @@ public class HistorysController {
 
     /**
      * 查询操作日志.
-     * 
-     * @param logs
+     *
+     * @param historyLogs
      * @return
      */
     @RequestMapping(value = { "/logs/grid" })
     @ResponseBody
-    public JpaPageResults<HistoryLogs> logsDataGrid(@ModelAttribute("historyLogs") HistoryLogs historyLogs) {
+    public JpaPageResults<HistoryLogs> logsDataGrid(PageSearchFilter search,@ModelAttribute("historyLogs") HistoryLogs historyLogs) {
         _logger.debug("history/logs/grid/ logsGrid() " + historyLogs);
-        return historyLogsService.queryPageResults(historyLogs);
+        return historyLogsService.queryPageResults(search.newPage(),historyLogs);
     }
 
     @RequestMapping(value = { "/login" })
@@ -85,16 +87,16 @@ public class HistorysController {
 
     /**
      * 查询登录日志.
-     * 
-     * @param logsAuth
+     *
+     * @param historyLogin
      * @return
      */
     @RequestMapping(value = { "/login/grid" })
     @ResponseBody
-    public JpaPageResults<HistoryLogin> logAuthsGrid(@ModelAttribute("historyLogin") HistoryLogin historyLogin) {
+    public JpaPageResults<HistoryLogin> logAuthsGrid(PageSearchFilter search, @ModelAttribute("historyLogin") HistoryLogin historyLogin) {
         _logger.debug("history/login/grid/ logsGrid() " + historyLogin);
         historyLogin.setUid(WebContext.getUserInfo().getId());
-        return historyLoginService.queryPageResults(historyLogin);
+        return historyLoginService.queryPageResults(search.newPage(),historyLogin);
     }
 
     @RequestMapping(value = { "/loginApps" })
@@ -104,18 +106,18 @@ public class HistorysController {
 
     /**
      * 查询单点登录日志.
-     * 
-     * @param logsSso
+     *
+     * @param historyLoginApps
      * @return
      */
     @RequestMapping(value = { "/loginApps/grid" })
     @ResponseBody
-    public JpaPageResults<HistoryLoginApps> logsSsoGrid(
+    public JpaPageResults<HistoryLoginApps> logsSsoGrid(PageSearchFilter search,
             @ModelAttribute("historyLoginApps") HistoryLoginApps historyLoginApps) {
         _logger.debug("history/loginApps/grid/ logsGrid() " + historyLoginApps);
         historyLoginApps.setId(null);
 
-        return historyLoginAppsService.queryPageResults(historyLoginApps);
+        return historyLoginAppsService.queryPageResults(search.newPage(),historyLoginApps);
 
     }
 

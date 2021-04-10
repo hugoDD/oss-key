@@ -5,21 +5,21 @@
 	<sql id="where_statement">
     	<if test="id != null and id != ''">
 			AND	RES.ID	=	#{id}
-		</if> 
+		</if>
 		<if test="appId != null and appId != ''">
             AND RES.APPID  =   #{appId}
-        </if> 
+        </if>
         <if test="parentId != null and parentId != ''">
             AND RES.PARENTID  =   #{parentId}
-        </if> 
+        </if>
 		<if test="name != null and name != ''">
 			AND RES.NAME LIKE '%${name}%'
 		</if>
     </sql>
-    
-	
-	
-	<select id="queryPageResults" parameterType="Resources" resultType="Resources">
+
+
+
+	<select id="queryPageResults" parameterType="Resources" resultType="org.maxkey.domain.Resources">
 		SELECT
 			RES.*,APP.NAME APPNAME
 		FROM
@@ -27,29 +27,11 @@
 		WHERE
 			 (1=1)	AND RES.APPID=APP.ID
 		<include refid="where_statement"/>
-		ORDER BY RES.SORTINDEX 
+		ORDER BY RES.SORTINDEX
 	</select>
-	
-	
-	<update id="logisticDelete" parameterType="Resources" >
-    	UPDATE MXK_RESOURCES SET
-    		STATUS	=	'2'  
-    	WHERE	1	=	1
-    	<if test="id != null">
-			AND	ID	=	#{id}
-		</if>
-		<if test="name != name">
-			ADN	NAME	=	#{name}
-		</if>
-    </update>
-    
-    
-    <update id="logisticBatchDelete" parameterType="java.util.List">
-    	UPDATE MXK_RESOURCES SET STATUS='2' WHERE ID IN
-    		<foreach item="item" collection="list" open="(" separator="," close=")">
-				#{item}
-    		</foreach>
-    </update>
-    
-   
+
+
+
+
+
 </mapper>

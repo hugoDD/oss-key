@@ -211,7 +211,7 @@ public class AppListController {
         Accounts appUsers = new Accounts();
         UserInfo userInfo = WebContext.getUserInfo();
         if (credential == Apps.CREDENTIALS.USER_DEFINED) {
-            appUsers = appUsersService.load(new Accounts(userInfo.getId(), appId));
+            appUsers = appUsersService.load(userInfo.getId(), appId);
             if (protocol.equalsIgnoreCase(ConstantsProtocols.DESKTOP) || protocol.equalsIgnoreCase(ConstantsProtocols.FORMBASED)
                     || protocol.equalsIgnoreCase(ConstantsProtocols.BASIC) || protocol.equalsIgnoreCase(ConstantsProtocols.EXTEND_API)) {
 
@@ -250,7 +250,7 @@ public class AppListController {
             @RequestParam("appId") String appId, @RequestParam("identity_username") String identity_username,
             @RequestParam("identity_password") String identity_password) {
 
-        Apps app = appsService.get(appId);
+        Apps app = appsService.getById(appId);
         UserInfo userInfo = WebContext.getUserInfo();
 
         Accounts appUsers = new Accounts();
@@ -258,10 +258,10 @@ public class AppListController {
         appUsers.setUid(userInfo.getId());
 
         if (identity_password != null && !identity_password.equals("") && credential == Apps.CREDENTIALS.USER_DEFINED) {
-            appUsers = appUsersService.load(new Accounts(userInfo.getId(), appId));
+            appUsers = appUsersService.load(userInfo.getId(), appId);
             if (appUsers == null) {
                 appUsers = new Accounts();
-                appUsers.setId(appUsers.generateId());
+                //appUsers.setId(appUsers.generateId());
                 appUsers.setAppId(appId);
                 appUsers.setAppName(app.getName());
                 appUsers.setUid(userInfo.getId());
@@ -270,11 +270,11 @@ public class AppListController {
 
                 appUsers.setRelatedUsername(identity_username);
                 appUsers.setRelatedPassword(ReciprocalUtils.encode(identity_password));
-                appUsersService.insert(appUsers);
+                appUsersService.save(appUsers);
             } else {
                 appUsers.setRelatedUsername(identity_username);
                 appUsers.setRelatedPassword(ReciprocalUtils.encode(identity_password));
-                appUsersService.update(appUsers);
+                appUsersService.updateById(appUsers);
             }
         }
 

@@ -302,7 +302,7 @@ public abstract class AbstractAuthenticationProvider {
             String message = WebContext.getI18nValue("login.error.username");
             _logger.debug("login user  " + username + " not in this System ." + message);
             UserInfo loginUser = new UserInfo(username);
-            loginUser.setId(loginUser.generateId());
+            //loginUser.setId(loginUser.generateId());
             loginUser.setDisplayName("not exist");
             loginUser.setLoginCount(0);
             authenticationRealm.insertLoginHistory(loginUser, ConstantsLoginType.LOCAL, "",

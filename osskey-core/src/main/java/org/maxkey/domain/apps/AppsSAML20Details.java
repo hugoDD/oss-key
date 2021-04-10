@@ -1,19 +1,19 @@
 /*
  * Copyright [2020] [MaxKey of copyright http://www.maxkey.top]
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
 
 package org.maxkey.domain.apps;
 
@@ -26,59 +26,58 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
  * @author Crystal.Sea
  *
  */
-@Entity
-@Table(name = "MXK_APPS_SAML_V20_DETAILS")
+@TableName("MXK_APPS_SAML_V20_DETAILS")
 public class AppsSAML20Details extends Apps {
 
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = -291159876339333345L;
-    @Id
-    @Column
-    @GeneratedValue(strategy = GenerationType.AUTO, generator = "uuid")
+    @TableId
     protected String id;
-    @Column
+
     private String certIssuer;
-    @Column
+
     private String certSubject;
-    @Column
+
     private String certExpiration;
-    @Column
+
     private String signature;
-    @Column
+
     private String digestMethod;
-    @Column
+
     private byte[] keyStore;
-    @Column
+
     private String entityId;
-    @Column
+
     private String spAcsUrl;
-    @Column
+
     private String issuer;
-    @Column
+
     private String audience;
-    @Column
+
     private String nameidFormat;
-    @Column
+
     private String validityInterval;
     /**
      * Redirect-Post Post-Post IdpInit-Post Redirect-PostSimpleSign
      * Post-PostSimpleSign IdpInit-PostSimpleSign
      */
-    @Column
+
     private String binding;
 
     /**
      * 0 false 1 true
      */
-    @Column
+
     private int encrypted;
 
     /**
@@ -89,21 +88,21 @@ public class AppsSAML20Details extends Apps {
      * metadata_file metadata_url or certificate
      */
     private String fileType;
-    
+
     X509Certificate trustCert = null;
     /**
      * metadata Url
      */
-    @Column
+
     private String metaUrl;
 
     /**
      * 0 original 1 uppercase 2 lowercase
      */
-    @Column
+
     private int nameIdConvert;
-    
-    @Column
+
+
     private String nameIdSuffix;
 
     public static final class BindingType {
@@ -116,7 +115,7 @@ public class AppsSAML20Details extends Apps {
     }
 
     /**
-     * 
+     *
      */
     public AppsSAML20Details() {
         super();
@@ -279,7 +278,7 @@ public class AppsSAML20Details extends Apps {
         this.validityInterval = validityInterval;
     }
 
-  
+
 
     public MultipartFile getMetaFile() {
         return metaFile;
@@ -342,7 +341,7 @@ public class AppsSAML20Details extends Apps {
     public void setDigestMethod(String digestMethod) {
         this.digestMethod = digestMethod;
     }
-    
+
     public String getNameIdSuffix() {
         return nameIdSuffix;
     }
@@ -402,6 +401,6 @@ public class AppsSAML20Details extends Apps {
         return builder.toString();
     }
 
- 
+
 
 }

@@ -1,19 +1,19 @@
 /*
  * Copyright [2020] [MaxKey of copyright http://www.maxkey.top]
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
 
 package org.maxkey.web;
 
@@ -48,7 +48,7 @@ public class InitializeContext extends HttpServlet {
     private static final Logger _logger = LoggerFactory.getLogger(InitializeContext.class);
     private static final long serialVersionUID = -797399138268601444L;
     ApplicationContext applicationContext;
-    
+
 
     @Override
     public String getServletInfo() {
@@ -58,14 +58,14 @@ public class InitializeContext extends HttpServlet {
     @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
-        
+
         _logger.info("SecurityContextHolder StrategyName " + SessionSecurityContextHolderStrategy.class.getCanonicalName());
         SecurityContextHolder.setStrategyName(SessionSecurityContextHolderStrategy.class.getCanonicalName());
-        
+
         WebContext.applicationContext = applicationContext;
-        
-        org.apache.mybatis.jpa.util.WebContext.applicationContext = applicationContext;
-        
+
+       // org.apache.mybatis.jpa.util.WebContext.applicationContext = applicationContext;
+
         // List Environment Variables
         listEnvVars();
 
@@ -85,7 +85,7 @@ public class InitializeContext extends HttpServlet {
     * InitApplicationContext.
     */
     public InitializeContext() {
-        this.applicationContext = 
+        this.applicationContext =
                 WebApplicationContextUtils.getWebApplicationContext(this.getServletContext());
     }
 
@@ -102,7 +102,7 @@ public class InitializeContext extends HttpServlet {
 
         try {
             if (applicationContext.containsBean("cacheFactory")) {
-                CacheFactory cacheFactory = 
+                CacheFactory cacheFactory =
                         applicationContext.getBean("cacheFactory", CacheFactory.class);
                 cacheFactory.start();
             }
@@ -121,38 +121,38 @@ public class InitializeContext extends HttpServlet {
             try {
                 _logger.debug("-----------------------------------------------------------");
                 _logger.debug("List DatabaseMetaData Variables ");
-                Connection connection = 
+                Connection connection =
                         ((javax.sql.DataSource) applicationContext.getBean("dataSource"))
                         .getConnection();
 
                 java.sql.DatabaseMetaData databaseMetaData = connection.getMetaData();
-                _logger.debug("DatabaseProductName   :   " 
+                _logger.debug("DatabaseProductName   :   "
                         + databaseMetaData.getDatabaseProductName());
-                _logger.debug("DatabaseProductVersion:   " 
+                _logger.debug("DatabaseProductVersion:   "
                         + databaseMetaData.getDatabaseProductVersion());
-                _logger.trace("DatabaseMajorVersion  :   " 
+                _logger.trace("DatabaseMajorVersion  :   "
                         + databaseMetaData.getDatabaseMajorVersion());
-                _logger.trace("DatabaseMinorVersion  :   " 
+                _logger.trace("DatabaseMinorVersion  :   "
                         + databaseMetaData.getDatabaseMinorVersion());
-                _logger.trace("supportsTransactions  :   " 
+                _logger.trace("supportsTransactions  :   "
                         + databaseMetaData.supportsTransactions());
-                _logger.trace("DefaultTransaction    :   " 
+                _logger.trace("DefaultTransaction    :   "
                         + databaseMetaData.getDefaultTransactionIsolation());
-                _logger.trace("MaxConnections        :   " 
+                _logger.trace("MaxConnections        :   "
                         + databaseMetaData.getMaxConnections());
                 _logger.trace("");
-                _logger.trace("JDBCMajorVersion      :   " 
+                _logger.trace("JDBCMajorVersion      :   "
                         + databaseMetaData.getJDBCMajorVersion());
-                _logger.trace("JDBCMinorVersion      :   " 
+                _logger.trace("JDBCMinorVersion      :   "
                         + databaseMetaData.getJDBCMinorVersion());
-                _logger.debug("DriverName            :   " 
+                _logger.debug("DriverName            :   "
                         + databaseMetaData.getDriverName());
-                _logger.debug("DriverVersion         :   " 
+                _logger.debug("DriverVersion         :   "
                         + databaseMetaData.getDriverVersion());
                 _logger.debug("");
-                _logger.debug("DBMS  URL             :   " 
+                _logger.debug("DBMS  URL             :   "
                         + databaseMetaData.getURL());
-                _logger.debug("UserName              :   " 
+                _logger.debug("UserName              :   "
                         + databaseMetaData.getUserName());
                 _logger.debug("-----------------------------------------------------------");
             } catch (SQLException e) {
@@ -169,7 +169,7 @@ public class InitializeContext extends HttpServlet {
         if (applicationContext.containsBean("propertySourcesPlaceholderConfigurer")) {
             _logger.trace("-----------------------------------------------------------");
             _logger.trace("List Properties Variables ");
-            PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer = 
+            PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer =
                     ((PropertySourcesPlaceholderConfigurer) applicationContext
                     .getBean("propertySourcesPlaceholderConfigurer"));
             WebContext.properties = (Properties) propertySourcesPlaceholderConfigurer

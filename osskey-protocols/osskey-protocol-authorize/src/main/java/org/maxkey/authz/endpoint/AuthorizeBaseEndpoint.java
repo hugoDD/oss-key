@@ -1,22 +1,22 @@
 /*
  * Copyright [2020] [MaxKey of copyright http://www.maxkey.top]
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
 
 /**
- * 
+ *
  */
 package org.maxkey.authz.endpoint;
 
@@ -41,50 +41,50 @@ import org.springframework.web.servlet.ModelAndView;
  */
 public class AuthorizeBaseEndpoint {
 	final static Logger _logger = LoggerFactory.getLogger(AuthorizeBaseEndpoint.class);
-	
-	@Autowired 
+
+	@Autowired
     @Qualifier("applicationConfig")
     protected ApplicationConfig applicationConfig;
-	
+
 	@Autowired
 	@Qualifier("appsService")
 	protected AppsService appsService;
-		
+
 	@Autowired
 	@Qualifier("accountsService")
 	protected AccountsService accountsService;
-		
+
 	protected Apps getApp(String id){
 		Apps  app=(Apps)WebContext.getAttribute(WebConstants.AUTHORIZE_SIGN_ON_APP);
 		//session中为空或者id不一致重新加载
 		if(app==null||!app.getId().equalsIgnoreCase(id)) {
-			app=appsService.get(id);
+			app=appsService.getById(id);
 			WebContext.setAttribute(WebConstants.AUTHORIZE_SIGN_ON_APP, app);
 		}
 		if(app	==	null){
 			_logger.error("Applications for id "+id + "  is null");
 		}
-		
+
 		return app;
 	}
-	
+
 	protected Accounts getAccounts(Apps app){
 		Accounts account=new Accounts();
 		UserInfo userInfo=WebContext.getUserInfo();
 		Apps  application= getApp(app.getId());
 		if(application.getCredential()==Apps.CREDENTIALS.USER_DEFINED){
-			
-			account=accountsService.load(new Accounts(userInfo.getId(),application.getId()));
+
+			account=accountsService.load(userInfo.getId(),application.getId());
 			if(account!=null){
 				account.setRelatedPassword(ReciprocalUtils.decoder(account.getRelatedPassword()));
 			}
 		}else if(application.getCredential()==Apps.CREDENTIALS.SHARED){
-			
+
 			account.setRelatedUsername(application.getSharedUsername());
 			account.setRelatedPassword(ReciprocalUtils.decoder(application.getSharedPassword()));
-			
+
 		}else if(application.getCredential()==Apps.CREDENTIALS.SYSTEM){
-			
+
 			if(application.getSystemUserAttr().equalsIgnoreCase("uid")){
 				account.setUsername(userInfo.getId());
 			}else if(application.getSystemUserAttr().equalsIgnoreCase("username")){
@@ -98,20 +98,20 @@ public class AuthorizeBaseEndpoint {
 			}
 			//decoder database stored encode password
 			account.setRelatedPassword(ReciprocalUtils.decoder(WebContext.getUserInfo().getDecipherable()));
-			
-			
+
+
 		}else if(application.getCredential()==Apps.CREDENTIALS.NONE){
-			
+
 			account.setUsername(userInfo.getUsername());
 			account.setRelatedPassword(userInfo.getUsername());
-			
+
 		}
 		return account;
 	}
-	
+
 	public ModelAndView generateInitCredentialModelAndView(String appId,String redirect_uri){
 		ModelAndView modelAndView=new ModelAndView("redirect:/authz/credential/forward?appId="+appId+"&redirect_uri="+redirect_uri);
 		return modelAndView;
 	}
-	
+
 }

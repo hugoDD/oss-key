@@ -5,10 +5,10 @@
 	<sql id="dao_where_statement">
     	<if test="id != null and id != ''">
 			AND	ID	=	#{id}
-		</if> 
+		</if>
 		<if test="uid != null and uid != ''">
 			AND	UID	=	#{uid}
-		</if> 
+		</if>
 		<if test="username != null and username != '' ">
 			AND LOWER(USERNAME) LIKE LOWER(CONCAT('%',#{username},'%'))
 		</if>
@@ -27,7 +27,7 @@
 		</if>
 		<if test="sessionId != null and sessionId != ''">
 			AND	SESSIONID	=	#{sessionId}
-		</if> 
+		</if>
 		<if test="loginType != null and loginType != ''">
 			AND	LOGINTYPE	=	#{loginType}
 		</if>
@@ -35,11 +35,11 @@
 			AND	SOURCEIP	=	#{sourceIp}
 		</if>
     </sql>
-	
-   
-    
-     <select id="queryPageResults" parameterType="HistoryLogin" resultType="HistoryLogin">
-    	SELECT 
+
+
+
+     <select id="queryPageResults" parameterType="HistoryLogin" resultType="org.maxkey.domain.HistoryLogin">
+    	SELECT
 			ID,
 	   		SESSIONID,
 			UID,
@@ -59,13 +59,13 @@
     	FROM MXK_HISTORY_LOGIN
     	WHERE	1	=	1
     	<include refid="dao_where_statement"/>
-    	
+
     	ORDER BY LOGINTIME DESC
     </select>
-    
+
     <update id="logout" parameterType="java.lang.String" >
     	UPDATE MXK_HISTORY_LOGIN SET
-			LOGOUTTIME			=	current_timestamp() 
+			LOGOUTTIME			=	current_timestamp()
 		WHERE
 			SESSIONID	=	#{value}
     </update>

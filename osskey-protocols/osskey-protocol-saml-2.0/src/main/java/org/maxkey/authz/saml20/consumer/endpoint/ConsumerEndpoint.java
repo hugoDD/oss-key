@@ -219,7 +219,7 @@ public class ConsumerEndpoint {
 	 */
 	private void initCredential(String spId) throws Exception {
 		// 1. 获取 sp keyStore
-		AppsSAML20Details saml20Details = saml20DetailsService.get(spId);
+		AppsSAML20Details saml20Details = saml20DetailsService.getById(spId);
 		if (saml20Details == null) {
 			// TODO
 			logger.error("spid[" + spId + "] not exists");

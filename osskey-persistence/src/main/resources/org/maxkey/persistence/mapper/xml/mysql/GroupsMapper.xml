@@ -5,25 +5,25 @@
 	<sql id="where_statement">
     	<if test="id != null and id != ''">
 			AND	ID	=	#{id}
-		</if> 
+		</if>
 		<if test="name != null and name != ''">
 			AND NAME LIKE '%${name}%'
 		</if>
     </sql>
-    
-	
-	
+
+
+
 	<select id="queryPageResults" parameterType="Groups" resultType="Groups">
 		SELECT
 			*
 		FROM
 			`MXK_GROUPS`
 		WHERE
-			 (1=1)	
+			 (1=1)
 		<include refid="where_statement"/>
 	</select>
-	
-	<select id="queryDynamicGroups" parameterType="Groups" resultType="Groups">
+
+	<select id="queryDynamicGroups" parameterType="Groups" resultType="org.maxkey.domain.Groups">
 		SELECT
 			*
 		FROM
@@ -32,11 +32,11 @@
 			 DYNAMIC = '1'
 		<include refid="where_statement"/>
 	</select>
-	
-	
+
+
 	<update id="logisticDelete" parameterType="Groups" >
     	UPDATE `MXK_GROUPS` SET
-    		STATUS	=	'2'  
+    		STATUS	=	'2'
     	WHERE	1	=	1
     	<if test="id != null">
 			AND	ID	=	#{id}
@@ -45,14 +45,14 @@
 			ADN	NAME	=	#{name}
 		</if>
     </update>
-    
-    
+
+
     <update id="logisticBatchDelete" parameterType="java.util.List">
     	UPDATE `MXK_GROUPS` SET STATUS='2' WHERE ID IN
     		<foreach item="item" collection="list" open="(" separator="," close=")">
 				#{item}
     		</foreach>
     </update>
-    
-   
+
+
 </mapper>

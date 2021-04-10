@@ -1,19 +1,19 @@
 /*
  * Copyright [2020] [MaxKey of copyright http://www.maxkey.top]
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
 
 package org.maxkey.domain.apps;
 
@@ -26,17 +26,19 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-import org.apache.mybatis.jpa.persistence.JpaBaseDomain;
+
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import org.maxkey.constants.Boolean;
 import org.maxkey.domain.Accounts;
 import org.springframework.web.multipart.MultipartFile;
 
-@Entity
-@Table(name = "MXK_APPS")
-public class Apps extends JpaBaseDomain implements Serializable {
+
+@TableName("MXK_APPS")
+public class Apps  implements Serializable {
 
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = -6264641546959620712L;
 
@@ -54,73 +56,71 @@ public class Apps extends JpaBaseDomain implements Serializable {
         public static final int INTRANET = 3;
     }
 
-    @Id
-    @Column
-    @GeneratedValue(strategy = GenerationType.AUTO, generator = "uuid")
+    @TableId
     protected String id;
     /**
-     * 
+     *
      */
-    @Column
+
     private String name;
     /*
      * Login url
      */
-    @Column
+
     private String loginUrl;
-    @Column
+
     private String category;
-    @Column
+
     private String protocol;
-    @Column
+
     private String secret;
     /*
      * icon and icon upload field iconField
      */
-    @Column
+
     private byte[] icon;
     private MultipartFile iconFile;
-    @Column
+
     private int visible;
-    
+
 
     //引导方式 IDP OR SP,default is IDP
     private String inducer;
     /*
      * vendor
      */
-    @Column
+
     private String vendor;
-    @Column
+
     private String vendorUrl;
 
     /*
      * CREDENTIAL VALUES USER-DEFINED SYSTEM SHARED NONE
      */
-    @Column
+
     private int credential;
-    @Column
+
     private String sharedUsername;
-    @Column
+
     private String sharedPassword;
-    @Column
+
     private String systemUserAttr;
 
     // 获取第三方token凭证
-    @Column
+
     private String principal;
-    @Column
+
     private String credentials;
-    @Column
+
     private String logoutUrl;
-    @Column
+
     private int logoutType;
     /*
      * extendAttr
      */
     private int isExtendAttr;
     private String extendAttr;
-    
+
     private String userPropertys;
 
     /**
@@ -128,35 +128,35 @@ public class Apps extends JpaBaseDomain implements Serializable {
      * SignaturePrivateKey issuer is domain name subject is app id append domain
      * name
      */
-    @Column
+
     private int isSignature;
-    @Column
+
     private int isAdapter;
-    @Column
+
     private String adapter;
 
     protected Accounts appUser;
-    @Column
+
     protected int sortIndex;
 
-    @Column
+
     protected int status;
-    @Column
+
     protected String createdBy;
-    @Column
+
     protected String createdDate;
-    @Column
+
     protected String modifiedBy;
-    @Column
+
     protected String modifiedDate;
-    @Column
+
     protected String description;
-    
-    
+
+
     protected String loginDateTime;
 
     protected String onlineTicket;
-    
+
     public Apps() {
         super();
         isSignature = Boolean.FALSE;
@@ -518,7 +518,7 @@ public class Apps extends JpaBaseDomain implements Serializable {
     public void setStatus(int status) {
         this.status = status;
     }
-    
+
     public String getInducer() {
         return inducer;
     }
@@ -526,7 +526,7 @@ public class Apps extends JpaBaseDomain implements Serializable {
     public void setInducer(String inducer) {
         this.inducer = inducer;
     }
-    
+
 
     public String getLogoutUrl() {
         return logoutUrl;
@@ -544,7 +544,7 @@ public class Apps extends JpaBaseDomain implements Serializable {
         this.logoutType = logoutType;
     }
 
-    
+
     public String getLoginDateTime() {
         return loginDateTime;
     }

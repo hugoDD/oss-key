@@ -1,24 +1,27 @@
 /*
  * Copyright [2020] [MaxKey of copyright http://www.maxkey.top]
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
 
 package org.maxkey.domain;
 
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.HashMap;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -26,94 +29,90 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import org.apache.mybatis.jpa.persistence.JpaBaseDomain;
+
+
 import org.maxkey.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
  * .
  * @author Crystal.Sea
- * 
+ *
  */
 
-@Entity
-@Table(name = "MXK_USERINFO")
-public class UserInfo extends JpaBaseDomain {
+@TableName("MXK_USERINFO")
+public class UserInfo implements Serializable {
     private static final long serialVersionUID = 6402443942083382236L;
-    //
-    @Id
-    @Column
-    @GeneratedValue(strategy = GenerationType.AUTO, generator = "uuid")
+    @TableId
     String id;
-    @Column
+
     protected String username;
-    @Column
+
     protected String password;
-    @Column
+
     protected String decipherable;
-    @Column
+
     protected String sharedSecret;
-    @Column
+
     protected String sharedCounter;
     /**
      * "Employee", "Supplier","Dealer","Contractor",Partner,Customer "Intern",
      * "Temp", "External", and "Unknown" .
      */
-    @Column
+
     protected String userType;
-    @Column
+
     protected String windowsAccount;
 
     // for user name
-    @Column
+
     protected String displayName;
-    @Column
+
     protected String nickName;
-    @Column
+
     protected String nameZhSpell;
-    @Column
+
     protected String nameZhShortSpell;
-    @Column
+
     protected String givenName;
-    @Column
+
     protected String middleName;
-    @Column
+
     protected String familyName;
-    @Column
+
     protected String honorificPrefix;
-    @Column
+
     protected String honorificSuffix;
-    @Column
+
     protected String formattedName;
 
-    @Column
+
     protected int married;
-    @Column
+
     protected int gender;
-    @Column
+
     protected String birthDate;
     @JsonIgnore
-    @Column
     protected byte[] picture;
     @JsonIgnore
     protected MultipartFile pictureFile;
-    @Column
+
     protected int idType;
-    @Column
+
     protected String idCardNo;
-    @Column
+
     protected String webSite;
-    @Column
+
     protected String startWorkDate;
 
     // for security
-    @Column
+
     protected int authnType;
-    @Column
+
     protected String email;
 
     protected int emailVerified;
-    @Column
+
     protected String mobile;
 
     protected int mobileVerified;
@@ -121,7 +120,7 @@ public class UserInfo extends JpaBaseDomain {
     protected String passwordQuestion;
 
     protected String passwordAnswer;
-    @Column
+
     // for apps login protected
     protected int appLoginAuthnType;
     protected String appLoginPassword;
@@ -140,83 +139,83 @@ public class UserInfo extends JpaBaseDomain {
     protected int passwordSetType;
     protected Integer loginCount;
 
-    @Column
+
     protected String locale;
-    @Column
+
     protected String timeZone;
-    @Column
+
     protected String preferredLanguage;
 
     // for work
-    @Column
+
     protected String workCountry;
-    @Column
+
     protected String workRegion;// province;
-    @Column
+
     protected String workLocality;// city;
-    @Column
+
     protected String workStreetAddress;
-    @Column
+
     protected String workAddressFormatted;
-    @Column
+
     protected String workEmail;
-    @Column
+
     protected String workPhoneNumber;
-    @Column
+
     protected String workPostalCode;
-    @Column
+
     protected String workFax;
     // for home
-    @Column
+
     protected String homeCountry;
-    @Column
+
     protected String homeRegion;// province;
-    @Column
+
     protected String homeLocality;// city;
-    @Column
+
     protected String homeStreetAddress;
-    @Column
+
     protected String homeAddressFormatted;
-    @Column
+
     protected String homeEmail;
-    @Column
+
     protected String homePhoneNumber;
-    @Column
+
     protected String homePostalCode;
-    @Column
+
     protected String homeFax;
     // for company
-    @Column
+
     protected String employeeNumber;
-    @Column
+
     protected String costCenter;
-    @Column
+
     protected String organization;
-    @Column
+
     protected String division;
-    @Column
+
     protected String departmentId;
-    @Column
+
     protected String department;
-    @Column
+
     protected String jobTitle;
-    @Column
+
     protected String jobLevel;
-    @Column
+
     protected String managerId;
-    @Column
+
     protected String manager;
-    @Column
+
     protected String assistantId;
-    @Column
+
     protected String assistant;
-    @Column
+
     protected String entryDate;
-    @Column
+
     protected String quitDate;
 
     // for social contact
-    @Column
+
     protected String defineIm;
     protected int weixinFollow;
 
@@ -237,21 +236,21 @@ public class UserInfo extends JpaBaseDomain {
 
     protected int gridList;
 
-    @Column
+
     String createdBy;
-    @Column
+
     String createdDate;
-    @Column
+
     String modifiedBy;
-    @Column
+
     String modifiedDate;
-    @Column
+
     int status;
-    @Column
+
     String description;
 
-    
-    
+
+
     public static class ONLINE {
         // 在线
         public static final int ONLINE = 1;
@@ -332,7 +331,7 @@ public class UserInfo extends JpaBaseDomain {
     }
 
     /**
-     * 
+     *
      */
     public UserInfo() {
         super();
@@ -472,7 +471,7 @@ public class UserInfo extends JpaBaseDomain {
         this.nickName = nickName;
     }
 
-   
+
 
     public String getNameZhSpell() {
         return nameZhSpell;
@@ -1150,7 +1149,7 @@ public class UserInfo extends JpaBaseDomain {
         this.description = description;
     }
 
- 
+
     /**
      * @return the createdBy
      */
