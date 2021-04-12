@@ -22,8 +22,9 @@ package org.maxkey.persistence.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.toolkit.Constants;
+import org.apache.ibatis.annotations.Param;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import org.apache.mybatis.jpa.persistence.JpaPageResults;
 import org.maxkey.domain.HistoryLogs;
 
 /**
@@ -33,5 +34,5 @@ import org.maxkey.domain.HistoryLogs;
 public  interface HistoryLogsMapper extends BaseMapper<HistoryLogs> {
 
 
-    JpaPageResults<HistoryLogs> queryPageResults(IPage<HistoryLogs> page, HistoryLogs historyLogs);
+    Page<HistoryLogs> queryPageResults(IPage<HistoryLogs> page, @Param(Constants.ENTITY) HistoryLogs historyLogs);
 }

@@ -20,7 +20,7 @@ package org.maxkey.persistence.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import org.apache.mybatis.jpa.persistence.JpaPageResults;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.maxkey.domain.HistoryLogin;
 
 /**
@@ -29,5 +29,5 @@ import org.maxkey.domain.HistoryLogin;
  */
 public interface HistoryLoginMapper extends BaseMapper<HistoryLogin> {
 
-    JpaPageResults<HistoryLogin> queryPageResults(IPage<HistoryLogin> page, HistoryLogin historyLogin);
+    Page<HistoryLogin> queryPageResults(IPage<HistoryLogin> page, HistoryLogin historyLogin);
 }

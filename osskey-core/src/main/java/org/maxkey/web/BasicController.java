@@ -17,7 +17,7 @@
 
 package org.maxkey.web;
 
-import org.apache.mybatis.jpa.persistence.JpaPageResults;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.maxkey.web.message.Message;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,7 +25,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 public interface BasicController  <T> {
 
-	public JpaPageResults<T> pageResults(@ModelAttribute("modelAttribute") T modelAttribute);
+	public Page<T> pageResults(@ModelAttribute("modelAttribute") T modelAttribute);
 
 	public ModelAndView forwardAdd(@ModelAttribute("modelAttribute") T modelAttribute);
 

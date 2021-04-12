@@ -19,7 +19,7 @@ package org.maxkey.persistence.service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import org.apache.mybatis.jpa.persistence.JpaPageResults;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.maxkey.domain.HistoryLoginApps;
 import org.maxkey.persistence.mapper.HistoryLoginAppsMapper;
 import org.springframework.stereotype.Service;
@@ -28,7 +28,7 @@ import org.springframework.stereotype.Service;
 public class HistoryLoginAppsService  extends ServiceImpl<HistoryLoginAppsMapper,HistoryLoginApps> {
 
 
-    public JpaPageResults<HistoryLoginApps> queryPageResults(IPage<Object> newPage, HistoryLoginApps historyLoginApps) {
+    public Page<HistoryLoginApps> queryPageResults(IPage<Object> newPage, HistoryLoginApps historyLoginApps) {
         return baseMapper.queryPageResults(newPage,historyLoginApps);
     }
 }

@@ -17,7 +17,7 @@
 
 package org.maxkey.web.contorller;
 
-import org.apache.mybatis.jpa.persistence.JpaPageResults;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.maxkey.constants.ConstantsOperateMessage;
 import org.maxkey.domain.Resources;
 import org.maxkey.persistence.service.ResourcesService;
@@ -62,7 +62,7 @@ public class ResourcesController {
 
 	@RequestMapping(value = { "/grid" })
 	@ResponseBody
-	public JpaPageResults<Resources> queryDataGrid(@ModelAttribute("resources") Resources resources) {
+	public Page<Resources> queryDataGrid(@ModelAttribute("resources") Resources resources) {
 		_logger.debug(""+resources);
 		return resourcesService.queryPageResults(resources);
 	}

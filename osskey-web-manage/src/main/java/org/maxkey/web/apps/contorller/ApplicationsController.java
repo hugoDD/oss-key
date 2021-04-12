@@ -1,24 +1,24 @@
 /*
  * Copyright [2020] [MaxKey of copyright http://www.maxkey.top]
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
 
 package org.maxkey.web.apps.contorller;
 
 
-import org.apache.mybatis.jpa.persistence.JpaPageResults;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.maxkey.constants.ConstantsOperateMessage;
 import org.maxkey.crypto.ReciprocalUtils;
 import org.maxkey.domain.ExtraAttr;
@@ -41,22 +41,22 @@ import org.springframework.web.servlet.ModelAndView;
 @RequestMapping(value={"/apps"})
 public class ApplicationsController extends BaseAppContorller {
 	final static Logger _logger = LoggerFactory.getLogger(ApplicationsController.class);
-	
+
 	@RequestMapping(value={"/list"})
 	public ModelAndView applicationsList(){
 		return new ModelAndView("apps/appsList");
 	}
-	
+
 	@RequestMapping(value={"/select"})
 	public ModelAndView select(){
 		return new ModelAndView("apps/selectAppsList");
 	}
-	
-	
+
+
 	@RequestMapping(value = { "/grid" })
 	@ResponseBody
-	public JpaPageResults<Apps> queryDataGrid(@ModelAttribute("applications") Apps applications) {
-		JpaPageResults<Apps> jqGridApp=appsService.queryPageResults(applications);
+	public Page<Apps> queryDataGrid(@ModelAttribute("applications") Apps applications) {
+		Page<Apps> jqGridApp=appsService.queryPageResults(applications);
 		if(jqGridApp!=null&&jqGridApp.getRows()!=null){
 			for (Apps app : jqGridApp.getRows()){
 				WebContext.setAttribute(app.getId(), app.getIcon());
@@ -64,36 +64,36 @@ public class ApplicationsController extends BaseAppContorller {
 		}
 		return jqGridApp;
 	}
-	
+
 	@RequestMapping(value = { "/forwardAdd" })
 	public ModelAndView forwardAdd() {
 		return new ModelAndView("apps/appAdd");
 	}
-	
-	
+
+
 	@ResponseBody
 	@RequestMapping(value={"/add"})
 	public Message insert(@ModelAttribute("application") Apps application) {
 		_logger.debug("-Add  :" + application);
-		
+
 		transform(application);
-		
+
 		if (appsService.insert(application)) {
 			return  new Message(WebContext.getI18nValue(ConstantsOperateMessage.INSERT_SUCCESS),MessageType.success);
-			
+
 		} else {
 			return  new Message(WebContext.getI18nValue(ConstantsOperateMessage.INSERT_SUCCESS),MessageType.error);
 		}
-		
+
 	}
-	
+
 	@RequestMapping(value = { "/forwardAppsExtendAttr/{id}" })
 	public ModelAndView forwardExtendAttr(@PathVariable("id") String id) {
 		ModelAndView modelAndView=new ModelAndView("apps/appsExtendAttr");
 		modelAndView.addObject("model",appsService.get(id));
 		return modelAndView;
 	}
-	
+
 	@ResponseBody
 	@RequestMapping(value = { "/updateExtendAttr" })
 	public Message updateExtendAttr(@ModelAttribute("application") Apps application,@ModelAttribute("extraAttrs") ExtraAttr extraAttr) {
@@ -107,51 +107,51 @@ public class ApplicationsController extends BaseAppContorller {
 			}
 			application.setExtendAttr(extraAttrs.toJsonString());
 		}
-		
+
 		if (appsService.updateExtendAttr(application)) {
 			return  new Message(WebContext.getI18nValue(ConstantsOperateMessage.INSERT_SUCCESS),MessageType.success);
-			
+
 		} else {
 			return  new Message(WebContext.getI18nValue(ConstantsOperateMessage.INSERT_ERROR),MessageType.error);
 		}
 	}
-	
+
 	/**
 	 * query
 	 * @param application
 	 * @return
 	 */
 	@ResponseBody
-	@RequestMapping(value={"/query"}) 
+	@RequestMapping(value={"/query"})
 	public Message query(@ModelAttribute("application") Apps application) {
 		_logger.debug("-query  :" + application);
 		if (appsService.load(application)!=null) {
 			return  new Message(WebContext.getI18nValue(ConstantsOperateMessage.INSERT_SUCCESS),MessageType.success);
-			
+
 		} else {
 			return  new Message(WebContext.getI18nValue(ConstantsOperateMessage.INSERT_ERROR),MessageType.error);
 		}
-		
+
 	}
-	
+
 	/**
 	 * modify
 	 * @param application
 	 * @return
 	 */
 	@ResponseBody
-	@RequestMapping(value={"/update"})  
+	@RequestMapping(value={"/update"})
 	public Message update(@ModelAttribute("application") Apps application) {
 		_logger.debug("-update  application :" + application);
 		if (appsService.update(application)) {
 			return  new Message(WebContext.getI18nValue(ConstantsOperateMessage.UPDATE_SUCCESS),MessageType.success);
-			
+
 		} else {
 			return  new Message(WebContext.getI18nValue(ConstantsOperateMessage.UPDATE_ERROR),MessageType.error);
 		}
-		
+
 	}
-	
+
 
 	@ResponseBody
 	@RequestMapping(value={"/delete"})
@@ -159,13 +159,13 @@ public class ApplicationsController extends BaseAppContorller {
 		_logger.debug("-delete  application :" + application);
 		if (appsService.delete(application)) {
 			return  new Message(WebContext.getI18nValue(ConstantsOperateMessage.DELETE_SUCCESS),MessageType.success);
-			
+
 		} else {
 			return  new Message(WebContext.getI18nValue(ConstantsOperateMessage.DELETE_SUCCESS),MessageType.error);
 		}
-		
+
 	}
-	
+
 	@ResponseBody
 	@RequestMapping(value = { "/generate/secret/{type}" })
 	public String generateSecret(@PathVariable("type") String type) {
@@ -182,9 +182,9 @@ public class ApplicationsController extends BaseAppContorller {
 		}else{
 			secret=ReciprocalUtils.generateKey("");
 		}
-		
+
 		return secret;
 	}
-	
-	
+
+
 }

@@ -17,7 +17,7 @@
 
 package org.maxkey.web.contorller;
 
-import org.apache.mybatis.jpa.persistence.JpaPageResults;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.maxkey.constants.ConstantsOperateMessage;
 import org.maxkey.domain.GroupMember;
 import org.maxkey.domain.Groups;
@@ -61,7 +61,7 @@ public class GroupMemberController {
 
 	@RequestMapping(value = { "/grid" })
 	@ResponseBody
-	public JpaPageResults<GroupMember> grid(@ModelAttribute("groupMember") GroupMember groupMember) {
+	public Page<GroupMember> grid(@ModelAttribute("groupMember") GroupMember groupMember) {
 		if(groupMember.getGroupId()==null||groupMember.getGroupId().equals("")){
 			return null;
 		}
@@ -84,7 +84,7 @@ public class GroupMemberController {
 
 	@RequestMapping(value = { "/queryMemberInGroup" })
 	@ResponseBody
-	public JpaPageResults<GroupMember> queryMemberInGroup(@ModelAttribute("groupMember")  GroupMember groupMember) {
+	public Page<GroupMember> queryMemberInGroup(@ModelAttribute("groupMember")  GroupMember groupMember) {
 		_logger.debug("groupMember : "+groupMember);
 		if(groupMember.getGroupId()==null||groupMember.getGroupId().equals("")||groupMember.getGroupId().equals("ROLE_ALL_USER")){
 			return groupMemberService.queryPageResults("allMemberInGroup",groupMember);
@@ -104,7 +104,7 @@ public class GroupMemberController {
 
 	@RequestMapping(value = { "/queryMemberNotInGroup" })
 	@ResponseBody
-	public JpaPageResults<GroupMember> queryMemberNotInGroupGrid(@ModelAttribute("groupMember")  GroupMember groupMember) {
+	public Page<GroupMember> queryMemberNotInGroupGrid(@ModelAttribute("groupMember")  GroupMember groupMember) {
 			return groupMemberService.queryPageResults("memberNotInGroup",groupMember);
 	}
 

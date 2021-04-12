@@ -1,23 +1,23 @@
 /*
  * Copyright [2020] [MaxKey of copyright http://www.maxkey.top]
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
 
 package org.maxkey.web.contorller;
 
-import org.apache.mybatis.jpa.persistence.JpaPageResults;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.maxkey.constants.ConstantsOperateMessage;
 import org.maxkey.crypto.ReciprocalUtils;
 import org.maxkey.domain.Accounts;
@@ -47,15 +47,15 @@ public class AccountsController {
 	@Autowired
 	@Qualifier("accountsService")
 	AccountsService accountsService;
-	
+
 	@Autowired
 	@Qualifier("appsService")
 	protected AppsService appsService;
-	
+
 	@Autowired
 	@Qualifier("userInfoService")
 	private UserInfoService userInfoService;
-	
+
 	@RequestMapping(value={"/list"})
 	public ModelAndView appAccountsList(){
 		ModelAndView modelAndView=new ModelAndView("/accounts/appAccountsList");
@@ -64,18 +64,18 @@ public class AccountsController {
 
 	@RequestMapping(value={"/grid"})
 	@ResponseBody
-	public JpaPageResults<Accounts> grid(@ModelAttribute("appAccounts") Accounts appAccounts){
+	public Page<Accounts> grid(@ModelAttribute("appAccounts") Accounts appAccounts){
 		return accountsService.queryPageResults(appAccounts);
-		
+
 	}
-	
+
 	@RequestMapping(value = { "/forwardSelect/{appId}" })
 	public ModelAndView forwardSelect(@PathVariable("appId") String appId) {
 		ModelAndView modelAndView=new ModelAndView("/accounts/appAccountsAddSelect");
 		modelAndView.addObject("appId",appId);
 		return modelAndView;
 	}
-	
+
 	@RequestMapping(value = { "/forwardAdd" })
 	public ModelAndView forwardAdd(@ModelAttribute("appAccounts") Accounts appAccounts) {
 		ModelAndView modelAndView=new ModelAndView("/accounts/appAccountsAdd");
@@ -84,65 +84,65 @@ public class AccountsController {
 		modelAndView.addObject("model",appAccounts);
 		return modelAndView;
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * @param group
 	 * @return
 	 */
 	@ResponseBody
-	@RequestMapping(value={"/add"})  
+	@RequestMapping(value={"/add"})
 	public Message add(@ModelAttribute("appAccounts") Accounts appAccounts ) {
 		_logger.debug("-update  :" + appAccounts);
 		appAccounts.setRelatedPassword(ReciprocalUtils.encode(appAccounts.getRelatedPassword()));
 		accountsService.insert(appAccounts);
 		return  new Message(WebContext.getI18nValue(ConstantsOperateMessage.UPDATE_SUCCESS),MessageType.success);
-		
+
 	}
-	
-	
+
+
 	@RequestMapping(value = { "/forwardUpdate/{id}" })
 	public ModelAndView forwardUpdate(@PathVariable("id") String id) {
 		ModelAndView modelAndView=new ModelAndView("/accounts/appAccountsUpdate");
 		Accounts appAccounts =accountsService.get(id);
-		
+
 		appAccounts.setRelatedPassword(ReciprocalUtils.decoder(appAccounts.getRelatedPassword()));
 		modelAndView.addObject("model",appAccounts);
 		return modelAndView;
 	}
 
-	
+
 	/**
-	 * 
+	 *
 	 * @param group
 	 * @return
 	 */
 	@ResponseBody
-	@RequestMapping(value={"/update"})  
+	@RequestMapping(value={"/update"})
 	public Message update(@ModelAttribute("appAccounts") Accounts appAccounts ) {
 		_logger.debug("-update  :" + appAccounts);
-		
+
 		appAccounts.setRelatedPassword(ReciprocalUtils.encode(appAccounts.getRelatedPassword()));
 		accountsService.update(appAccounts);
 		return  new Message(WebContext.getI18nValue(ConstantsOperateMessage.UPDATE_SUCCESS),MessageType.success);
-		
+
 	}
-	
+
 
 	@ResponseBody
 	@RequestMapping(value={"/delete"})
 	public Message delete(@ModelAttribute("appAccounts") Accounts appAccounts ) {
-		
+
 		_logger.debug("-delete  AppAccounts :" + appAccounts);
-		
+
 		String[] appAccountsds=appAccounts.getId().split(",");
 		for(int i=0;i<appAccountsds.length;i++){
 			accountsService.remove(appAccountsds[i]);
 		}
-		
+
 		return  new Message(WebContext.getI18nValue(ConstantsOperateMessage.DELETE_SUCCESS),MessageType.success);
-		
-		
+
+
 	}
-	
+
 }

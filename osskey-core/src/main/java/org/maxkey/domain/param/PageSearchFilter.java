@@ -14,22 +14,23 @@ public class PageSearchFilter extends  SearchFilter{
     /**
      * 每页显示条数，默认 10
      */
-    private long size = 10;
+    private long pageSize = 10;
 
     /**
      * 当前页
      */
-    private long current = 1;
+    private long pageNumber = 1;
 
     private String sortField;
     private String sortOrder;
 
 
+
     public <T> IPage<T> newPage(){
-        Page<T> page =  new Page<>(this.size,this.current);
+        Page<T> page =  new Page<>(this.pageSize,this.pageNumber);
         if("asc".equalsIgnoreCase(this.sortOrder)){
             page.addOrder( OrderItem.asc(this.sortField));
-        }else {
+        }else if("desc".equalsIgnoreCase(this.sortOrder)){
             page.addOrder( OrderItem.desc(this.sortField));
         }
         return page;

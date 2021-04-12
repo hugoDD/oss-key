@@ -3,36 +3,36 @@
 <mapper namespace="org.maxkey.persistence.mapper.HistoryLoginMapper" >
 
 	<sql id="dao_where_statement">
-    	<if test="id != null and id != ''">
+    	<if test="historyLogin.id != null and historyLogin.id != ''">
 			AND	ID	=	#{id}
 		</if>
-		<if test="uid != null and uid != ''">
-			AND	UID	=	#{uid}
+		<if test="historyLogin.uid != null and historyLogin.uid != ''">
+			AND	UID	=	#{historyLogin.uid}
 		</if>
-		<if test="username != null and username != '' ">
-			AND LOWER(USERNAME) LIKE LOWER(CONCAT('%',#{username},'%'))
+		<if test="historyLogin.username != null and historyLogin.username != '' ">
+			AND LOWER(USERNAME) LIKE LOWER(CONCAT('%',#{historyLogin.username},'%'))
 		</if>
-		<if test="message != null and message != '' ">
-			AND LOWER(MESSAGE) LIKE LOWER(CONCAT('%',#{message},'%'))
+		<if test="historyLogin.message != null and historyLogin.message != '' ">
+			AND LOWER(MESSAGE) LIKE LOWER(CONCAT('%',#{historyLogin.message},'%'))
 		</if>
-		<if test="displayName != null and displayName != '' ">
-			AND LOWER(DISPLAYNAME) LIKE LOWER(CONCAT('%',#{displayName},'%'))
+		<if test="historyLogin.displayName != null and historyLogin.displayName != '' ">
+			AND LOWER(DISPLAYNAME) LIKE LOWER(CONCAT('%',#{historyLogin.displayName},'%'))
 		</if>
 
-		<if test="startDate != null and startDate != ''">
-			AND	LOGINTIME	>=	#{startDate}
+		<if test="historyLogin.startDate != null and historyLogin.startDate != ''">
+			AND	LOGINTIME	>=	#{historyLogin.startDate}
 		</if>
-		<if test="endDate != null and endDate != ''">
-			AND	 #{endDate}	>=	LOGINTIME
+		<if test="historyLogin.endDate != null and historyLogin.endDate != ''">
+			AND	 #{historyLogin.endDate}	>=	LOGINTIME
 		</if>
-		<if test="sessionId != null and sessionId != ''">
-			AND	SESSIONID	=	#{sessionId}
+		<if test="historyLogin.sessionId != null and historyLogin.sessionId != ''">
+			AND	SESSIONID	=	#{historyLogin.sessionId}
 		</if>
-		<if test="loginType != null and loginType != ''">
-			AND	LOGINTYPE	=	#{loginType}
+		<if test="historyLogin.loginType != null and historyLogin.loginType != ''">
+			AND	LOGINTYPE	=	#{historyLogin.loginType}
 		</if>
-		<if test="sourceIp != null and sourceIp != ''">
-			AND	SOURCEIP	=	#{sourceIp}
+		<if test="historyLogin.sourceIp != null and historyLogin.sourceIp != ''">
+			AND	SOURCEIP	=	#{historyLogin.sourceIp}
 		</if>
     </sql>
 

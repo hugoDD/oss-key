@@ -17,7 +17,7 @@
 
 package org.maxkey.web.contorller;
 
-import org.apache.mybatis.jpa.persistence.JpaPageResults;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.maxkey.constants.ConstantsOperateMessage;
 import org.maxkey.crypto.ReciprocalUtils;
 import org.maxkey.domain.ExcelImport;
@@ -70,7 +70,7 @@ public class UserInfoController {
 	 */
 	@RequestMapping(value={"/grid"})
 	@ResponseBody
-	public JpaPageResults<UserInfo> forwardUsersList(@ModelAttribute("userInfo") UserInfo userInfo){
+	public Page<UserInfo> forwardUsersList(@ModelAttribute("userInfo") UserInfo userInfo){
 		return userInfoService.queryPageResults(userInfo);
 
 	}

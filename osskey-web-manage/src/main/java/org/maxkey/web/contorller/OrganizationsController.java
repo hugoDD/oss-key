@@ -17,7 +17,7 @@
 
 package org.maxkey.web.contorller;
 
-import org.apache.mybatis.jpa.persistence.JpaPageResults;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.maxkey.constants.ConstantsOperateMessage;
 import org.maxkey.domain.ExcelImport;
 import org.maxkey.domain.Organizations;
@@ -87,7 +87,7 @@ public class OrganizationsController {
 
 	@RequestMapping(value = { "/pageresults" })
 	@ResponseBody
-	public JpaPageResults<Organizations> pageResults(@ModelAttribute("orgs") Organizations orgs) {
+	public Page<Organizations> pageResults(@ModelAttribute("orgs") Organizations orgs) {
 		return organizationsService.queryPageResults(orgs);
 
 	}

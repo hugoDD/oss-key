@@ -17,7 +17,7 @@
 
 package org.maxkey.web.contorller;
 
-import org.apache.mybatis.jpa.persistence.JpaPageResults;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.maxkey.domain.HistoryLogin;
 import org.maxkey.domain.HistoryLoginApps;
 import org.maxkey.domain.HistoryLogs;
@@ -68,7 +68,7 @@ final static Logger _logger = LoggerFactory.getLogger(LogsController.class);
 	 */
 	@RequestMapping(value={"/grid"})
 	@ResponseBody
-	public JpaPageResults<HistoryLogs> logsDataGrid(PageSearchFilter search, @ModelAttribute("logs") HistoryLogs logs){
+	public Page<HistoryLogs> logsDataGrid(PageSearchFilter search, @ModelAttribute("logs") HistoryLogs logs){
 		_logger.debug("logs/datagrid/ logsGrid() "+logs);
 		return logsService.queryPageResults(search.newPage(),logs);
 	}
@@ -91,7 +91,7 @@ final static Logger _logger = LoggerFactory.getLogger(LogsController.class);
 	 */
 	@RequestMapping(value={"/loginHistory/grid"})
 	@ResponseBody
-	public JpaPageResults<HistoryLogin> logAuthsGrid(PageSearchFilter search,@ModelAttribute("loginHistory") HistoryLogin loginHistory){
+	public Page<HistoryLogin> logAuthsGrid(PageSearchFilter search, @ModelAttribute("loginHistory") HistoryLogin loginHistory){
 		_logger.debug("logs/loginHistory/datagrid/ logsGrid() "+loginHistory);
 		return loginHistoryService.queryPageResults(search.newPage(),loginHistory);
 	}
@@ -110,7 +110,7 @@ final static Logger _logger = LoggerFactory.getLogger(LogsController.class);
 	 */
 	@RequestMapping(value={"/loginAppsHistory/grid"})
 	@ResponseBody
-	public JpaPageResults<HistoryLoginApps> loginAppsHistoryGrid(PageSearchFilter search,@ModelAttribute("loginAppsHistory") HistoryLoginApps loginAppsHistory){
+	public Page<HistoryLoginApps> loginAppsHistoryGrid(PageSearchFilter search, @ModelAttribute("loginAppsHistory") HistoryLoginApps loginAppsHistory){
 		_logger.debug("logs/loginAppsHistory/datagrid/ logsGrid() "+loginAppsHistory);
 		loginAppsHistory.setId(null);
 		return loginAppsHistoryService.queryPageResults(search.newPage(),loginAppsHistory);

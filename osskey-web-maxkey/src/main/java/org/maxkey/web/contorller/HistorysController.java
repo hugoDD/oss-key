@@ -20,7 +20,7 @@ package org.maxkey.web.contorller;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import org.apache.mybatis.jpa.persistence.JpaPageResults;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.maxkey.domain.HistoryLogin;
 import org.maxkey.domain.HistoryLoginApps;
 import org.maxkey.domain.HistoryLogs;
@@ -75,7 +75,7 @@ public class HistorysController {
      */
     @RequestMapping(value = { "/logs/grid" })
     @ResponseBody
-    public JpaPageResults<HistoryLogs> logsDataGrid(PageSearchFilter search,@ModelAttribute("historyLogs") HistoryLogs historyLogs) {
+    public Page<HistoryLogs> logsDataGrid(PageSearchFilter search, @ModelAttribute("historyLogs") HistoryLogs historyLogs) {
         _logger.debug("history/logs/grid/ logsGrid() " + historyLogs);
         return historyLogsService.queryPageResults(search.newPage(),historyLogs);
     }
@@ -93,7 +93,7 @@ public class HistorysController {
      */
     @RequestMapping(value = { "/login/grid" })
     @ResponseBody
-    public JpaPageResults<HistoryLogin> logAuthsGrid(PageSearchFilter search, @ModelAttribute("historyLogin") HistoryLogin historyLogin) {
+    public Page<HistoryLogin> logAuthsGrid(PageSearchFilter search, @ModelAttribute("historyLogin") HistoryLogin historyLogin) {
         _logger.debug("history/login/grid/ logsGrid() " + historyLogin);
         historyLogin.setUid(WebContext.getUserInfo().getId());
         return historyLoginService.queryPageResults(search.newPage(),historyLogin);
@@ -112,8 +112,8 @@ public class HistorysController {
      */
     @RequestMapping(value = { "/loginApps/grid" })
     @ResponseBody
-    public JpaPageResults<HistoryLoginApps> logsSsoGrid(PageSearchFilter search,
-            @ModelAttribute("historyLoginApps") HistoryLoginApps historyLoginApps) {
+    public Page<HistoryLoginApps> logsSsoGrid(PageSearchFilter search,
+                                              @ModelAttribute("historyLoginApps") HistoryLoginApps historyLoginApps) {
         _logger.debug("history/loginApps/grid/ logsGrid() " + historyLoginApps);
         historyLoginApps.setId(null);
 
