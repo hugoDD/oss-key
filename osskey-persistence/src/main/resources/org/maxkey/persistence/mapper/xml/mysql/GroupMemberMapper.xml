@@ -207,7 +207,12 @@
 		</if>
 	</select>
 
-	<update id="addDynamicGroupMember" parameterType="Groups" >
+    <select id="queryPageResults" resultType="org.maxkey.domain.GroupMember">
+
+
+	</select>
+
+    <update id="addDynamicGroupMember" parameterType="Groups" >
     	INSERT INTO MXK_GROUP_MEMBER(
     		ID,
     		GROUPID,

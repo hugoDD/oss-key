@@ -21,6 +21,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.maxkey.constants.ConstantsOperateMessage;
 import org.maxkey.crypto.ReciprocalUtils;
 import org.maxkey.domain.Accounts;
+import org.maxkey.domain.param.PageSearchFilter;
 import org.maxkey.persistence.service.AccountsService;
 import org.maxkey.persistence.service.AppsService;
 import org.maxkey.persistence.service.UserInfoService;
@@ -37,6 +38,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
+
+import java.util.Arrays;
 
 
 @Controller
@@ -64,8 +67,8 @@ public class AccountsController {
 
 	@RequestMapping(value={"/grid"})
 	@ResponseBody
-	public Page<Accounts> grid(@ModelAttribute("appAccounts") Accounts appAccounts){
-		return accountsService.queryPageResults(appAccounts);
+	public Page<Accounts> grid(PageSearchFilter searchFilter, @ModelAttribute("appAccounts") Accounts appAccounts){
+		return accountsService.queryPageResults(searchFilter.newPage(),appAccounts);
 
 	}
 
@@ -87,7 +90,7 @@ public class AccountsController {
 
 	/**
 	 *
-	 * @param group
+	 * @param appAccounts
 	 * @return
 	 */
 	@ResponseBody
@@ -95,7 +98,7 @@ public class AccountsController {
 	public Message add(@ModelAttribute("appAccounts") Accounts appAccounts ) {
 		_logger.debug("-update  :" + appAccounts);
 		appAccounts.setRelatedPassword(ReciprocalUtils.encode(appAccounts.getRelatedPassword()));
-		accountsService.insert(appAccounts);
+		accountsService.save(appAccounts);
 		return  new Message(WebContext.getI18nValue(ConstantsOperateMessage.UPDATE_SUCCESS),MessageType.success);
 
 	}
@@ -104,7 +107,7 @@ public class AccountsController {
 	@RequestMapping(value = { "/forwardUpdate/{id}" })
 	public ModelAndView forwardUpdate(@PathVariable("id") String id) {
 		ModelAndView modelAndView=new ModelAndView("/accounts/appAccountsUpdate");
-		Accounts appAccounts =accountsService.get(id);
+		Accounts appAccounts =accountsService.getById(id);
 
 		appAccounts.setRelatedPassword(ReciprocalUtils.decoder(appAccounts.getRelatedPassword()));
 		modelAndView.addObject("model",appAccounts);
@@ -123,7 +126,7 @@ public class AccountsController {
 		_logger.debug("-update  :" + appAccounts);
 
 		appAccounts.setRelatedPassword(ReciprocalUtils.encode(appAccounts.getRelatedPassword()));
-		accountsService.update(appAccounts);
+		accountsService.updateById(appAccounts);
 		return  new Message(WebContext.getI18nValue(ConstantsOperateMessage.UPDATE_SUCCESS),MessageType.success);
 
 	}
@@ -136,9 +139,10 @@ public class AccountsController {
 		_logger.debug("-delete  AppAccounts :" + appAccounts);
 
 		String[] appAccountsds=appAccounts.getId().split(",");
-		for(int i=0;i<appAccountsds.length;i++){
-			accountsService.remove(appAccountsds[i]);
-		}
+		accountsService.removeByIds(Arrays.asList(appAccountsds));
+//		for(int i=0;i<appAccountsds.length;i++){
+//			accountsService.removeB(appAccountsds[i]);
+//		}
 
 		return  new Message(WebContext.getI18nValue(ConstantsOperateMessage.DELETE_SUCCESS),MessageType.success);
 

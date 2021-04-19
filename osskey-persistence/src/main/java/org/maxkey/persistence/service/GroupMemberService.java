@@ -17,6 +17,8 @@
 
 package org.maxkey.persistence.service;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.maxkey.domain.GroupMember;
 import org.maxkey.domain.Groups;
@@ -26,4 +28,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class GroupMemberService  extends ServiceImpl<GroupMemberMapper,GroupMember> {
 
+    public Page<GroupMember> queryPageResults(IPage<Object> newPage, GroupMember groupMember) {
+        return  baseMapper.queryPageResults(newPage,groupMember);
+    }
 }

@@ -17,6 +17,8 @@
 
 package org.maxkey.persistence.service;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.maxkey.domain.GroupPrivileges;
 import org.maxkey.persistence.mapper.GroupPrivilegesMapper;
@@ -26,5 +28,7 @@ import org.springframework.stereotype.Service;
 public class GroupPrivilegesService  extends ServiceImpl<GroupPrivilegesMapper,GroupPrivileges> {
 
 
-
+    public Page<GroupPrivileges> queryPageResults(IPage<GroupPrivileges> newPage, GroupPrivileges groupApp) {
+        return baseMapper.queryPageResults(newPage, groupApp);
+    }
 }

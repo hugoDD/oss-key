@@ -44,7 +44,7 @@ public class BasicDetailsController  extends BaseAppContorller {
 	public ModelAndView forwardAdd() {
 		ModelAndView modelAndView=new ModelAndView("apps/basic/appAdd");
 		Apps appDetails =new Apps();
-		appDetails.setId(appDetails.generateId());
+		//appDetails.setId(appDetails.generateId());
 		appDetails.setProtocol(ConstantsProtocols.BASIC);
 		appDetails.setSecret(ReciprocalUtils.generateKey(ReciprocalUtils.Algorithm.DES));
 		modelAndView.addObject("model",appDetails);
@@ -58,7 +58,7 @@ public class BasicDetailsController  extends BaseAppContorller {
 
 		transform(appDetails);
 
-		if (appsService.insert(appDetails)) {
+		if (appsService.save(appDetails)) {
 			  new Message(WebContext.getI18nValue(ConstantsOperateMessage.INSERT_SUCCESS),MessageType.success);
 
 		} else {
@@ -70,7 +70,7 @@ public class BasicDetailsController  extends BaseAppContorller {
 	@RequestMapping(value = { "/forwardUpdate/{id}" })
 	public ModelAndView forwardUpdate(@PathVariable("id") String id) {
 		ModelAndView modelAndView=new ModelAndView("apps/basic/appUpdate");
-		Apps appDetails=appsService.get(id);
+		Apps appDetails=appsService.getById(id);
 		super.decoderSecret(appDetails);
 		WebContext.setAttribute(appDetails.getId(), appDetails.getIcon());
 		modelAndView.addObject("model",appDetails);
@@ -88,7 +88,7 @@ public class BasicDetailsController  extends BaseAppContorller {
 		_logger.debug("-update  application :" + appDetails);
 		transform(appDetails);
 
-		if (appsService.update(appDetails)) {
+		if (appsService.updateById(appDetails)) {
 			  new Message(WebContext.getI18nValue(ConstantsOperateMessage.UPDATE_SUCCESS),MessageType.success);
 
 		} else {
@@ -102,7 +102,7 @@ public class BasicDetailsController  extends BaseAppContorller {
 	@RequestMapping(value={"/delete/{id}"})
 	public Message delete(@PathVariable("id") String id) {
 		_logger.debug("-delete  application :" + id);
-		if (appsService.remove(id)) {
+		if (appsService.removeById(id)) {
 			return  new Message(WebContext.getI18nValue(ConstantsOperateMessage.DELETE_SUCCESS),MessageType.success);
 
 		} else {

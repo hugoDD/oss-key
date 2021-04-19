@@ -58,4 +58,8 @@
 		<include refid="where_statement"/>
 	</select>
 
+    <select id="queryPageResults" resultType="org.maxkey.domain.GroupPrivileges">
+
+	</select>
+
 </mapper>

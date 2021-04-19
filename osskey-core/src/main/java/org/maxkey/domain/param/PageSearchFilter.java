@@ -27,7 +27,7 @@ public class PageSearchFilter extends  SearchFilter{
 
 
     public <T> IPage<T> newPage(){
-        Page<T> page =  new Page<>(this.pageSize,this.pageNumber);
+        Page<T> page =  new Page<>(this.pageNumber,this.pageSize);
         if("asc".equalsIgnoreCase(this.sortOrder)){
             page.addOrder( OrderItem.asc(this.sortField));
         }else if("desc".equalsIgnoreCase(this.sortOrder)){

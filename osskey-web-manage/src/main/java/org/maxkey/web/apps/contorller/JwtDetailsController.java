@@ -1,19 +1,19 @@
 /*
  * Copyright [2020] [MaxKey of copyright http://www.maxkey.top]
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
 
 package org.maxkey.web.apps.contorller;
 
@@ -40,16 +40,16 @@ import org.springframework.web.servlet.ModelAndView;
 @RequestMapping(value={"/apps/jwt"})
 public class JwtDetailsController  extends BaseAppContorller {
 	final static Logger _logger = LoggerFactory.getLogger(JwtDetailsController.class);
-	
+
 	@Autowired
 	AppsJwtDetailsService jwtDetailsService;
-	
-	
+
+
 	@RequestMapping(value = { "/forwardAdd" })
 	public ModelAndView forwardAdd() {
 		ModelAndView modelAndView=new ModelAndView("apps/jwt/appAdd");
 		AppsJwtDetails jwtDetails =new AppsJwtDetails();
-		jwtDetails.setId(jwtDetails.generateId());
+		//jwtDetails.setId(jwtDetails.generateId());
 		jwtDetails.setProtocol(ConstantsProtocols.JWT);
 		jwtDetails.setSecret(ReciprocalUtils.generateKey(ReciprocalUtils.Algorithm.AES));
 		jwtDetails.setAlgorithmKey(jwtDetails.getSecret());
@@ -57,25 +57,25 @@ public class JwtDetailsController  extends BaseAppContorller {
 		modelAndView.addObject("model",jwtDetails);
 		return modelAndView;
 	}
-	
-	
+
+
 	@RequestMapping(value={"/add"})
 	public ModelAndView insert(@ModelAttribute("jwtDetails") AppsJwtDetails jwtDetails) {
 		_logger.debug("-Add  :" + jwtDetails);
-		
+
 		transform(jwtDetails);
-		
+
 		jwtDetails.setAlgorithmKey(jwtDetails.getSecret());
-		
-		if (jwtDetailsService.insert(jwtDetails)&&appsService.insertApp(jwtDetails)) {
+
+		if (jwtDetailsService.save(jwtDetails)&&appsService.save(jwtDetails)) {
 			  new Message(WebContext.getI18nValue(ConstantsOperateMessage.INSERT_SUCCESS),MessageType.success);
-			
+
 		} else {
 			  new Message(WebContext.getI18nValue(ConstantsOperateMessage.INSERT_SUCCESS),MessageType.error);
 		}
 		return   WebContext.forward("forwardUpdate/"+jwtDetails.getId());
 	}
-	
+
 	@RequestMapping(value = { "/forwardUpdate/{id}" })
 	public ModelAndView forwardUpdate(@PathVariable("id") String id) {
 		ModelAndView modelAndView=new ModelAndView("apps/jwt/appUpdate");
@@ -93,33 +93,33 @@ public class JwtDetailsController  extends BaseAppContorller {
 	 * @param application
 	 * @return
 	 */
-	@RequestMapping(value={"/update"})  
+	@RequestMapping(value={"/update"})
 	public ModelAndView update(@ModelAttribute("jwtDetails") AppsJwtDetails jwtDetails) {
 		//
 		_logger.debug("-update  application :" + jwtDetails);
 		transform(jwtDetails);
 		jwtDetails.setAlgorithmKey(jwtDetails.getSecret());
-		if (jwtDetailsService.update(jwtDetails)&&appsService.updateApp(jwtDetails)) {
+		if (jwtDetailsService.updateById(jwtDetails)&&appsService.updateById(jwtDetails)) {
 			  new Message(WebContext.getI18nValue(ConstantsOperateMessage.UPDATE_SUCCESS),MessageType.success);
-			
+
 		} else {
 			  new Message(WebContext.getI18nValue(ConstantsOperateMessage.UPDATE_ERROR),MessageType.error);
 		}
 		return   WebContext.forward("forwardUpdate/"+jwtDetails.getId());
 	}
-	
+
 
 	@ResponseBody
 	@RequestMapping(value={"/delete/{id}"})
 	public Message delete(@PathVariable("id") String id) {
 		_logger.debug("-delete  application :" + id);
-		if (jwtDetailsService.remove(id)&&appsService.remove(id)) {
+		if (jwtDetailsService.removeById(id)&&appsService.removeById(id)) {
 			return  new Message(WebContext.getI18nValue(ConstantsOperateMessage.DELETE_SUCCESS),MessageType.success);
-			
+
 		} else {
 			return  new Message(WebContext.getI18nValue(ConstantsOperateMessage.DELETE_SUCCESS),MessageType.error);
 		}
 	}
-	
-	
+
+
 }

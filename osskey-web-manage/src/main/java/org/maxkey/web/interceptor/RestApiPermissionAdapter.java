@@ -85,7 +85,7 @@ public class RestApiPermissionAdapter  implements AsyncHandlerInterceptor  {
 		    _logger.trace("appId "+ appId+" , appSecret " + appSecret);
 		    Apps app = appsCacheStore.get(appId);
 		    if (app == null) {
-		    	app = appsService.get(appId);
+		    	app = appsService.getById(appId);
 		    	appsCacheStore.put(appId, app);
 		    }
 

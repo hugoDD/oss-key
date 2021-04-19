@@ -24,6 +24,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.maxkey.authn.SigninPrincipal;
 import org.maxkey.authz.endpoint.AuthorizeBaseEndpoint;
 import org.maxkey.authz.endpoint.adapter.AbstractAuthorizeAdapter;
 import org.maxkey.authz.token.endpoint.adapter.TokenBasedDefaultAdapter;
@@ -42,10 +43,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+
 /**
  * @author Crystal.Sea
  *
  */
+@Api(tags = "TokenBased接口文档模块")
 @Controller
 public class TokenBasedAuthorizeEndpoint  extends AuthorizeBaseEndpoint{
 
@@ -58,6 +63,7 @@ public class TokenBasedAuthorizeEndpoint  extends AuthorizeBaseEndpoint{
 	@Autowired
 	ApplicationConfig applicationConfig;
 	
+	@ApiOperation(value = "TokenBased认证接口", notes = "传递参数应用ID",httpMethod="GET")
 	@RequestMapping("/authz/tokenbased/{id}")
 	public ModelAndView authorize(
 			HttpServletRequest request,
@@ -67,7 +73,7 @@ public class TokenBasedAuthorizeEndpoint  extends AuthorizeBaseEndpoint{
 		
 		
 		AppsTokenBasedDetails tokenBasedDetails=null;
-		tokenBasedDetails=tokenBasedDetailsService.get(id);
+		tokenBasedDetails=tokenBasedDetailsService.getAppDetails(id);
 		_logger.debug(""+tokenBasedDetails);
 		
 		Apps  application= getApp(id);
@@ -82,6 +88,7 @@ public class TokenBasedAuthorizeEndpoint  extends AuthorizeBaseEndpoint{
 		}
 		
 		String tokenData=adapter.generateInfo(
+		        (SigninPrincipal)WebContext.getAuthentication().getPrincipal(),
 				WebContext.getUserInfo(), 
 				tokenBasedDetails);
 		
@@ -117,17 +124,17 @@ public class TokenBasedAuthorizeEndpoint  extends AuthorizeBaseEndpoint{
 			
 			cookie.setPath("/");
 			//
-			//cookie.setDomain("."+applicationConfig.getSubDomainName());
+			//cookie.setDomain("."+applicationConfig.getBaseDomainName());
 			//tomcat 8.5
-			cookie.setDomain(applicationConfig.getDomainName());
+			cookie.setDomain(applicationConfig.getBaseDomainName());
 			
-			_logger.debug("Sub Domain Name : "+"."+applicationConfig.getDomainName());
+			_logger.debug("Sub Domain Name : "+"."+applicationConfig.getBaseDomainName());
 			response.addCookie(cookie);
 			
-			if(tokenBasedDetails.getRedirectUri().indexOf(applicationConfig.getDomainName())>-1){
+			if(tokenBasedDetails.getRedirectUri().indexOf(applicationConfig.getBaseDomainName())>-1){
 				return WebContext.redirect(tokenBasedDetails.getRedirectUri());
 			}else{
-				_logger.error(tokenBasedDetails.getRedirectUri()+" not in domain "+applicationConfig.getDomainName());
+				_logger.error(tokenBasedDetails.getRedirectUri()+" not in domain "+applicationConfig.getBaseDomainName());
 				return null;
 			}
 		}

@@ -1,19 +1,19 @@
 /*
  * Copyright [2020] [MaxKey of copyright http://www.maxkey.top]
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
 
 package org.maxkey.identity.rest;
 
@@ -39,12 +39,12 @@ public class RestOrganizationController {
 
     @Autowired
     OrganizationsService organizationsService;
-    
+
     @ResponseBody
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public Organizations getUser(@PathVariable String id,
                                        @RequestParam(required = false) String attributes) {
-        Organizations org = organizationsService.get(id);
+        Organizations org = organizationsService.getById(id);
         return org;
     }
 
@@ -53,7 +53,7 @@ public class RestOrganizationController {
     public Organizations create(@RequestBody  Organizations org,
                                                       @RequestParam(required = false) String attributes,
                                                       UriComponentsBuilder builder) throws IOException {
-        Organizations loadOrg = organizationsService.get(org.getId());
+        Organizations loadOrg = organizationsService.getById(org.getId());
         if(loadOrg == null) {
             organizationsService.insert(org);
         }else {
@@ -68,7 +68,7 @@ public class RestOrganizationController {
                                                        @RequestBody Organizations org,
                                                        @RequestParam(required = false) String attributes)
             throws IOException {
-        Organizations loadOrg = organizationsService.get(id);
+        Organizations loadOrg = organizationsService.getById(id);
         if(loadOrg == null) {
             organizationsService.insert(org);
         }else {
@@ -81,7 +81,6 @@ public class RestOrganizationController {
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     @ResponseStatus(HttpStatus.OK)
     public void delete(@PathVariable final String id) {
-        organizationsService.remove(id);
-       
+        organizationsService.removeById(id);
     }
 }

@@ -21,6 +21,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.maxkey.constants.ConstantsOperateMessage;
 import org.maxkey.domain.ExcelImport;
 import org.maxkey.domain.Organizations;
+import org.maxkey.domain.param.PageSearchFilter;
 import org.maxkey.persistence.service.OrganizationsService;
 import org.maxkey.web.WebContext;
 import org.maxkey.web.component.TreeNode;
@@ -55,7 +56,8 @@ public class OrganizationsController {
   public List<HashMap<String, Object>> organizationsTree(@RequestParam(value = "id", required = false) String id) {
     _logger.debug("organizationsTree id :" + id);
     Organizations queryOrg = new Organizations();
-    List<Organizations> organizationsList = this.organizationsService.query(queryOrg);
+  //  List<Organizations> organizationsList = this.organizationsService.query(queryOrg);
+    List<Organizations> organizationsList = this.organizationsService.list();
     TreeNodeList treeNodeList = new TreeNodeList();
 
     for (Organizations org : organizationsList) {
@@ -87,8 +89,8 @@ public class OrganizationsController {
 
 	@RequestMapping(value = { "/pageresults" })
 	@ResponseBody
-	public Page<Organizations> pageResults(@ModelAttribute("orgs") Organizations orgs) {
-		return organizationsService.queryPageResults(orgs);
+	public Page<Organizations> pageResults(PageSearchFilter page , @ModelAttribute("orgs") Organizations orgs) {
+		return organizationsService.queryPageResults(page.newPage(),orgs);
 
 	}
 
@@ -105,7 +107,7 @@ public class OrganizationsController {
 	@RequestMapping(value = { "/forwardAdd" })
 	public ModelAndView forwardAdd(@ModelAttribute("org") Organizations org) {
 		ModelAndView modelAndView=new ModelAndView("/orgs/orgsAdd");
-		org =organizationsService.get(org.getId());
+		org =organizationsService.getById(org.getId());
 		modelAndView.addObject("model",org);
 		return modelAndView;
 	}
@@ -117,9 +119,9 @@ public class OrganizationsController {
   @RequestMapping({"/add"})
   public Message insert(@ModelAttribute("org") Organizations org) {
     _logger.debug("-Add  :" + org);
-    if (null == org.getId() || org.getId().equals("")) {
-    	org.generateId();
-    }
+    //if (null == org.getId() || org.getId().equals("")) {
+    	//org.generateId();
+    //}
 
     if (this.organizationsService.insert(org)) {
       return new Message(WebContext.getI18nValue("message.action.insert.success"), MessageType.success);
@@ -139,7 +141,7 @@ public class OrganizationsController {
   @RequestMapping({"/query"})
   public Message query(@ModelAttribute("org") Organizations org) {
     _logger.debug("-query  :" + org);
-    if (this.organizationsService.load(org) != null) {
+    if (this.organizationsService.getById(org) != null) {
       return new Message(WebContext.getI18nValue("message.action.insert.success"), MessageType.success);
     }
 
@@ -152,7 +154,7 @@ public class OrganizationsController {
 	@RequestMapping(value = { "/forwardUpdate/{id}" })
 	public ModelAndView forwardUpdate(@PathVariable("id") String id) {
 		ModelAndView modelAndView=new ModelAndView("/orgs/orgsUpdate");
-		Organizations org =organizationsService.get(id);
+		Organizations org =organizationsService.getById(id);
 
 		modelAndView.addObject("model",org);
 		return modelAndView;
@@ -181,7 +183,7 @@ public class OrganizationsController {
   @RequestMapping({"/delete"})
   public Message delete(@ModelAttribute("org") Organizations org) {
     _logger.debug("-delete  organization :" + org);
-    if (this.organizationsService.remove(org.getId())) {
+    if (this.organizationsService.removeById(org.getId())) {
       return new Message(WebContext.getI18nValue("message.action.delete.success"), MessageType.success);
     }
 

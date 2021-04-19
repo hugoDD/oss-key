@@ -21,9 +21,12 @@
 package org.maxkey.persistence.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.apache.ibatis.annotations.Update;
 import org.maxkey.domain.apps.Apps;
 import org.maxkey.domain.apps.UserApps;
+import org.maxkey.domain.param.PageSearchFilter;
 
 import java.util.List;
 
@@ -42,4 +45,6 @@ public  interface AppsMapper extends BaseMapper<Apps> {
 
 
      List<UserApps> queryMyApps(UserApps userApplications);
+
+    Page<Apps> queryPageResults(IPage<Apps> page, Apps applications);
 }

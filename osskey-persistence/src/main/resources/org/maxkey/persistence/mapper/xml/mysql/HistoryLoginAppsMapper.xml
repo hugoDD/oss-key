@@ -3,32 +3,32 @@
 <mapper namespace="org.maxkey.persistence.mapper.HistoryLoginAppsMapper" >
 
 	<sql id="dao_where_statement">
-    	<if test="id != null and id != ''">
-			AND	ID	=	#{id}
+    	<if test="historyLoginApps.id != null and historyLoginApps.id != ''">
+			AND	ID	=	#{historyLoginApps.id}
 		</if>
-		<if test="sessionId != null and sessionId != ''">
-			AND	SESSIONID	=	#{sessionId}
+		<if test="historyLoginApps.sessionId != null and historyLoginApps.sessionId != ''">
+			AND	SESSIONID	=	#{historyLoginApps.sessionId}
 		</if>
-		<if test="appId != null and appId != ''">
-			AND	APPID	=	#{appId}
+		<if test="historyLoginApps.appId != null and historyLoginApps.appId != ''">
+			AND	APPID	=	#{historyLoginApps.appId}
 		</if>
-		<if test="appName != null and appName != ''">
-			AND	APPNAME	LIKE CONCAT('%',#{appName},'%')
+		<if test="historyLoginApps.appName != null and historyLoginApps.appName != ''">
+			AND	APPNAME	LIKE CONCAT('%',#{historyLoginApps.appName},'%')
 		</if>
-		<if test="uid != null and uid != ''">
-			AND	UID	=	#{uid}
+		<if test="historyLoginApps.uid != null and historyLoginApps.uid != ''">
+			AND	UID	=	#{historyLoginApps.uid}
 		</if>
-		<if test="username != null and username != ''">
-			AND	USERNAME	LIKE CONCAT('%',#{username},'%')
+		<if test="historyLoginApps.username != null and historyLoginApps.username != ''">
+			AND	USERNAME	LIKE CONCAT('%',#{historyLoginApps.username},'%')
 		</if>
-		<if test="displayName != null and displayName != ''">
-			AND	DISPLAYNAME	LIKE CONCAT('%',#{displayName},'%')
+		<if test="historyLoginApps.displayName != null and historyLoginApps.displayName != ''">
+			AND	DISPLAYNAME	LIKE CONCAT('%',#{historyLoginApps.displayName},'%')
 		</if>
-		<if test="startDate != null and startDate != ''">
-			AND	LOGINTIME	>=	#{startDate}
+		<if test="historyLoginApps.startDate != null and historyLoginApps.startDate != ''">
+			AND	LOGINTIME	>=	#{historyLoginApps.startDate}
 		</if>
-		<if test="endDate != null and endDate != ''">
-			AND	 #{endDate}	>=	LOGINTIME
+		<if test="historyLoginApps.endDate != null and historyLoginApps.endDate != ''">
+			AND	 #{historyLoginApps.endDate}	>=	LOGINTIME
 		</if>
 
     </sql>

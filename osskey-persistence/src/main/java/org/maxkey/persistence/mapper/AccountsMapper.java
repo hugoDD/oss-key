@@ -21,6 +21,8 @@
 package org.maxkey.persistence.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.maxkey.domain.Accounts;
 
 /**
@@ -30,4 +32,5 @@ import org.maxkey.domain.Accounts;
 public  interface AccountsMapper extends BaseMapper<Accounts> {
 
 
+    Page<Accounts> queryPageResults(IPage<Object> newPage, Accounts appAccounts);
 }

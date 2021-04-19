@@ -21,6 +21,8 @@
 package org.maxkey.persistence.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.maxkey.domain.GroupPrivileges;
 
 import java.util.List;
@@ -38,4 +40,5 @@ public  interface GroupPrivilegesMapper extends BaseMapper<GroupPrivileges> {
 	 List<GroupPrivileges> appsNotInGroup(GroupPrivileges entity);
 
 
+    Page<GroupPrivileges> queryPageResults(IPage<GroupPrivileges> newPage, GroupPrivileges groupApp);
 }

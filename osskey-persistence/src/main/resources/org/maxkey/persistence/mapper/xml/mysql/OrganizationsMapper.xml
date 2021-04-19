@@ -4,8 +4,8 @@
 
 	<sql id="dao_where_statement">
     	<if test="id != null and id != ''">
-			AND	ID	=	#{id} 	
-		</if> 
+			AND	ID	=	#{id}
+		</if>
 		<if test="name != null and name != '' ">
 			AND	NAME	like	'%#{name}%'
 		</if>
@@ -17,20 +17,20 @@
 		</if>
 
     </sql>
-	
-    
-    
-     <select id="queryPageResults" parameterType="Organizations" resultType="Organizations">
-    	SELECT 
+
+
+
+     <select id="queryPageResults" parameterType="Organizations" resultType="org.maxkey.domain.Organizations">
+    	SELECT
 			*
-    	FROM MXK_ORGANIZATIONS 
+    	FROM MXK_ORGANIZATIONS
     	WHERE	1	=	1
     	<include refid="dao_where_statement"/>
     </select>
-    
-  
+
+
     <update id="logisticDelete" parameterType="Organizations" >
-    	UPDATE MXK_ORGANIZATIONS SET STATUS	=	'2'  
+    	UPDATE MXK_ORGANIZATIONS SET STATUS	=	'2'
     		WHERE	1	=	1
     	<if test="id != null and id != '' ">
 			AND	ID	=	#{id}
@@ -45,14 +45,14 @@
 			ADN	CODEPATH	=	#{codePath}
 		</if>
     </update>
-    
+
     <update id="logisticBatchDelete" parameterType="java.util.List">
-    	UPDATE MXK_ORGANIZATIONS SET STATUS	=	'2'  
+    	UPDATE MXK_ORGANIZATIONS SET STATUS	=	'2'
     		 WHERE ID IN
-		<foreach collection="ids" item="selectId"  open="(" separator="," close=")">  
-        	#{selectId}   
+		<foreach collection="ids" item="selectId"  open="(" separator="," close=")">
+        	#{selectId}
      	</foreach>
     </update>
-    
-  
+
+
 </mapper>

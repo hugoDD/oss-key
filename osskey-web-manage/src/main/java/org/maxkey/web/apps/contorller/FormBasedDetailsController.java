@@ -49,7 +49,7 @@ public class FormBasedDetailsController  extends BaseAppContorller {
 	public ModelAndView forwardAdd() {
 		ModelAndView modelAndView=new ModelAndView("apps/formbased/appAdd");
 		AppsFormBasedDetails formBasedDetails=new AppsFormBasedDetails();
-		formBasedDetails.setId(formBasedDetails.generateId());
+		//formBasedDetails.setId(formBasedDetails.generateId());
 		formBasedDetails.setProtocol(ConstantsProtocols.FORMBASED);
 		formBasedDetails.setSecret(ReciprocalUtils.generateKey(""));
 
@@ -65,7 +65,7 @@ public class FormBasedDetailsController  extends BaseAppContorller {
 
 		transform(formBasedDetails);
 
-		if (formBasedDetailsService.insert(formBasedDetails)&&appsService.insertApp(formBasedDetails)) {
+		if (formBasedDetailsService.save(formBasedDetails)&&appsService.save(formBasedDetails)) {
 			  new Message(WebContext.getI18nValue(ConstantsOperateMessage.INSERT_SUCCESS),MessageType.success);
 
 		} else {
@@ -87,7 +87,7 @@ public class FormBasedDetailsController  extends BaseAppContorller {
 	}
 	/**
 	 * modify
-	 * @param application
+	 * @param formBasedDetails
 	 * @return
 	 */
 	@RequestMapping(value={"/update"})
@@ -95,7 +95,7 @@ public class FormBasedDetailsController  extends BaseAppContorller {
 		//
 		_logger.debug("-update  application :" + formBasedDetails);
 		transform(formBasedDetails);
-		if (formBasedDetailsService.update(formBasedDetails)&&appsService.updateApp(formBasedDetails)) {
+		if (formBasedDetailsService.updateById(formBasedDetails)&&appsService.updateById(formBasedDetails)) {
 			  new Message(WebContext.getI18nValue(ConstantsOperateMessage.UPDATE_SUCCESS),MessageType.success);
 
 		} else {
@@ -109,7 +109,7 @@ public class FormBasedDetailsController  extends BaseAppContorller {
 	@RequestMapping(value={"/delete/{id}"})
 	public Message delete(@PathVariable("id") String id) {
 		_logger.debug("-delete  application :" + id);
-		if (formBasedDetailsService.remove(id)&&appsService.remove(id)) {
+		if (formBasedDetailsService.removeById(id)&&appsService.removeById(id)) {
 			return  new Message(WebContext.getI18nValue(ConstantsOperateMessage.DELETE_SUCCESS),MessageType.success);
 
 		} else {
