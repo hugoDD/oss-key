@@ -1,19 +1,19 @@
 /*
  * Copyright [2020] [MaxKey of copyright http://www.maxkey.top]
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
 
 package org.maxkey.web.contorller;
 
@@ -32,7 +32,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
  * ImageCaptchaEndpoint  Producer captcha.
- * @author Crystal.Sea
+ * @author hugoDD
  *
  */
 @Controller
@@ -44,14 +44,14 @@ public class ImageCaptchaEndpoint extends AbstractImageEndpoint {
 
     /**
      * captcha image Producer.
-     * 
+     *
      * @param request HttpServletRequest
      * @param response HttpServletResponse
      */
     @RequestMapping(value = "/captcha")
     public void captchaHandleRequest(HttpServletRequest request, HttpServletResponse response) {
         try {
-           
+
             String kaptchaText = captchaProducer.createText();
             if (applicationConfig.getLoginConfig().getCaptchaType()
                                         .equalsIgnoreCase("Arithmetic")) {
@@ -65,7 +65,7 @@ public class ImageCaptchaEndpoint extends AbstractImageEndpoint {
                     calculateValue = intParamA + intParamB;
                     kaptchaText = intParamA + "+" + intParamB + "=?";
                 }
-                _logger.trace("Sesssion id " + request.getSession().getId() 
+                _logger.trace("Sesssion id " + request.getSession().getId()
                         + " , Arithmetic calculate Value is " + calculateValue);
                 request.getSession().setAttribute(
                         WebConstants.KAPTCHA_SESSION_KEY, calculateValue + "");
@@ -73,9 +73,9 @@ public class ImageCaptchaEndpoint extends AbstractImageEndpoint {
                 // store the text in the session
                 request.getSession().setAttribute(WebConstants.KAPTCHA_SESSION_KEY, kaptchaText);
             }
-            _logger.trace("Sesssion id " + request.getSession().getId() 
+            _logger.trace("Sesssion id " + request.getSession().getId()
                                 + " , Captcha Text is " + kaptchaText);
-           
+
             // create the image with the text
             BufferedImage bufferedImage = captchaProducer.createImage(kaptchaText);
             producerImage(request,response,bufferedImage);
@@ -84,7 +84,7 @@ public class ImageCaptchaEndpoint extends AbstractImageEndpoint {
         }
     }
 
- 
+
 
     public void setCaptchaProducer(Producer captchaProducer) {
         this.captchaProducer = captchaProducer;

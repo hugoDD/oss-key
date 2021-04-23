@@ -31,7 +31,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 /**
- * @author Crystal.Sea
+ * @author hugoDD
  *
  */
 @TableName("MXK_APPS_JWT_DETAILS")

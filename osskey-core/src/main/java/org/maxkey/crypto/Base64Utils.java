@@ -1,19 +1,19 @@
 /*
  * Copyright [2020] [MaxKey of copyright http://www.maxkey.top]
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
 
 package org.maxkey.crypto;
 
@@ -24,9 +24,9 @@ import org.apache.commons.codec.binary.Base64;
 
 /**
  * Base64 Utils.
- * 
- * @author Crystal.Sea
- * 
+ *
+ * @author hugoDD
+ *
  */
 public final class Base64Utils {
 
@@ -58,7 +58,7 @@ public final class Base64Utils {
 
     /**
      * encode file to base64 Code String.
-     * 
+     *
      * @param fileName file path
      * @return *
      * @throws Exception e
@@ -76,7 +76,7 @@ public final class Base64Utils {
 
     /**
      * base64 Code decode String save to targetPath.
-     * 
+     *
      * @param base64Code String
      * @param targetPath String
      * @throws Exception e
@@ -92,9 +92,9 @@ public final class Base64Utils {
 
     /**
      * base64 code save to file.
-     * 
+     *
      * @param base64Code String
-     * @param targetPath String 
+     * @param targetPath String
      * @throws Exception e
      */
 
@@ -112,7 +112,7 @@ public final class Base64Utils {
      */
     public static String base64UrlEncode(byte[] simple) {
         // Regular base64
-        String s = new String(Base64.encodeBase64(simple)); 
+        String s = new String(Base64.encodeBase64(simple));
         // encoder
         s = s.split("=")[0]; // Remove any trailing '='s
         s = s.replace('+', '-'); // 62nd char of encoding

@@ -20,7 +20,7 @@ package org.maxkey.authn.support.socialsignon.service;
 
 /**
  *
- * @author Crystal.Sea
+ * @author hugoDD
  */
 public class SocialsAssociate  {
 

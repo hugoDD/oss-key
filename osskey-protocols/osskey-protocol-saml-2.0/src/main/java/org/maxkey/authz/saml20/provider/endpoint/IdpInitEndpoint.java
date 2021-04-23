@@ -1,19 +1,19 @@
 /*
  * Copyright [2020] [MaxKey of copyright http://www.maxkey.top]
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
 
 package org.maxkey.authz.saml20.provider.endpoint;
 
@@ -46,7 +46,7 @@ import io.swagger.annotations.ApiOperation;
 /**
  * idp init  not need extract SAML request message
  * AuthnRequestInfo use default init
- * @author Crystal.Sea
+ * @author hugoDD
  *
  */
 @Api(tags = "SAML v2.0 API文档模块")
@@ -55,15 +55,15 @@ public class IdpInitEndpoint {
 	private final static Logger logger = LoggerFactory.getLogger(IdpInitEndpoint.class);
 
 	private BindingAdapter bindingAdapter;
-	
+
 	@Autowired
 	@Qualifier("postSimpleSignBindingAdapter")
 	private BindingAdapter postSimpleSignBindingAdapter;
-	
+
 	@Autowired
 	@Qualifier("postBindingAdapter")
 	private BindingAdapter postBindingAdapter;
-	
+
 	@Autowired
 	@Qualifier("extractRedirectBindingAdapter")
 	private ExtractBindingAdapter extractRedirectBindingAdapter;
@@ -74,15 +74,15 @@ public class IdpInitEndpoint {
 
 	@Autowired
 	private AppsSaml20DetailsService saml20DetailsService;
-	
+
 	/**
-	 * 
+	 *
 	 * @param request
 	 * @param response
 	 * @param appId
 	 * @return
 	 * @throws Exception
-	 * 
+	 *
 	 *
 	 */
 	@ApiOperation(value = "SAML 2.0 IDP Init接口", notes = "传递参数应用ID",httpMethod="GET")
@@ -105,20 +105,20 @@ public class IdpInitEndpoint {
 
 		extractRedirectBindingAdapter.setSaml20Detail(saml20Details);
 		extractRedirectBindingAdapter.buildSecurityPolicyResolver(trustKeyStore);
-		
+
 		String binding=saml20Details.getBinding();
-		
+
 		if(binding.endsWith("PostSimpleSign")){
 			bindingAdapter=postSimpleSignBindingAdapter;
 		}else{
 			bindingAdapter=postBindingAdapter;
 		}
-		
+
 		//AuthnRequestInfo init authnRequestID to null
 		bindingAdapter.setAuthnRequestInfo(new AuthnRequestInfo());
 
 		bindingAdapter.setExtractBindingAdapter(extractRedirectBindingAdapter);
-		
+
 		request.getSession().setAttribute(WebConstants.AUTHORIZE_SIGN_ON_APP_SAMLV20_ADAPTER, bindingAdapter);
 
 		logger.debug("idp init forwarding to assertion :","/authz/saml20/assertion");

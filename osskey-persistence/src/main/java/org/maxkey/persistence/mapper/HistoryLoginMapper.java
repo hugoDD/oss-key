@@ -24,7 +24,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.maxkey.domain.HistoryLogin;
 
 /**
- * @author Crystal.sea
+ * @author hugoDD
  *
  */
 public interface HistoryLoginMapper extends BaseMapper<HistoryLogin> {

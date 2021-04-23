@@ -31,7 +31,7 @@ package org.maxkey.crypto.signature;
  *   5. B received data & signedData from A
  *   6. B verify data & signedData use public key
  *
- * @author Crystal.Sea
+ * @author hugoDD
  *
  */
 public  interface  ISigner {

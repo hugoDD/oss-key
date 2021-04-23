@@ -33,7 +33,7 @@ import java.util.List;
 
 /**
  * ImageEndpoint  Producer Image and captcha.
- * @author Crystal.Sea
+ * @author hugoDD
  *
  */
 @Controller

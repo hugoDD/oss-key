@@ -40,7 +40,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * 日志处理需在parasec-servlet.xml中配置
  * mvc:interceptors  log
- * @author Crystal.Sea
+ * @author hugoDD
  *
  */
 @Component

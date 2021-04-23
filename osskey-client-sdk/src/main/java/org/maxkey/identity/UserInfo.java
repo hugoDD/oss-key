@@ -1,19 +1,19 @@
 /*
  * Copyright [2020] [MaxKey of copyright http://www.maxkey.top]
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
 
 package org.maxkey.identity;
 
@@ -25,86 +25,86 @@ import java.util.HashMap;
 
 /**
  * .
- * @author Crystal.Sea
- * 
+ * @author hugoDD
+ *
  */
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class UserInfo implements Serializable  {
-   
+
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = -5193241252705283875L;
 
     String id;
-    
+
     protected String username;
-    
+
     protected String password;
-    
+
     protected String decipherable;
-    
+
     protected String sharedSecret;
-    
+
     protected String sharedCounter;
     /**
      * "Employee", "Supplier","Dealer","Contractor",Partner,Customer "Intern",
      * "Temp", "External", and "Unknown" .
      */
-    
+
     protected String userType;
-    
+
     protected String windowsAccount;
 
     // for user name
-    
+
     protected String displayName;
-    
+
     protected String nickName;
-    
+
     protected String nameZhSpell;
-    
+
     protected String nameZhShortSpell;
-    
+
     protected String givenName;
-    
+
     protected String middleName;
-    
+
     protected String familyName;
-    
+
     protected String honorificPrefix;
-    
+
     protected String honorificSuffix;
-    
+
     protected String formattedName;
 
-    
+
     protected int married;
-    
+
     protected int gender;
-    
+
     protected String birthDate;
     @JsonIgnore
-    
+
     protected byte[] picture;
-    
+
     protected int idType;
-    
+
     protected String idCardNo;
-    
+
     protected String webSite;
-    
+
     protected String startWorkDate;
 
     // for security
-    
+
     protected int authnType;
-    
+
     protected String email;
 
     protected int emailVerified;
-    
+
     protected String mobile;
 
     protected int mobileVerified;
@@ -112,7 +112,7 @@ public class UserInfo implements Serializable  {
     protected String passwordQuestion;
 
     protected String passwordAnswer;
-    
+
     // for apps login protected
     protected int appLoginAuthnType;
     protected String appLoginPassword;
@@ -130,83 +130,83 @@ public class UserInfo implements Serializable  {
     protected int passwordSetType;
     protected Integer loginCount;
 
-    
+
     protected String locale;
-    
+
     protected String timeZone;
-    
+
     protected String preferredLanguage;
 
     // for work
-    
+
     protected String workCountry;
-    
+
     protected String workRegion;// province;
-    
+
     protected String workLocality;// city;
-    
+
     protected String workStreetAddress;
-    
+
     protected String workAddressFormatted;
-    
+
     protected String workEmail;
-    
+
     protected String workPhoneNumber;
-    
+
     protected String workPostalCode;
-    
+
     protected String workFax;
     // for home
-    
+
     protected String homeCountry;
-    
+
     protected String homeRegion;// province;
-    
+
     protected String homeLocality;// city;
-    
+
     protected String homeStreetAddress;
-    
+
     protected String homeAddressFormatted;
-    
+
     protected String homeEmail;
-    
+
     protected String homePhoneNumber;
-    
+
     protected String homePostalCode;
-    
+
     protected String homeFax;
     // for company
-    
+
     protected String employeeNumber;
-    
+
     protected String costCenter;
-    
+
     protected String organization;
-    
+
     protected String division;
-    
+
     protected String departmentId;
-    
+
     protected String department;
-    
+
     protected String jobTitle;
-    
+
     protected String jobLevel;
-    
+
     protected String managerId;
-    
+
     protected String manager;
-    
+
     protected String assistantId;
-    
+
     protected String assistant;
-    
+
     protected String entryDate;
-    
+
     protected String quitDate;
 
     // for social contact
-    
+
     protected String defineIm;
     protected int weixinFollow;
 
@@ -227,17 +227,17 @@ public class UserInfo implements Serializable  {
 
     protected int gridList;
 
-    
+
     String createdBy;
-    
+
     String createdDate;
-    
+
     String modifiedBy;
-    
+
     String modifiedDate;
-    
+
     int status;
-    
+
     String description;
 
     public static class ONLINE {
@@ -320,7 +320,7 @@ public class UserInfo implements Serializable  {
     }
 
     /**
-     * 
+     *
      */
     public UserInfo() {
         super();
@@ -438,7 +438,7 @@ public class UserInfo implements Serializable  {
         this.nickName = nickName;
     }
 
-   
+
 
     public String getNameZhSpell() {
         return nameZhSpell;
@@ -1103,64 +1103,64 @@ public class UserInfo implements Serializable  {
 
     @Override
     public String toString() {
-        return "UserInfo [username=" + username 
+        return "UserInfo [username=" + username
                 + ", password=" + password + ", decipherable=" + decipherable
-                + ", sharedSecret=" + sharedSecret 
+                + ", sharedSecret=" + sharedSecret
                 + ", sharedCounter=" + sharedCounter + ", userType=" + userType
-                + ", windowsAccount=" + windowsAccount 
+                + ", windowsAccount=" + windowsAccount
                 + ", displayName=" + displayName + ", nickName=" + nickName
-                + ", nameZHSpell=" + nameZhSpell 
-                + ", nameZHShortSpell=" + nameZhShortSpell 
+                + ", nameZHSpell=" + nameZhSpell
+                + ", nameZHShortSpell=" + nameZhShortSpell
                 + ", givenName=" + givenName
-                + ", middleName=" + middleName + ", familyName=" + familyName 
+                + ", middleName=" + middleName + ", familyName=" + familyName
                 + ", honorificPrefix=" + honorificPrefix
-                + ", honorificSuffix=" + honorificSuffix 
+                + ", honorificSuffix=" + honorificSuffix
                 + ", formattedName=" + formattedName + ", married=" + married
-                + ", gender=" + gender + ", birthDate=" + birthDate 
+                + ", gender=" + gender + ", birthDate=" + birthDate
                 + ", idType="
-                + idType + ", idCardNo=" + idCardNo + ", webSite=" + webSite 
+                + idType + ", idCardNo=" + idCardNo + ", webSite=" + webSite
                 + ", startWorkDate=" + startWorkDate
-                + ", authnType=" + authnType + ", email=" + email 
+                + ", authnType=" + authnType + ", email=" + email
                 + ", emailVerified=" + emailVerified + ", mobile="
-                + mobile + ", mobileVerified=" + mobileVerified 
+                + mobile + ", mobileVerified=" + mobileVerified
                 + ", passwordQuestion=" + passwordQuestion
                 + ", passwordAnswer=" + passwordAnswer + ", appLoginAuthnType=" + appLoginAuthnType
-                + ", appLoginPassword=" + appLoginPassword 
+                + ", appLoginPassword=" + appLoginPassword
                 + ", protectedApps=" + protectedApps + ", protectedAppsMap="
-                + protectedAppsMap + ", passwordLastSetTime=" + passwordLastSetTime 
+                + protectedAppsMap + ", passwordLastSetTime=" + passwordLastSetTime
                 + ", badPasswordCount="
-                + badPasswordCount + ", unLockTime=" + unLockTime 
+                + badPasswordCount + ", unLockTime=" + unLockTime
                 + ", isLocked=" + isLocked + ", lastLoginTime="
-                + lastLoginTime + ", lastLoginIp=" + lastLoginIp 
+                + lastLoginTime + ", lastLoginIp=" + lastLoginIp
                 + ", lastLogoffTime=" + lastLogoffTime
-                + ", passwordSetType=" + passwordSetType 
+                + ", passwordSetType=" + passwordSetType
                 + ", loginCount=" + loginCount + ", locale=" + locale
-                + ", timeZone=" + timeZone + ", preferredLanguage=" + preferredLanguage 
+                + ", timeZone=" + timeZone + ", preferredLanguage=" + preferredLanguage
                 + ", workCountry=" + workCountry
-                + ", workRegion=" + workRegion + ", workLocality=" + workLocality 
+                + ", workRegion=" + workRegion + ", workLocality=" + workLocality
                 + ", workStreetAddress="
-                + workStreetAddress + ", workAddressFormatted=" + workAddressFormatted 
+                + workStreetAddress + ", workAddressFormatted=" + workAddressFormatted
                 + ", workEmail=" + workEmail
-                + ", workPhoneNumber=" + workPhoneNumber + ", workPostalCode=" + workPostalCode 
+                + ", workPhoneNumber=" + workPhoneNumber + ", workPostalCode=" + workPostalCode
                 + ", workFax=" + workFax
-                + ", homeCountry=" + homeCountry + ", homeRegion=" + homeRegion 
+                + ", homeCountry=" + homeCountry + ", homeRegion=" + homeRegion
                 + ", homeLocality=" + homeLocality
-                + ", homeStreetAddress=" + homeStreetAddress 
+                + ", homeStreetAddress=" + homeStreetAddress
                 + ", homeAddressFormatted=" + homeAddressFormatted
-                + ", homeEmail=" + homeEmail 
+                + ", homeEmail=" + homeEmail
                 + ", homePhoneNumber=" + homePhoneNumber + ", homePostalCode="
-                + homePostalCode + ", homeFax=" + homeFax 
+                + homePostalCode + ", homeFax=" + homeFax
                 + ", employeeNumber=" + employeeNumber + ", costCenter="
-                + costCenter + ", organization=" + organization 
+                + costCenter + ", organization=" + organization
                 + ", division=" + division + ", departmentId="
-                + departmentId + ", department=" + department 
+                + departmentId + ", department=" + department
                 + ", jobTitle=" + jobTitle + ", jobLevel=" + jobLevel
-                + ", managerId=" + managerId + ", manager=" + manager 
+                + ", managerId=" + managerId + ", manager=" + manager
                 + ", assistantId=" + assistantId + ", assistant="
-                + assistant + ", entryDate=" + entryDate 
-                + ", quitDate=" + quitDate + ", extraAttribute=" + extraAttribute 
+                + assistant + ", entryDate=" + entryDate
+                + ", quitDate=" + quitDate + ", extraAttribute=" + extraAttribute
                 + ", extraAttributeName=" + extraAttributeName + ", extraAttributeValue="
-                + extraAttributeValue + ", extraAttributeMap=" + extraAttributeMap 
+                + extraAttributeValue + ", extraAttributeMap=" + extraAttributeMap
                 + ", online=" + online + ", ldapDn="
                 + ldapDn + "]";
     }

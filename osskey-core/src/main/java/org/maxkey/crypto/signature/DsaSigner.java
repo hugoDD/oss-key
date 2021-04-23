@@ -1,19 +1,19 @@
 /*
  * Copyright [2020] [MaxKey of copyright http://www.maxkey.top]
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
 
 package org.maxkey.crypto.signature;
 
@@ -34,7 +34,7 @@ import org.maxkey.crypto.KeyPairType;
  * default signature  algorithm is SHA1withDSA
  * default key size is 1024
  * DsaSigner support SHA1withDSA
- * @author Crystal.Sea
+ * @author hugoDD
  *
  */
 public final class DsaSigner implements ISigner {
@@ -62,13 +62,13 @@ public final class DsaSigner implements ISigner {
 
 		return signature.sign();
 	}
-	
-	
+
+
 	public  String signB64(String data, String privateKey) throws Exception {
-		
+
 		byte[] privateKeyByte = Base64Utils.decoder(privateKey);
-		byte[] dataBytes = data.getBytes();	
-		
+		byte[] dataBytes = data.getBytes();
+
 		byte[] signatureBytes=sign(dataBytes,privateKeyByte);
 
 		return Base64Utils.encoder(signatureBytes);
@@ -91,13 +91,13 @@ public final class DsaSigner implements ISigner {
 		// ��֤
 		return signature.verify(signBytes);
 	}
-	
+
 	public boolean verifyB64(String data, String publicKey, String sign)throws Exception {
 
 		byte[] privateKeyByte = Base64Utils.decoder(publicKey);
 		byte[] dataBytes = data.getBytes();
 		byte[] signBytes=Base64Utils.decoder(sign);
-		
+
 		// ��֤
 		return verify(dataBytes,privateKeyByte,signBytes);
 	}

@@ -1,19 +1,19 @@
 /*
  * Copyright [2020] [MaxKey of copyright http://www.maxkey.top]
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
 
 package org.maxkey.authn.realm.jdbc;
 
@@ -30,9 +30,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 /**
  * same as JdbcAuthenticationRealm.
- * 
- * @author Crystal.Sea
- * 
+ *
+ * @author hugoDD
+ *
  */
 public class DefaultJdbcAuthenticationRealm extends AbstractAuthenticationRealm {
     private static Logger _logger = LoggerFactory.getLogger(DefaultJdbcAuthenticationRealm.class);
@@ -47,13 +47,13 @@ public class DefaultJdbcAuthenticationRealm extends AbstractAuthenticationRealm 
     public DefaultJdbcAuthenticationRealm(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
-    
+
     /**
      * passwordMatches.
      */
     public boolean passwordMatches(UserInfo userInfo, String password) {
         boolean passwordMatches = false;
-        _logger.info("password : " 
+        _logger.info("password : "
                 + PasswordReciprocal.getInstance().rawPassword(userInfo.getUsername(), password));
         passwordMatches = passwordEncoder.matches(password,userInfo.getPassword());
         _logger.debug("passwordvalid : " + passwordMatches);
@@ -64,8 +64,8 @@ public class DefaultJdbcAuthenticationRealm extends AbstractAuthenticationRealm 
         }
         return passwordMatches;
     }
-    
-    
-    
- 
+
+
+
+
 }

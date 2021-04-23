@@ -1,22 +1,22 @@
 /*
  * Copyright [2020] [MaxKey of copyright http://www.maxkey.top]
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
 
 /**
- * 
+ *
  */
 package org.maxkey.authz.saml20.metadata;
 
@@ -52,16 +52,16 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 /**
- * @author Crystal.Sea
- * 
+ * @author hugoDD
+ *
  */
 public class MetadataDescriptorUtil {
 	private final static Logger logger = LoggerFactory.getLogger(MetadataDescriptorUtil.class);
-	
+
 	private static MetadataDescriptorUtil instance = null;
-	
+
 	/**
-	 * 
+	 *
 	 */
 	public MetadataDescriptorUtil() {
 		try {
@@ -155,7 +155,7 @@ public class MetadataDescriptorUtil {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param args
 	 * @throws Exception
 	 * @throws ConfigurationException
@@ -166,7 +166,7 @@ public class MetadataDescriptorUtil {
 		//
 		File file = new File("d:\\SAMLSP-00D90000000hf9n.xml");
 		org.opensaml.DefaultBootstrap.bootstrap();
-		
+
 		EntityDescriptor entityDescriptor = MetadataDescriptorUtil.getInstance().getEntityDescriptor(file);
 
 		// System.out.println("2 : "+entityDescriptor.getRoleDescriptors());

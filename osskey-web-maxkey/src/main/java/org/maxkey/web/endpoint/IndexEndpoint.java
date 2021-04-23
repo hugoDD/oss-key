@@ -1,19 +1,19 @@
 /*
  * Copyright [2020] [MaxKey of copyright http://www.maxkey.top]
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
 
 package org.maxkey.web.endpoint;
 
@@ -35,13 +35,13 @@ import org.springframework.web.servlet.ModelAndView;
 
 /**
  * Index
- * @author Crystal.Sea
+ * @author hugoDD
  *
  */
 @Controller
 public class IndexEndpoint {
 	private static Logger _logger = LoggerFactory.getLogger(IndexEndpoint.class);
-	
+
 	@Autowired
   	@Qualifier("applicationConfig")
   	ApplicationConfig applicationConfig;
@@ -57,18 +57,18 @@ public class IndexEndpoint {
         _logger.debug("Uri /appList");
 		return  new ModelAndView("/appList");
 	}
-	
+
 	@RequestMapping(value={"/index"})
 	public ModelAndView home(HttpServletRequest request,
             HttpServletResponse response) throws ServletException, IOException {
 		_logger.debug("home /index.");
 		return  new ModelAndView("index");
 	}
-	
+
 	@RequestMapping(value={"/"})
 	public ModelAndView index() {
 		_logger.debug("IndexEndpoint /.");
 		return  new ModelAndView("index");
-		
+
 	}
 }

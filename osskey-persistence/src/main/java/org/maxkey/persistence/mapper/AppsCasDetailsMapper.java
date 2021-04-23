@@ -24,7 +24,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.maxkey.domain.apps.AppsCasDetails;
 
 /**
- * @author Crystal.sea
+ * @author hugoDD
  *
  */
 public  interface AppsCasDetailsMapper extends BaseMapper<AppsCasDetails> {

@@ -31,7 +31,7 @@ import org.maxkey.domain.param.PageSearchFilter;
 import java.util.List;
 
 /**
- * @author Crystal.sea
+ * @author hugoDD
  *
  */
 public  interface AppsMapper extends BaseMapper<Apps> {

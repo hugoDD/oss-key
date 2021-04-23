@@ -1,22 +1,22 @@
 /*
  * Copyright [2020] [MaxKey of copyright http://www.maxkey.top]
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
 
 /**
- * 
+ *
  */
 package org.maxkey.authz.cas.endpoint;
 
@@ -38,7 +38,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
 /**
- * @author Crystal.Sea
+ * @author hugoDD
  * https://apereo.github.io/cas/6.2.x/protocol/CAS-Protocol-Specification.html
  */
 @Api(tags = "CAS API文档模块")
@@ -46,15 +46,15 @@ import io.swagger.annotations.ApiOperation;
 public class Cas10AuthorizeEndpoint   extends CasBaseAuthorizeEndpoint{
 
 	final static Logger _logger = LoggerFactory.getLogger(Cas10AuthorizeEndpoint.class);
-	
+
 	/**
 	 * @param request
 	 * @param response
 	 * @param ticket
 	 * @param service
 	 * @param renew
-	 * @return 
-	 *    
+	 * @return
+	 *
 2.4. /validate [CAS 1.0]
 /validate checks the validity of a service ticket. /validate is part of the CAS 1.0 protocol and thus does not handle proxy authentication. CAS MUST respond with a ticket validation failure response when a proxy ticket is passed to /validate.
 
@@ -76,7 +76,7 @@ renew [OPTIONAL] - if this parameter is set, ticket validation will only succeed
 			On ticket validation success:
 			yes<LF>
 			username<LF>
-			
+
 			On ticket validation failure:
 			no<LF>
 			<LF>
@@ -91,12 +91,12 @@ renew [OPTIONAL] - if this parameter is set, ticket validation will only succeed
 			@RequestParam(value = CasConstants.PARAMETER.SERVICE) String service,
 			@RequestParam(value = CasConstants.PARAMETER.RENEW,required=false) String renew
 			 ){
-	    _logger.debug("serviceValidate " 
-                + " ticket " + ticket 
+	    _logger.debug("serviceValidate "
+                + " ticket " + ticket
                 +" , service " + service
                 +" , renew " + renew
         );
-	    
+
 		Ticket storedTicket=null;
 		try {
 			storedTicket = ticketServices.consumeTicket(ticket);
@@ -105,7 +105,7 @@ renew [OPTIONAL] - if this parameter is set, ticket validation will only succeed
 			e.printStackTrace();
 			_logger.error("consume Ticket error " , e);
 		}
-		
+
 		if(storedTicket!=null){
 			String principal=((SigninPrincipal)storedTicket.getAuthentication().getPrincipal()).getUsername();
 			_logger.debug("principal "+principal);

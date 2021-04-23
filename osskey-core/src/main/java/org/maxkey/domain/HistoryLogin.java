@@ -25,7 +25,7 @@ import java.io.Serializable;
 
 
 /**
- * @author Crystal.Sea
+ * @author hugoDD
  */
 @Data
 @TableName("MXK_HISTORY_LOGIN")

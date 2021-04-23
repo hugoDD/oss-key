@@ -41,7 +41,7 @@ import java.util.ArrayList;
 
 /**
  * database Authentication provider.
- * @author Crystal.Sea
+ * @author hugoDD
  *
  */
 public class RealmAuthenticationProvider extends AbstractAuthenticationProvider {

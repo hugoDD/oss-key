@@ -41,7 +41,7 @@ import java.util.HashMap;
 /**
  * login Authentication abstract class.
  *
- * @author Crystal.Sea
+ * @author hugoDD
  *
  */
 public abstract class AbstractAuthenticationProvider {

@@ -26,7 +26,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.maxkey.domain.Accounts;
 
 /**
- * @author Crystal.sea
+ * @author hugoDD
  *
  */
 public  interface AccountsMapper extends BaseMapper<Accounts> {

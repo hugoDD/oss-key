@@ -31,7 +31,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
- * @author Crystal.Sea
+ * @author hugoDD
  *
  */
 @TableName("MXK_APPS_SAML_V20_DETAILS")

@@ -24,7 +24,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.maxkey.domain.apps.AppsSAML20Details;
 
 /**
- * @author Crystal.sea
+ * @author hugoDD
  *
  */
 public  interface AppsSaml20DetailsMapper extends BaseMapper<AppsSAML20Details> {

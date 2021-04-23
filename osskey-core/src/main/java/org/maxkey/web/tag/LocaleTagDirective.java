@@ -1,19 +1,19 @@
 /*
  * Copyright [2020] [MaxKey of copyright http://www.maxkey.top]
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
 
 package org.maxkey.web.tag;
 
@@ -36,8 +36,8 @@ import org.springframework.web.servlet.support.RequestContextUtils;
 
 /**
  * 获取应用上下文标签 .<@locale/>
- * 
- * @author Crystal.Sea
+ *
+ * @author hugoDD
  *
  */
 
@@ -49,10 +49,10 @@ public class LocaleTagDirective implements TemplateDirectiveModel {
 
     @SuppressWarnings("rawtypes")
     @Override
-    public void execute(Environment env, 
+    public void execute(Environment env,
             Map params, TemplateModel[] loopVars, TemplateDirectiveBody body)
             throws TemplateException, IOException {
-        WebApplicationContext webApplicationContext = 
+        WebApplicationContext webApplicationContext =
                 RequestContextUtils.findWebApplicationContext(request);
         String message = "";
         if (params.get("code") == null) {
@@ -64,7 +64,7 @@ public class LocaleTagDirective implements TemplateDirectiveModel {
             _logger.trace("message code " + params.get("code"));
             try {
                 message = webApplicationContext.getMessage(
-                                params.get("code").toString(), 
+                                params.get("code").toString(),
                                 null,
                                 RequestContextUtils.getLocale(request));
 

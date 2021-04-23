@@ -28,7 +28,7 @@ import org.maxkey.domain.GroupPrivileges;
 import java.util.List;
 
 /**
- * @author Crystal.sea
+ * @author hugoDD
  *
  */
 

@@ -41,7 +41,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * basic认证Interceptor处理.
- * @author Crystal.Sea
+ * @author hugoDD
  *
  */
 @Component
