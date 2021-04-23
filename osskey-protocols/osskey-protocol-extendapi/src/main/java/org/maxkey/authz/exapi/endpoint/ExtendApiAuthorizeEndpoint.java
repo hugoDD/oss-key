@@ -1,22 +1,22 @@
 /*
  * Copyright [2020] [MaxKey of copyright http://www.maxkey.top]
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
 
 /**
- * 
+ *
  */
 package org.maxkey.authz.exapi.endpoint;
 
@@ -40,7 +40,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
 /**
- * @author Crystal.Sea
+ * @author hugoDD
  *
  */
 @Api(tags = "ExtendApi接口文档模块")
@@ -51,33 +51,33 @@ public class ExtendApiAuthorizeEndpoint  extends AuthorizeBaseEndpoint{
 	@ApiOperation(value = "ExtendApi认证地址接口", notes = "参数应用ID",httpMethod="GET")
 	@RequestMapping("/authz/api/{id}")
 	public ModelAndView authorize(HttpServletRequest request,@PathVariable("id") String id){
-		
+
 		Apps apps=getApp(id);
 		_logger.debug(""+apps);
-		
+
 		if(Boolean.isTrue(apps.getIsAdapter())){
 			Accounts appUser=getAccounts(apps);
-			
+
 			if(appUser	==	null){
 				return generateInitCredentialModelAndView(id,"/authorize/api/"+id);
 			}
 
 			ModelAndView modelAndView=new ModelAndView();
-			
+
 			AbstractAuthorizeAdapter adapter =(AbstractAuthorizeAdapter)Instance.newInstance(apps.getAdapter());
-			
+
 			apps.setAppUser(appUser);
-			
+
 			modelAndView=adapter.authorize(
-					WebContext.getUserInfo(), 
-					apps, 
-					appUser.getRelatedUsername()+"."+appUser.getRelatedPassword(), 
+					WebContext.getUserInfo(),
+					apps,
+					appUser.getRelatedUsername()+"."+appUser.getRelatedPassword(),
 					modelAndView);
 			return modelAndView;
 		}else{
 			String redirec_uri=getApp(id).getLoginUrl();
 			return WebContext.redirect(redirec_uri);
 		}
-		
+
 	}
 }
