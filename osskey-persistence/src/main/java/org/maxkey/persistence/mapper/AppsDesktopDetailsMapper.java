@@ -24,7 +24,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.maxkey.domain.apps.AppsDesktopDetails;
 
 /**
- * @author Crystal.sea
+ * @author hugoDD
  *
  */
 public  interface AppsDesktopDetailsMapper extends BaseMapper<AppsDesktopDetails> {

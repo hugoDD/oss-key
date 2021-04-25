@@ -58,12 +58,12 @@ public class GroupsController {
 	}
 
 
-	@RequestMapping(value = { "/grid" })
-	@ResponseBody
-	public Page<Groups> queryDataGrid(@ModelAttribute("groups") Groups groups) {
-		_logger.debug(""+groups);
-		return groupsService.queryPageResults(groups);
-	}
+//	@RequestMapping(value = { "/grid" })
+//	@ResponseBody
+//	public Page<Groups> queryDataGrid(@ModelAttribute("groups") Groups groups) {
+//		_logger.debug(""+groups);
+//		return groupsService.queryPageResults(groups);
+//	}
 
 
 	@RequestMapping(value = { "/forwardAdd" })
@@ -74,7 +74,7 @@ public class GroupsController {
 	@RequestMapping(value = { "/forwardUpdate/{id}" })
 	public ModelAndView forwardUpdate(@PathVariable("id") String id) {
 		ModelAndView modelAndView=new ModelAndView("groups/groupUpdate");
-		Groups group=groupsService.get(id);
+		Groups group=groupsService.getById(id);
 		modelAndView.addObject("model",group);
 		return modelAndView;
 	}
@@ -84,7 +84,7 @@ public class GroupsController {
 	public Message insert(@ModelAttribute("group") Groups group) {
 		_logger.debug("-Add  :" + group);
 
-		if (groupsService.insert(group)) {
+		if (groupsService.save(group)) {
 		    groupsService.refreshDynamicGroups(group);
 			return  new Message(WebContext.getI18nValue(ConstantsOperateMessage.INSERT_SUCCESS),MessageType.success);
 
@@ -103,7 +103,7 @@ public class GroupsController {
 	@RequestMapping(value={"/query"})
 	public Message query(@ModelAttribute("group") Groups group) {
 		_logger.debug("-query  :" + group);
-		if (groupsService.load(group)!=null) {
+		if (groupsService.getById(group.getId())!=null) {
 			return  new Message(WebContext.getI18nValue(ConstantsOperateMessage.INSERT_SUCCESS),MessageType.success);
 
 		} else {
@@ -122,7 +122,7 @@ public class GroupsController {
 	public Message update(@ModelAttribute("group") Groups group) {
 		_logger.debug("-update  group :" + group);
 
-		if (groupsService.update(group)) {
+		if (groupsService.updateById(group)) {
 		    groupsService.refreshDynamicGroups(group);
 			return  new Message(WebContext.getI18nValue(ConstantsOperateMessage.UPDATE_SUCCESS),MessageType.success);
 

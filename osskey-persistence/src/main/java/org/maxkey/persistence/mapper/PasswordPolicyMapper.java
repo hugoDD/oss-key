@@ -24,7 +24,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.maxkey.domain.PasswordPolicy;
 
 /**
- * @author Crystal.sea
+ * @author hugoDD
  *
  */
 public  interface PasswordPolicyMapper extends BaseMapper<PasswordPolicy> {

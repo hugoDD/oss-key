@@ -34,7 +34,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  *  SingleSignOnFilter.
- * @author Crystal.Sea
+ * @author hugoDD
  */
 
 public class SingleSignOnFilter implements Filter {

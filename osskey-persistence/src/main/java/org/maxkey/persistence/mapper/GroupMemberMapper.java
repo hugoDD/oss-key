@@ -21,13 +21,15 @@
 package org.maxkey.persistence.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.maxkey.domain.GroupMember;
 import org.maxkey.domain.Groups;
 
 import java.util.List;
 
 /**
- * @author Crystal.sea
+ * @author hugoDD
  *
  */
 
@@ -45,5 +47,5 @@ public  interface GroupMemberMapper extends BaseMapper<GroupMember> {
 	public int deleteByGroupId(String groupId);
 
 
-
+    Page<GroupMember> queryPageResults(IPage<Object> newPage, GroupMember groupMember);
 }

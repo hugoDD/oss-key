@@ -1,19 +1,19 @@
 /*
  * Copyright [2020] [MaxKey of copyright http://www.maxkey.top]
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
 
 package org.maxkey.web;
 
@@ -47,20 +47,20 @@ import org.springframework.web.servlet.support.RequestContextUtils;
 
 /**
  * Application is common class for Web Application Context.
- * 
- * @author Crystal.Sea
+ *
+ * @author hugoDD
  * @since 1.5
  */
 public final class WebContext {
-    
+
     final static Logger _logger = LoggerFactory.getLogger(WebContext.class);
-    
+
     public static Properties properties;
-    
+
     public static ApplicationContext applicationContext;
-    
+
     public static ArrayList<String> sessionAttributeNameList = new ArrayList<String>();
-    
+
     static {
         sessionAttributeNameList.add(WebConstants.CURRENT_LOGIN_USER_PASSWORD_SET_TYPE);
         sessionAttributeNameList.add(WebConstants.FIRST_SAVED_REQUEST_PARAMETER);
@@ -69,10 +69,10 @@ public final class WebContext {
         sessionAttributeNameList.add(WebConstants.AUTHORIZE_SIGN_ON_APP_SAMLV20_ADAPTER);
         sessionAttributeNameList.add(WebConstants.AUTHORIZE_SIGN_ON_APP);
     }
-     
+
     /**
      * set Current login user to session.
-     * 
+     *
      * @see WebConstants.CURRENT_USER
      */
     public static void setUserInfo(UserInfo userInfo) {
@@ -81,7 +81,7 @@ public final class WebContext {
 
     /**
      * get Current login user from session.
-     * 
+     *
      * @see WebConstants.CURRENT_USER
      * @return UserInfo
      */
@@ -91,7 +91,7 @@ public final class WebContext {
 
     /**
      * set Message to session,session id is Constants.MESSAGE
-     * 
+     *
      * @see WebConstants.MESSAGE
      * @param message Message
      */
@@ -101,7 +101,7 @@ public final class WebContext {
 
     /**
      * get message from session,session id is Constants.MESSAGE
-     * 
+     *
      * @see WebConstants.MESSAGE
      * @return Message
      */
@@ -111,7 +111,7 @@ public final class WebContext {
 
     /**
      * clear session Message ,session id is Constants.MESSAGE
-     * 
+     *
      * @see WebConstants.MESSAGE
      */
     public static void clearMessage() {
@@ -120,6 +120,12 @@ public final class WebContext {
 
     public static void setAuthentication(Authentication authentication) {
         setAttribute(WebConstants.AUTHENTICATION, authentication);
+        setAttribute(getSession().getId(),authentication);
+    }
+
+    public static Authentication getAuthenticationByToken(String token ) {
+        Authentication authentication = (Authentication) getAttribute(token);
+        return authentication;
     }
 
     public static Authentication getAuthentication() {
@@ -145,7 +151,7 @@ public final class WebContext {
     public static ApplicationContext getApplicationContext(){
         return WebApplicationContextUtils.getWebApplicationContext(getSession().getServletContext());
     }
-    
+
     /**
      * get bean from spring configuration by bean id
      * @param id
@@ -162,43 +168,43 @@ public final class WebContext {
     // below method is common HttpServlet method
     /**
      * get Spring HttpServletRequest.
-     * 
+     *
      * @return HttpServletRequest
      */
     public static HttpServletRequest getRequest() {
-        return ((ServletRequestAttributes) 
+        return ((ServletRequestAttributes)
                     RequestContextHolder.getRequestAttributes()).getRequest();
     }
-    
+
     public static HttpServletResponse getResponse() {
-        return ((ServletRequestAttributes) 
+        return ((ServletRequestAttributes)
                     RequestContextHolder.getRequestAttributes()).getResponse();
     }
 
     /**
      * get Http Context full Path.
-     * 
+     *
      * @return String HttpContextPath
      */
     public static String getHttpContextPath() {
         HttpServletRequest httpServletRequest = WebContext.getRequest();
         return getHttpContextPath(httpServletRequest);
     }
-    
+
     /**
      * get Http Context full Path,if port equals 80 or 443 is omitted.
-     * 
+     *
      * @return String eg:http://192.168.1.20:9080/webcontext or
      *         http://www.website.com/webcontext
      */
     public static String getHttpContextPath(HttpServletRequest httpServletRequest) {
         ApplicationConfig applicationConfig = (
                 ApplicationConfig) WebContext.getBean("applicationConfig");
-        
+
         _logger.trace("Config ServerPrefix " + applicationConfig.getServerPrefix());
         _logger.trace("Config DomainName " + applicationConfig.getDomainName());
         _logger.trace("ServerName " + httpServletRequest.getServerName());
-        
+
         String scheme = httpServletRequest.getScheme().toLowerCase();
         String httpContextPath = scheme + "://"+httpServletRequest.getServerName();
         int port = httpServletRequest.getServerPort();
@@ -206,7 +212,7 @@ public final class WebContext {
             httpContextPath    +=  ":"+port;
         }
         httpContextPath += httpServletRequest.getContextPath() + "";
-        
+
         _logger.trace("httpContextPath " + httpContextPath);
         return httpContextPath;
 
@@ -214,7 +220,7 @@ public final class WebContext {
 
     /**
      * get current Session.
-     * 
+     *
      * @return HttpSession
      */
     public static HttpSession getSession() {
@@ -223,7 +229,7 @@ public final class WebContext {
 
     /**
      * get current Session,if no session ,new Session created.
-     * 
+     *
      * @return HttpSession
      */
     public static HttpSession getSession(boolean create) {
@@ -233,7 +239,7 @@ public final class WebContext {
 
     /**
      * set Attribute to session ,Attribute name is name,value is value.
-     * 
+     *
      * @param name String
      * @param value String
      */
@@ -243,7 +249,7 @@ public final class WebContext {
 
     /**
      * get Attribute from session by name.
-     * 
+     *
      * @param name String
      * @return
      */
@@ -253,7 +259,7 @@ public final class WebContext {
 
     /**
      * remove Attribute from session by name.
-     * 
+     *
      * @param name String
      */
     public static void removeAttribute(String name) {
@@ -262,7 +268,7 @@ public final class WebContext {
 
     /**
      * get Request Parameter by name.
-     * 
+     *
      * @param name String
      * @return String
      */
@@ -272,7 +278,7 @@ public final class WebContext {
 
     /**
      * encoding encodingString by ApplicationConfig.
-     * 
+     *
      * @param encodingString String
      * @return encoded String
      */
@@ -284,13 +290,13 @@ public final class WebContext {
     /**
      * get locale from Spring Resolver,if locale is null,get locale from Spring.
      * SessionLocaleResolver this is from internationalization
-     * 
+     *
      * @return Locale
      */
     public static Locale getLocale() {
         Locale locale = null;
         try {
-            CookieLocaleResolver cookieLocaleResolver = 
+            CookieLocaleResolver cookieLocaleResolver =
                     (CookieLocaleResolver) getBean("localeResolver");
             locale = cookieLocaleResolver.resolveLocale(getRequest());
 
@@ -302,7 +308,7 @@ public final class WebContext {
 
         return locale;
     }
-    
+
     public static Map<String, String> getRequestParameterMap(HttpServletRequest request) {
         Map<String, String> map = new HashMap<String, String>();
         Map<String, String[]> parameters = request.getParameterMap();
@@ -329,12 +335,12 @@ public final class WebContext {
             return null;
         }
     }
- 
+
     /**
      * 将cookie封装到Map里面.
      *
      * @param request HttpServletRequest
-     * @return Map 
+     * @return Map
      */
     private static Map<String, Cookie> readCookieAll(HttpServletRequest request) {
         Map<String, Cookie> cookieMap = new HashMap<String, Cookie>();
@@ -346,7 +352,7 @@ public final class WebContext {
         }
         return cookieMap;
     }
- 
+
     /**
      * 保存Cookies.
      *
@@ -384,7 +390,7 @@ public final class WebContext {
         WebContext.setCookie(response,domain,name, value,0);
         return response;
     }
-    
+
     public static HttpServletResponse setCookie(
             HttpServletResponse response, String domain ,String name, String value) {
         WebContext.setCookie(response,domain,name, value,-1);
@@ -393,7 +399,7 @@ public final class WebContext {
 
     /**
      * get Current Date,eg 2012-07-10.
-     * 
+     *
      * @return String
      */
     public static String getCurrentDate() {
@@ -402,7 +408,7 @@ public final class WebContext {
 
     /**
      * get System Menu RootId,root id is constant.
-     * 
+     *
      * @return String
      */
     public static String getSystemNavRootId() {
@@ -411,7 +417,7 @@ public final class WebContext {
 
     /**
      * get Request IpAddress,for current Request.
-     * 
+     *
      * @return String,100.167.216.100
      */
     public static final String getRequestIpAddress() {
@@ -420,7 +426,7 @@ public final class WebContext {
 
     /**
      * get Request IpAddress by request.
-     * 
+     *
      * @param request HttpServletRequest
      * @return String
      */
@@ -464,7 +470,7 @@ public final class WebContext {
         String message = code;
         try {
             message = getApplicationContext().getMessage(
-                code.toString(), 
+                code.toString(),
                 null,
                 getLocale());
         } catch (Exception e) {
@@ -482,9 +488,9 @@ public final class WebContext {
      */
     public static String getI18nValue(String code, Object[] filedValues) {
         String message = code;
-        try { 
+        try {
             message = getApplicationContext().getMessage(
-                code.toString(), 
+                code.toString(),
                 filedValues,
                 getLocale());
         } catch (Exception e) {
@@ -493,7 +499,7 @@ public final class WebContext {
         }
         return message;
     }
-    
+
     //TODO:
     /**
      * getRequestLocale.
@@ -505,7 +511,7 @@ public final class WebContext {
 
     /**
      * generate random Universally Unique Identifier,delete -.
-     * 
+     *
      * @return String
      */
     public static String genId() {

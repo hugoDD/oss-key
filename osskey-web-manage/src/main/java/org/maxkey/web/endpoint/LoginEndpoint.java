@@ -1,19 +1,19 @@
 /*
  * Copyright [2020] [MaxKey of copyright http://www.maxkey.top]
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
 
 package org.maxkey.web.endpoint;
 
@@ -32,22 +32,22 @@ import org.springframework.web.servlet.ModelAndView;
 
 
 /**
- * @author Crystal.Sea
+ * @author hugoDD
  *
  */
 @Controller
 public class LoginEndpoint {
 	private static Logger _logger = LoggerFactory.getLogger(LoginEndpoint.class);
-	
+
 	@Autowired
   	@Qualifier("applicationConfig")
   	protected ApplicationConfig applicationConfig;
- 	
+
 
 	@Autowired
 	@Qualifier("authenticationProvider")
 	AbstractAuthenticationProvider authenticationProvider ;
-	
+
 	/**
 	 * init login
 	 * @return
@@ -55,13 +55,13 @@ public class LoginEndpoint {
  	@RequestMapping(value={"/login"})
 	public ModelAndView login() {
 		_logger.debug("LoginController /login.");
-		
+
 		boolean isAuthenticated= WebContext.isAuthenticated();
 		//for normal login
 		if(isAuthenticated){
 			return WebContext.redirect("/main");
 		}
-		
+
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.addObject("isRemeberMe", applicationConfig.getLoginConfig().isRemeberMe());
 		modelAndView.addObject("isCaptcha", applicationConfig.getLoginConfig().isCaptcha());
@@ -69,10 +69,10 @@ public class LoginEndpoint {
 		modelAndView.setViewName("login");
 		return modelAndView;
 	}
- 	
+
  	@RequestMapping(value={"/logon.do"})
 	public ModelAndView logon(@ModelAttribute("loginCredential") LoginCredential loginCredential) {
- 		
+
  		if(WebContext.isAuthenticated()){
  			return WebContext.redirect("/main");
 		}else{

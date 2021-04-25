@@ -28,7 +28,7 @@ import java.util.ArrayList;
 
 /**
  *
- * @author Crystal.Sea
+ * @author hugoDD
  *
  */
 public class Navigations  implements java.io.Serializable {

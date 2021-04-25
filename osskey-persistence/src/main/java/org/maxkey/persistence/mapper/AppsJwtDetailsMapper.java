@@ -24,7 +24,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.maxkey.domain.apps.AppsJwtDetails;
 
 /**
- * @author Crystal.sea
+ * @author hugoDD
  *
  */
 public  interface AppsJwtDetailsMapper extends BaseMapper<AppsJwtDetails> {

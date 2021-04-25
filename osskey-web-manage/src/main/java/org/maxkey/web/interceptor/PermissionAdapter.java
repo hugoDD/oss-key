@@ -35,7 +35,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * 权限Interceptor处理
  * 权限处理需在servlet.xml中配置
  *  mvc:interceptors  permission
- * @author Crystal.Sea
+ * @author hugoDD
  *
  */
 @Component

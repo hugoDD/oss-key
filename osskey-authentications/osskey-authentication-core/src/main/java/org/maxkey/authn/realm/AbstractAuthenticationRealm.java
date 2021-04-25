@@ -38,7 +38,7 @@ import java.util.List;
 
 /**
  * AbstractAuthenticationRealm.
- * @author Crystal.Sea
+ * @author hugoDD
  *
  */
 public abstract class AbstractAuthenticationRealm {

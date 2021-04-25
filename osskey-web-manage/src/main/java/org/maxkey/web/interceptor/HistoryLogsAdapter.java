@@ -40,7 +40,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * 日志处理需在parasec-servlet.xml中配置
  * mvc:interceptors  log
- * @author Crystal.Sea
+ * @author hugoDD
  *
  */
 @Component
@@ -73,7 +73,7 @@ public class HistoryLogsAdapter  implements AsyncHandlerInterceptor  {
 					""
 				);
 				_logger.debug("insert db logs content : "+logs);
-				historyLogsService.insert(logs);//日志插入数据库
+				historyLogsService.save(logs);//日志插入数据库
 				if(message.getMessageScope() == MessageScope.DB) {//message类型仅插入数据库
 					WebContext.clearMessage();//清除message
 				}

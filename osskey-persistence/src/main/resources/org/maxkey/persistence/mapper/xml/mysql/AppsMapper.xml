@@ -24,7 +24,7 @@
     </sql>
 
 
-    <select id="queryPageResults" parameterType="Apps" resultType="Apps">
+    <select id="queryPageResults" parameterType="Apps" resultType="org.maxkey.domain.apps.Apps">
         SELECT
         *
         FROM

@@ -22,7 +22,7 @@ import org.maxkey.domain.UserInfoAdjoint;
 
 
 /**
- * @author Crystal.Sea
+ * @author hugoDD
  *
  */
 public interface UserInfoAdjointMapper  extends BaseMapper<UserInfoAdjoint> {

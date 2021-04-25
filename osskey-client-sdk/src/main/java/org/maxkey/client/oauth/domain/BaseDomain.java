@@ -1,19 +1,19 @@
 /*
  * Copyright [2020] [MaxKey of copyright http://www.maxkey.top]
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
 
 package org.maxkey.client.oauth.domain;
 
@@ -25,53 +25,53 @@ import org.apache.log4j.Logger;
 
 /**
  * BaseDomain for connsec's domain
- * 
- * @author Crystal.sea
- * 
+ *
+ * @author hugoDD
+ *
  */
 public class BaseDomain implements Serializable{
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = -6290127045507211154L;
-	
-	
+
+
 	protected final static Logger logger = Logger.getLogger(BaseDomain.class);
-	
+
 	/**
 	 * Domain id
 	 */
 	protected String 	id;
-	
 
-	
+
+
 	protected String 	tid;
-	
+
 	protected String 	tname;
 	/**
 	 * description
 	 */
 	protected String  	description;
-	
+
 	protected int 		status;
-	
+
 	protected int 		sortOrder;
-	
+
 	protected String 	createdBy;
-	
+
 	protected Date 		createdDate;
-	
+
 	protected String 	modifiedBy;
-	
+
 	protected Date 		modifiedDate;
-	
-	
+
+
 	protected String 	startDate;
 	protected String 	endDate;
-	
+
 	protected String error;
 	protected String error_description;
-	
+
 	protected String responseString;
 
 	public String getError() {
@@ -89,9 +89,9 @@ public class BaseDomain implements Serializable{
 	public void setError_description(String error_description) {
 		this.error_description = error_description;
 	}
-	
+
 	public BaseDomain() {
-		
+
 	}
 
 	/**

@@ -31,7 +31,7 @@ import javax.naming.directory.SearchControls;
 import javax.naming.directory.SearchResult;
 
 /**
- * @author Crystal.Sea
+ * @author hugoDD
  *
  */
 public final class LdapServer implements IAuthenticationServer {

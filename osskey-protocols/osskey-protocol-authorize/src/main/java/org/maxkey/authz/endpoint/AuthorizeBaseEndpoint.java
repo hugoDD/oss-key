@@ -36,7 +36,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.servlet.ModelAndView;
 
 /**
- * @author Crystal.Sea
+ * @author hugoDD
  *
  */
 public class AuthorizeBaseEndpoint {

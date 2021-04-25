@@ -48,7 +48,7 @@ public class DesktopDetailsController  extends BaseAppContorller {
 	public ModelAndView forwardAdd() {
 		ModelAndView modelAndView=new ModelAndView("apps/desktop/appAdd");
 		AppsDesktopDetails desktopDetails=new AppsDesktopDetails();
-		desktopDetails.setId(desktopDetails.generateId());
+		//desktopDetails.setId(desktopDetails.generateId());
 		desktopDetails.setProtocol(ConstantsProtocols.DESKTOP);
 		desktopDetails.setSecret(ReciprocalUtils.generateKey(""));
 
@@ -63,8 +63,8 @@ public class DesktopDetailsController  extends BaseAppContorller {
 		_logger.debug("-Add  :" + desktopDetails);
 
 		transform(desktopDetails);
-		desktopDetailsService.insert(desktopDetails);
-		if (appsService.insertApp(desktopDetails)) {
+		desktopDetailsService.save(desktopDetails);
+		if (appsService.save(desktopDetails)) {
 			  new Message(WebContext.getI18nValue(ConstantsOperateMessage.INSERT_SUCCESS),MessageType.success);
 
 		} else {
@@ -86,7 +86,7 @@ public class DesktopDetailsController  extends BaseAppContorller {
 	}
 	/**
 	 * modify
-	 * @param application
+	 * @param desktopDetails
 	 * @return
 	 */
 
@@ -96,7 +96,7 @@ public class DesktopDetailsController  extends BaseAppContorller {
 		_logger.debug("-update  application :" + desktopDetails);
 		transform(desktopDetails);
 
-		if (desktopDetailsService.update(desktopDetails)&&appsService.updateApp(desktopDetails)) {
+		if (desktopDetailsService.updateById(desktopDetails)&&appsService.updateById(desktopDetails)) {
 			  new Message(WebContext.getI18nValue(ConstantsOperateMessage.UPDATE_SUCCESS),MessageType.success);
 
 		} else {
@@ -109,7 +109,7 @@ public class DesktopDetailsController  extends BaseAppContorller {
 	@RequestMapping(value={"/delete/{id}"})
 	public Message delete(@PathVariable("id") String id) {
 		_logger.debug("-delete  application :" + id);
-		if (desktopDetailsService.remove(id)&&appsService.remove(id)) {
+		if (desktopDetailsService.removeById(id)&&appsService.removeById(id)) {
 			return  new Message(WebContext.getI18nValue(ConstantsOperateMessage.DELETE_SUCCESS),MessageType.success);
 
 		} else {

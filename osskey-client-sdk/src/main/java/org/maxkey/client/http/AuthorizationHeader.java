@@ -1,19 +1,19 @@
 /*
  * Copyright [2020] [MaxKey of copyright http://www.maxkey.top]
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
 
 package org.maxkey.client.http;
 
@@ -21,15 +21,15 @@ import org.maxkey.client.crypto.Base64Utils;
 
 
 /**
- * @author Crystal.Sea
+ * @author hugoDD
  *
  */
 public class AuthorizationHeader {
-	
+
 	public static String AUTHORIZATION_HEADERNAME="Authorization";
-	
+
 	public static String BASIC="Basic ";
-	
+
 	public static String BEARER="Bearer ";
 
 	public static String createBasic( String username, String password ){
@@ -47,7 +47,7 @@ public class AuthorizationHeader {
 			return null;
 		}
 	}
-	
+
 	public static boolean isBasic( String basic ){
 		if(basic.startsWith(BASIC )){
 			return true;
@@ -55,7 +55,7 @@ public class AuthorizationHeader {
 			return false;
 		}
 	}
-	
+
 	public static String resolveBearer( String bearer ){
 		if(isBearer(bearer)){
 			return bearer.split(" ")[1];
@@ -63,14 +63,14 @@ public class AuthorizationHeader {
 			return null;
 		}
 	}
-	
-	
+
+
 	public static String createBearer(String bearer){
 		return BEARER +bearer;
 	}
-	
 
-	
+
+
 	public static boolean isBearer( String bearer ){
 		if(bearer.startsWith(BEARER )){
 			return true;
@@ -79,5 +79,5 @@ public class AuthorizationHeader {
 		}
 	}
 
-	
+
 }

@@ -17,6 +17,8 @@
 
 package org.maxkey.persistence.service;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.google.common.collect.Lists;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -253,4 +255,8 @@ public class OrganizationsService  extends ServiceImpl<OrganizationsMapper,Organ
             return String.valueOf(cell.getStringCellValue().trim());
         }
     }
+
+	public Page<Organizations> queryPageResults(IPage<Object> page, Organizations orgs) {
+    	return baseMapper.queryPageResults(page,orgs);
+	}
 }

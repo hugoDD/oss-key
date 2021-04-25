@@ -23,7 +23,7 @@ import java.io.Serializable;
 
 /**
  * xml can not include array , MultipartFile
- * @author Crystal.Sea
+ * @author hugoDD
  *
  */
 @XmlRootElement

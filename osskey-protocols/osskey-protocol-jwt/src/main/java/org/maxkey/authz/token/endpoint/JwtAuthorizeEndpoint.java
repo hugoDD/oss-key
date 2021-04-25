@@ -1,22 +1,22 @@
 /*
  * Copyright [2020] [MaxKey of copyright http://www.maxkey.top]
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
 
 /**
- * 
+ *
  */
 package org.maxkey.authz.token.endpoint;
 
@@ -47,91 +47,91 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
 /**
- * @author Crystal.Sea
+ * @author hugoDD
  *
  */
-@Api(tags = "JWT½Ó¿ÚÎÄµµÄ£¿é")
+@Api(tags = "JWTï¿½Ó¿ï¿½ï¿½Äµï¿½Ä£ï¿½ï¿½")
 @Controller
 public class JwtAuthorizeEndpoint  extends AuthorizeBaseEndpoint{
 
 	final static Logger _logger = LoggerFactory.getLogger(JwtAuthorizeEndpoint.class);
-	
+
 	@Autowired
 	AppsJwtDetailsService jwtDetailsService;
-	
+
 	JwtDefaultAdapter jwtDefaultAdapter=new JwtDefaultAdapter();
-	
+
 	@Autowired
 	ApplicationConfig applicationConfig;
-	
-	@ApiOperation(value = "JWTÈÏÖ¤µØÖ·½Ó¿Ú", notes = "²ÎÊýÓ¦ÓÃID",httpMethod="GET")
+
+	@ApiOperation(value = "JWTï¿½ï¿½Ö¤ï¿½ï¿½Ö·ï¿½Ó¿ï¿½", notes = "ï¿½ï¿½ï¿½ï¿½Ó¦ï¿½ï¿½ID",httpMethod="GET")
 	@RequestMapping("/authz/jwt/{id}")
 	public ModelAndView authorize(
 			HttpServletRequest request,
 			HttpServletResponse response,
 			@PathVariable("id") String id){
 		ModelAndView modelAndView=new ModelAndView();
-		
-		
+
+
 		AppsJwtDetails jwtDetails=null;
 		jwtDetails=jwtDetailsService.getAppDetails(id);
 		_logger.debug(""+jwtDetails);
-		
+
 		Apps  application= getApp(id);
 		jwtDetails.setAdapter(application.getAdapter());
 		jwtDetails.setIsAdapter(application.getIsAdapter());
-		
+
 		AbstractAuthorizeAdapter adapter;
 		if(Boolean.isTrue(jwtDetails.getIsAdapter())){
 			adapter =(AbstractAuthorizeAdapter)Instance.newInstance(jwtDetails.getAdapter());
 		}else{
 			adapter =(AbstractAuthorizeAdapter)jwtDefaultAdapter;
 		}
-		
+
 		String tokenData=adapter.generateInfo(
 		        (SigninPrincipal)WebContext.getAuthentication().getPrincipal(),
-				WebContext.getUserInfo(), 
+				WebContext.getUserInfo(),
 				jwtDetails);
-		
+
 		String encryptTokenData=adapter.encrypt(
-				tokenData, 
-				jwtDetails.getAlgorithmKey(), 
+				tokenData,
+				jwtDetails.getAlgorithmKey(),
 				jwtDetails.getAlgorithm());
-		
+
 		String signTokenData=adapter.sign(
-				encryptTokenData, 
+				encryptTokenData,
 				jwtDetails);
-		
+
 		if(jwtDetails.getTokenType().equalsIgnoreCase("POST")) {
 			modelAndView=adapter.authorize(
-					WebContext.getUserInfo(), 
-					jwtDetails, 
-					signTokenData, 
+					WebContext.getUserInfo(),
+					jwtDetails,
+					signTokenData,
 					modelAndView);
-			
+
 			return modelAndView;
 		}else {
-			
+
 			String cookieValue="";
 			cookieValue=signTokenData;
-			
+
 			_logger.debug("Cookie Name : "+jwtDetails.getCookieName());
-			
+
 			Cookie cookie= new Cookie(jwtDetails.getCookieName(),cookieValue);
-			
+
 			Integer maxAge=Integer.parseInt(jwtDetails.getExpires())*60;
 			_logger.debug("Cookie Max Age :"+maxAge+" seconds.");
 			cookie.setMaxAge(maxAge);
-			
+
 			cookie.setPath("/");
 			//
 			//cookie.setDomain("."+applicationConfig.getBaseDomainName());
 			//tomcat 8.5
 			cookie.setDomain(applicationConfig.getBaseDomainName());
-			
+
 			_logger.debug("Sub Domain Name : "+"."+applicationConfig.getBaseDomainName());
 			response.addCookie(cookie);
-			
+
 			if(jwtDetails.getRedirectUri().indexOf(applicationConfig.getBaseDomainName())>-1){
 				return WebContext.redirect(jwtDetails.getRedirectUri());
 			}else{
@@ -139,7 +139,7 @@ public class JwtAuthorizeEndpoint  extends AuthorizeBaseEndpoint{
 				return null;
 			}
 		}
-		
+
 	}
 
 }

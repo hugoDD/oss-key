@@ -24,6 +24,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.maxkey.domain.HistoryLogin;
 import org.maxkey.domain.HistoryLoginApps;
 import org.maxkey.domain.HistoryLogs;
+import org.maxkey.domain.PageResults;
 import org.maxkey.domain.param.PageSearchFilter;
 import org.maxkey.persistence.service.HistoryLoginAppsService;
 import org.maxkey.persistence.service.HistoryLoginService;
@@ -44,7 +45,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 /**
  * 登录日志和操作日志查询.
  *
- * @author Crystal.sea
+ * @author hugoDD
  *
  */
 
@@ -75,9 +76,10 @@ public class HistorysController {
      */
     @RequestMapping(value = { "/logs/grid" })
     @ResponseBody
-    public Page<HistoryLogs> logsDataGrid(PageSearchFilter search, @ModelAttribute("historyLogs") HistoryLogs historyLogs) {
+    public PageResults<HistoryLogs> logsDataGrid(PageSearchFilter search, @ModelAttribute("historyLogs") HistoryLogs historyLogs) {
         _logger.debug("history/logs/grid/ logsGrid() " + historyLogs);
-        return historyLogsService.queryPageResults(search.newPage(),historyLogs);
+        Page<HistoryLogs> page = historyLogsService.queryPageResults(search.newPage(),historyLogs);
+        return new PageResults<>(page);
     }
 
     @RequestMapping(value = { "/login" })
@@ -93,10 +95,12 @@ public class HistorysController {
      */
     @RequestMapping(value = { "/login/grid" })
     @ResponseBody
-    public Page<HistoryLogin> logAuthsGrid(PageSearchFilter search, @ModelAttribute("historyLogin") HistoryLogin historyLogin) {
+    public PageResults<HistoryLogin> logAuthsGrid(PageSearchFilter search, @ModelAttribute("historyLogin") HistoryLogin historyLogin) {
         _logger.debug("history/login/grid/ logsGrid() " + historyLogin);
         historyLogin.setUid(WebContext.getUserInfo().getId());
-        return historyLoginService.queryPageResults(search.newPage(),historyLogin);
+        Page<HistoryLogin> historyLoginPage = historyLoginService.queryPageResults(search.newPage(),historyLogin);
+        PageResults<HistoryLogin> pageResults = new PageResults<>((int)historyLoginPage.getCurrent(),(int)historyLoginPage.getSize(),historyLoginPage.getTotal(),historyLoginPage.getRecords());
+        return pageResults;
     }
 
     @RequestMapping(value = { "/loginApps" })
@@ -112,13 +116,16 @@ public class HistorysController {
      */
     @RequestMapping(value = { "/loginApps/grid" })
     @ResponseBody
-    public Page<HistoryLoginApps> logsSsoGrid(PageSearchFilter search,
+    public PageResults<HistoryLoginApps> logsSsoGrid(PageSearchFilter search,
                                               @ModelAttribute("historyLoginApps") HistoryLoginApps historyLoginApps) {
         _logger.debug("history/loginApps/grid/ logsGrid() " + historyLoginApps);
         historyLoginApps.setId(null);
 
-        return historyLoginAppsService.queryPageResults(search.newPage(),historyLoginApps);
+        Page<HistoryLoginApps>  page= historyLoginAppsService.queryPageResults(search.newPage(),historyLoginApps);
 
+        PageResults<HistoryLoginApps> pageResults = new PageResults<>((int)page.getCurrent(),(int)page.getSize(),page.getTotal(),page.getRecords());
+
+        return pageResults;
     }
 
     @InitBinder

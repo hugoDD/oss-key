@@ -21,6 +21,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.maxkey.constants.ConstantsOperateMessage;
 import org.maxkey.domain.GroupPrivileges;
 import org.maxkey.domain.apps.Apps;
+import org.maxkey.domain.param.PageSearchFilter;
 import org.maxkey.persistence.service.GroupPrivilegesService;
 import org.maxkey.web.WebContext;
 import org.maxkey.web.message.Message;
@@ -35,6 +36,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
+
+import java.util.Arrays;
 
 
 @Controller
@@ -54,17 +57,17 @@ public class GroupPrivilegesController {
 
 	@RequestMapping(value = { "/queryAppsInGroup" })
 	@ResponseBody
-	public Page<GroupPrivileges> queryAppsInGroup(@ModelAttribute("groupApp") GroupPrivileges groupApp) {
+	public Page<GroupPrivileges> queryAppsInGroup(PageSearchFilter page, @ModelAttribute("groupApp") GroupPrivileges groupApp) {
 
 		Page<GroupPrivileges> jqGridApp;
 
-		jqGridApp= groupPrivilegesService.queryPageResults("appsInGroup",groupApp);
-
-		if(jqGridApp!=null&&jqGridApp.getRows()!=null){
-			for (Apps app : jqGridApp.getRows()){
-				WebContext.setAttribute(app.getId(), app.getIcon());
-			}
-		}
+		jqGridApp= groupPrivilegesService.queryPageResults(page.newPage(),groupApp);
+//
+//		if(jqGridApp!=null&&jqGridApp.getRows()!=null){
+//			for (Apps app : jqGridApp.getRows()){
+//				WebContext.setAttribute(app.getId(), app.getIcon());
+//			}
+//		}
 		return jqGridApp;
 
 	}
@@ -77,21 +80,21 @@ public class GroupPrivilegesController {
 	}
 
 
-	@RequestMapping(value = { "/queryAppsNotInGroup" })
-	@ResponseBody
-	public Page<GroupPrivileges> queryAppsNotInGroup(@ModelAttribute("groupApp") GroupPrivileges groupApp) {
-		Page<GroupPrivileges> jqGridApp;
-
-		jqGridApp= groupPrivilegesService.queryPageResults("appsNotInGroup",groupApp);
-
-		if(jqGridApp!=null&&jqGridApp.getRows()!=null){
-			for (Apps app : jqGridApp.getRows()){
-				WebContext.setAttribute(app.getId(), app.getIcon());
-			}
-		}
-		return jqGridApp;
-
-	}
+//	@RequestMapping(value = { "/queryAppsNotInGroup" })
+//	@ResponseBody
+//	public Page<GroupPrivileges> queryAppsNotInGroup(@ModelAttribute("groupApp") GroupPrivileges groupApp) {
+//		Page<GroupPrivileges> jqGridApp;
+//
+//		jqGridApp= groupPrivilegesService.queryPageResults("appsNotInGroup",groupApp);
+//
+//		if(jqGridApp!=null&&jqGridApp.getRows()!=null){
+//			for (Apps app : jqGridApp.getRows()){
+//				WebContext.setAttribute(app.getId(), app.getIcon());
+//			}
+//		}
+//		return jqGridApp;
+//
+//	}
 
 
 	@RequestMapping(value = {"/insert"})
@@ -110,8 +113,8 @@ public class GroupPrivilegesController {
 
 			for (int i = 0; i < arrAppIds.length; i++) {
 				GroupPrivileges newGroupApp = new GroupPrivileges(groupId, arrAppIds[i]);
-				newGroupApp.setId(newGroupApp.generateId());
-				result = groupPrivilegesService.insert(newGroupApp);
+				//newGroupApp.setId(newGroupApp.generateId());
+				result = groupPrivilegesService.save(newGroupApp);
 			}
 			if(!result) {
 				return  new Message(WebContext.getI18nValue(ConstantsOperateMessage.INSERT_ERROR),MessageType.error);
@@ -134,9 +137,10 @@ public class GroupPrivilegesController {
 		if (privilegesIds != null) {
 			String[] arrPrivilegesIds = privilegesIds.split(",");
 
-			for (int i = 0; i < arrPrivilegesIds.length; i++) {
-				result = groupPrivilegesService.remove(arrPrivilegesIds[i]);
-			}
+			result = groupPrivilegesService.removeByIds(Arrays.asList(arrPrivilegesIds));
+//			for (int i = 0; i < arrPrivilegesIds.length; i++) {
+//				result = groupPrivilegesService.remove(arrPrivilegesIds[i]);
+//			}
 			if(!result) {
 				return  new Message(WebContext.getI18nValue(ConstantsOperateMessage.INSERT_ERROR),MessageType.error);
 			}

@@ -3,30 +3,30 @@
 <mapper namespace="org.maxkey.persistence.mapper.HistoryLogsMapper" >
 
 	<sql id="where_statement">
-    	<if test="id != null and id != ''">
-			AND	ID	=	#{id}
+    	<if test="et.id != null and et.id != ''">
+			AND	ID	=	#{et.id}
 		</if>
-		<if test="serviceName != null and serviceName != '' ">
-			AND	 LOWER(SERVICENAME) LIKE LOWER(CONCAT('%',#{serviceName},'%'))
+		<if test="et.serviceName != null and et.serviceName != '' ">
+			AND	 LOWER(SERVICENAME) LIKE LOWER(CONCAT('%',#{et.serviceName},'%'))
 		</if>
-		<if test="message != null and message != '' ">
-			AND	 LOWER(MESSAGE) LIKE LOWER(CONCAT('%',#{message},'%'))
+		<if test="et.message != null and et.message != '' ">
+			AND	 LOWER(MESSAGE) LIKE LOWER(CONCAT('%',#{et.message},'%'))
 		</if>
-		<if test="startDate != null  and startDate != '' ">
-			AND CREATEDDATE  BETWEEN 	#{startDate} AND	#{endDate}
+		<if test="et.startDate != null  and et.startDate != '' ">
+			AND CREATEDDATE  BETWEEN 	#{et.startDate} AND	#{et.endDate}
 		</if>
-		<if test="createdBy != null and createdBy != ''">
-			AND	CREATEDBY	=	#{createdBy}
+		<if test="et.createdBy != null and et.createdBy != ''">
+			AND	CREATEDBY	=	#{et.createdBy}
 		</if>
 
-		<if test="username != null and username != ''">
-			AND	 LOWER(USERNAME) LIKE LOWER(CONCAT('%',#{username},'%'))
+		<if test="et.username != null and et.username != ''">
+			AND	 LOWER(USERNAME) LIKE LOWER(CONCAT('%',#{et.username},'%'))
 		</if>
-		<if test="messageType != null and messageType != ''">
-			AND	MESSAGETYPE	=	#{messageType}
+		<if test="et.messageType != null and et.messageType != ''">
+			AND	MESSAGETYPE	=	#{et.messageType}
 		</if>
-		<if test="operateType != null and operateType != ''">
-			AND	OPERATETYPE	=	#{operateType}
+		<if test="et.operateType != null and et.operateType != ''">
+			AND	OPERATETYPE	=	#{et.operateType}
 		</if>
     </sql>
 

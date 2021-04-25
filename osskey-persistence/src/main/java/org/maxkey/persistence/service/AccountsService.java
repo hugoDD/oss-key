@@ -18,6 +18,8 @@
 package org.maxkey.persistence.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.maxkey.domain.Accounts;
 import org.maxkey.persistence.mapper.AccountsMapper;
@@ -35,5 +37,9 @@ public class AccountsService  extends ServiceImpl<AccountsMapper,Accounts> {
         queryWrapper.eq(Accounts::getUid,userId).eq(Accounts::getAppId,appId);
         Accounts accounts = baseMapper.selectOne(queryWrapper);
         return accounts;
+    }
+
+    public Page<Accounts> queryPageResults(IPage<Object> newPage, Accounts appAccounts) {
+       return baseMapper.queryPageResults(newPage,appAccounts);
     }
 }

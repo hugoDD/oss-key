@@ -51,7 +51,7 @@ public class OAuth20DetailsController  extends BaseAppContorller {
 	public ModelAndView forwardAdd() {
 		ModelAndView modelAndView=new ModelAndView("apps/oauth20/appAdd");
 		AppsOAuth20Details oauth20Details=new AppsOAuth20Details();
-		oauth20Details.setId(oauth20Details.generateId());
+		//oauth20Details.setId(oauth20Details.generateId());
 		oauth20Details.setSecret(ReciprocalUtils.generateKey(""));
 		oauth20Details.setClientId(oauth20Details.getId());
 		oauth20Details.setClientSecret(oauth20Details.getSecret());
@@ -70,7 +70,7 @@ public class OAuth20DetailsController  extends BaseAppContorller {
 		oauth20Details.setClientSecret(oauth20Details.getSecret());
 
 		oauth20JdbcClientDetailsService.addClientDetails(oauth20Details.clientDetailsRowMapper());
-		if (appsService.insertApp(oauth20Details)) {
+		if (appsService.save(oauth20Details)) {
 			  new Message(WebContext.getI18nValue(ConstantsOperateMessage.INSERT_SUCCESS),MessageType.success);
 
 		} else {
@@ -83,7 +83,7 @@ public class OAuth20DetailsController  extends BaseAppContorller {
 	public ModelAndView forwardUpdate(@PathVariable("id") String id) {
 		ModelAndView modelAndView=new ModelAndView("apps/oauth20/appUpdate");
 		BaseClientDetails baseClientDetails=(BaseClientDetails)oauth20JdbcClientDetailsService.loadClientByClientId(id);
-		Apps application=appsService.get(id);//
+		Apps application=appsService.getById(id);//
 		decoderSecret(application);
 		AppsOAuth20Details oauth20Details=new AppsOAuth20Details(application,baseClientDetails);
 		oauth20Details.setSecret(application.getSecret());
@@ -109,7 +109,7 @@ public class OAuth20DetailsController  extends BaseAppContorller {
 
 		transform(oauth20Details);
 
-		if (appsService.updateApp(oauth20Details)) {
+		if (appsService.updateById(oauth20Details)) {
 			  new Message(WebContext.getI18nValue(ConstantsOperateMessage.UPDATE_SUCCESS),MessageType.success);
 		} else {
 			  new Message(WebContext.getI18nValue(ConstantsOperateMessage.UPDATE_ERROR),MessageType.error);
@@ -123,7 +123,7 @@ public class OAuth20DetailsController  extends BaseAppContorller {
 	public Message delete(@PathVariable("id") String id) {
 		_logger.debug("-delete  application :" + id);
 		oauth20JdbcClientDetailsService.removeClientDetails(id);
-		if (appsService.remove(id)) {
+		if (appsService.removeById(id)) {
 			return  new Message(WebContext.getI18nValue(ConstantsOperateMessage.DELETE_SUCCESS),MessageType.success);
 
 		} else {

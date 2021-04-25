@@ -21,6 +21,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.maxkey.constants.ConstantsOperateMessage;
 import org.maxkey.domain.GroupMember;
 import org.maxkey.domain.Groups;
+import org.maxkey.domain.param.PageSearchFilter;
 import org.maxkey.persistence.service.GroupMemberService;
 import org.maxkey.persistence.service.GroupsService;
 import org.maxkey.web.WebContext;
@@ -36,6 +37,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
+
+import java.util.Arrays;
 
 
 @Controller
@@ -61,11 +64,11 @@ public class GroupMemberController {
 
 	@RequestMapping(value = { "/grid" })
 	@ResponseBody
-	public Page<GroupMember> grid(@ModelAttribute("groupMember") GroupMember groupMember) {
+	public Page<GroupMember> grid(PageSearchFilter page, @ModelAttribute("groupMember") GroupMember groupMember) {
 		if(groupMember.getGroupId()==null||groupMember.getGroupId().equals("")){
 			return null;
 		}
-		return groupMemberService.queryPageResults(groupMember);
+		return groupMemberService.queryPageResults(page.newPage(),groupMember);
 	}
 
 	@RequestMapping(value = { "/forwardAdd" })
@@ -76,7 +79,7 @@ public class GroupMemberController {
 	@RequestMapping(value = { "/forwardUpdate/{id}" })
 	public ModelAndView forwardUpdate(@PathVariable("id") String id) {
 		ModelAndView modelAndView=new ModelAndView("groups/groupUpdate");
-		GroupMember groupMember=groupMemberService.get(id);
+		GroupMember groupMember=groupMemberService.getById(id);
 		modelAndView.addObject("model",groupMember);
 		return modelAndView;
 	}
@@ -86,27 +89,28 @@ public class GroupMemberController {
 	@ResponseBody
 	public Page<GroupMember> queryMemberInGroup(@ModelAttribute("groupMember")  GroupMember groupMember) {
 		_logger.debug("groupMember : "+groupMember);
-		if(groupMember.getGroupId()==null||groupMember.getGroupId().equals("")||groupMember.getGroupId().equals("ROLE_ALL_USER")){
-			return groupMemberService.queryPageResults("allMemberInGroup",groupMember);
-		}else{
-			return groupMemberService.queryPageResults("memberInGroup",groupMember);
-		}
+//		if(groupMember.getGroupId()==null||groupMember.getGroupId().equals("")||groupMember.getGroupId().equals("ROLE_ALL_USER")){
+//			return groupMemberService.queryPageResults("allMemberInGroup",groupMember);
+//		}else{
+//			return groupMemberService.queryPageResults("memberInGroup",groupMember);
+//		}
+		return null;
 	}
 
 
 	@RequestMapping(value={"/addGroupAppsList/{groupId}"})
 	public ModelAndView addGroupAppsList(@PathVariable("groupId") String groupId){
 		ModelAndView modelAndView=new ModelAndView("groupuser/addGroupUsersList");
-		Groups group=groupsService.get(groupId);
+		Groups group=groupsService.getById(groupId);
 		modelAndView.addObject("group", group);
 		return modelAndView;
 	}
 
-	@RequestMapping(value = { "/queryMemberNotInGroup" })
-	@ResponseBody
-	public Page<GroupMember> queryMemberNotInGroupGrid(@ModelAttribute("groupMember")  GroupMember groupMember) {
-			return groupMemberService.queryPageResults("memberNotInGroup",groupMember);
-	}
+//	@RequestMapping(value = { "/queryMemberNotInGroup" })
+//	@ResponseBody
+//	public Page<GroupMember> queryMemberNotInGroupGrid(@ModelAttribute("groupMember")  GroupMember groupMember) {
+//			return groupMemberService.queryPageResults("memberNotInGroup",groupMember);
+//	}
 
 
 	@RequestMapping(value = {"/insert"})
@@ -127,8 +131,8 @@ public class GroupMemberController {
 
 			for (int i = 0; i < arrMemberIds.length; i++) {
 				GroupMember newGroupMember = new GroupMember(groupId,groupMember.getGroupName(), arrMemberIds[i], arrMemberNames[i],"USER");
-				newGroupMember.setId(newGroupMember.generateId());
-				result = groupMemberService.insert(newGroupMember);
+				//newGroupMember.setId(newGroupMember.generateId());
+				result = groupMemberService.save(newGroupMember);
 			}
 			if(!result) {
 				return  new Message(WebContext.getI18nValue(ConstantsOperateMessage.INSERT_ERROR),MessageType.error);
@@ -150,9 +154,10 @@ public class GroupMemberController {
 		String groupMemberIds = groupMember.getId();
 		if (groupMemberIds != null) {
 			String[] arrMemberIds = groupMemberIds.split(",");
-			for (int i = 0; i < arrMemberIds.length; i++) {
-				groupMemberService.remove(arrMemberIds[i]);
-			}
+			groupMemberService.removeByIds(Arrays.asList(arrMemberIds));
+//			for (int i = 0; i < arrMemberIds.length; i++) {
+//				groupMemberService.remove(arrMemberIds[i]);
+//			}
 			if(!result) {
 				return  new Message(WebContext.getI18nValue(ConstantsOperateMessage.INSERT_ERROR),MessageType.error);
 			}

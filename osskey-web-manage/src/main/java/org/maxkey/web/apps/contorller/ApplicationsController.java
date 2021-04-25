@@ -23,7 +23,9 @@ import org.maxkey.constants.ConstantsOperateMessage;
 import org.maxkey.crypto.ReciprocalUtils;
 import org.maxkey.domain.ExtraAttr;
 import org.maxkey.domain.ExtraAttrs;
+import org.maxkey.domain.PageResults;
 import org.maxkey.domain.apps.Apps;
+import org.maxkey.domain.param.PageSearchFilter;
 import org.maxkey.web.WebContext;
 import org.maxkey.web.message.Message;
 import org.maxkey.web.message.MessageType;
@@ -55,8 +57,9 @@ public class ApplicationsController extends BaseAppContorller {
 
 	@RequestMapping(value = { "/grid" })
 	@ResponseBody
-	public Page<Apps> queryDataGrid(@ModelAttribute("applications") Apps applications) {
-		Page<Apps> jqGridApp=appsService.queryPageResults(applications);
+	public PageResults<Apps> queryDataGrid(PageSearchFilter page, @ModelAttribute("applications") Apps applications) {
+		Page<Apps> pageApps=appsService.queryPageResults(page.newPage(),applications);
+		PageResults<Apps> jqGridApp = new PageResults<>(pageApps);
 		if(jqGridApp!=null&&jqGridApp.getRows()!=null){
 			for (Apps app : jqGridApp.getRows()){
 				WebContext.setAttribute(app.getId(), app.getIcon());
@@ -78,7 +81,7 @@ public class ApplicationsController extends BaseAppContorller {
 
 		transform(application);
 
-		if (appsService.insert(application)) {
+		if (appsService.save(application)) {
 			return  new Message(WebContext.getI18nValue(ConstantsOperateMessage.INSERT_SUCCESS),MessageType.success);
 
 		} else {
@@ -90,7 +93,7 @@ public class ApplicationsController extends BaseAppContorller {
 	@RequestMapping(value = { "/forwardAppsExtendAttr/{id}" })
 	public ModelAndView forwardExtendAttr(@PathVariable("id") String id) {
 		ModelAndView modelAndView=new ModelAndView("apps/appsExtendAttr");
-		modelAndView.addObject("model",appsService.get(id));
+		modelAndView.addObject("model",appsService.getById(id));
 		return modelAndView;
 	}
 
@@ -125,7 +128,7 @@ public class ApplicationsController extends BaseAppContorller {
 	@RequestMapping(value={"/query"})
 	public Message query(@ModelAttribute("application") Apps application) {
 		_logger.debug("-query  :" + application);
-		if (appsService.load(application)!=null) {
+		if (appsService.getById(application)!=null) {
 			return  new Message(WebContext.getI18nValue(ConstantsOperateMessage.INSERT_SUCCESS),MessageType.success);
 
 		} else {
@@ -143,7 +146,7 @@ public class ApplicationsController extends BaseAppContorller {
 	@RequestMapping(value={"/update"})
 	public Message update(@ModelAttribute("application") Apps application) {
 		_logger.debug("-update  application :" + application);
-		if (appsService.update(application)) {
+		if (appsService.updateById(application)) {
 			return  new Message(WebContext.getI18nValue(ConstantsOperateMessage.UPDATE_SUCCESS),MessageType.success);
 
 		} else {
@@ -157,7 +160,7 @@ public class ApplicationsController extends BaseAppContorller {
 	@RequestMapping(value={"/delete"})
 	public Message delete(@ModelAttribute("application") Apps application) {
 		_logger.debug("-delete  application :" + application);
-		if (appsService.delete(application)) {
+		if (appsService.removeById(application.getId())) {
 			return  new Message(WebContext.getI18nValue(ConstantsOperateMessage.DELETE_SUCCESS),MessageType.success);
 
 		} else {

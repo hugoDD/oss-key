@@ -1,22 +1,22 @@
 /*
  * Copyright [2020] [MaxKey of copyright http://www.maxkey.top]
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
 
 /**
- * 
+ *
  */
 package org.maxkey.authz.formbased.endpoint;
 
@@ -44,19 +44,19 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
 /**
- * @author Crystal.Sea
+ * @author hugoDD
  *
  */
 @Api(tags = "FormBased接口文档模块")
 @Controller
 public class FormBasedAuthorizeEndpoint  extends AuthorizeBaseEndpoint{
 	final static Logger _logger = LoggerFactory.getLogger(FormBasedAuthorizeEndpoint.class);
-	
+
 	@Autowired
 	AppsFormBasedDetailsService formBasedDetailsService;
-	
+
 	FormBasedDefaultAdapter defaultFormBasedAdapter=new FormBasedDefaultAdapter();
-	
+
 	@ApiOperation(value = "FormBased认证地址接口", notes = "参数应用ID",httpMethod="GET")
 	@RequestMapping("/authz/formbased/{id}")
 	public ModelAndView authorize(
@@ -68,35 +68,35 @@ public class FormBasedAuthorizeEndpoint  extends AuthorizeBaseEndpoint{
 		formBasedDetails.setAdapter(application.getAdapter());
 		formBasedDetails.setIsAdapter(application.getIsAdapter());
 		ModelAndView modelAndView=null;
-		
+
 		Accounts appUser=getAccounts(formBasedDetails);
-		
+
 		_logger.debug("Accounts "+appUser);
 		if(appUser	==	null){
 			return generateInitCredentialModelAndView(id,"/authorize/formbased/"+id);
-			
+
 		}else{
 			formBasedDetails.setAppUser(appUser);
-			
+
 			modelAndView=new ModelAndView();
-			
+
 			AbstractAuthorizeAdapter adapter;
-			
+
 			if(Boolean.isTrue(formBasedDetails.getIsAdapter())){
 				adapter =(AbstractAuthorizeAdapter)Instance.newInstance(formBasedDetails.getAdapter());
 			}else{
 				adapter =(AbstractAuthorizeAdapter)defaultFormBasedAdapter;
 			}
-			
+
 			modelAndView=adapter.authorize(
-					WebContext.getUserInfo(), 
-					formBasedDetails, 
-					appUser.getRelatedUsername()+"."+appUser.getRelatedPassword(), 
+					WebContext.getUserInfo(),
+					formBasedDetails,
+					appUser.getRelatedUsername()+"."+appUser.getRelatedPassword(),
 					modelAndView);
 		}
-		
+
 		_logger.debug("FormBased View Name " + modelAndView.getViewName());
-		
+
 		return modelAndView;
 	}
 }

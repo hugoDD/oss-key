@@ -41,7 +41,7 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
 
 /**
  * InitApplicationContext .
- * @author Crystal.Sea
+ * @author hugoDD
  *
  */
 public class InitializeContext extends HttpServlet {

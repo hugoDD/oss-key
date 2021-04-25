@@ -35,7 +35,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * OAuth v2.0 accessToken认证Interceptor处理.
- * @author Crystal.Sea
+ * @author hugoDD
  *
  */
 @Component

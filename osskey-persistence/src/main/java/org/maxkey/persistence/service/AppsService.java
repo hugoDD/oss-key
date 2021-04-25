@@ -17,9 +17,12 @@
 
 package org.maxkey.persistence.service;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.maxkey.domain.apps.Apps;
 import org.maxkey.domain.apps.UserApps;
+import org.maxkey.domain.param.PageSearchFilter;
 import org.maxkey.persistence.mapper.AppsMapper;
 import org.springframework.stereotype.Service;
 
@@ -33,5 +36,13 @@ public class AppsService  extends ServiceImpl<AppsMapper,Apps> {
 
     public List<UserApps> queryMyApps(UserApps userApplications){
         return baseMapper.queryMyApps(userApplications);
+    }
+
+    public Page<Apps> queryPageResults(IPage<Apps> page, Apps applications) {
+        return baseMapper.queryPageResults(page,applications);
+    }
+
+    public boolean updateExtendAttr(Apps application) {
+        return baseMapper.updateExtendAttr(application)>0;
     }
 }

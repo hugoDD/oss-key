@@ -23,7 +23,7 @@ import org.maxkey.domain.UserInfo;
 
 
 /**
- * @author Crystal.Sea
+ * @author hugoDD
  *
  */
 public interface UserInfoMapper  extends BaseMapper<UserInfo> {

@@ -76,7 +76,7 @@ public class SAML20DetailsController   extends BaseAppContorller {
 		AppsSAML20Details saml20Details=new AppsSAML20Details();
 		saml20Details.setSecret(ReciprocalUtils.generateKey(""));
 		saml20Details.setProtocol(ConstantsProtocols.SAML20);
-		saml20Details.setId(saml20Details.generateId());
+		//saml20Details.setId(saml20Details.generateId());
 		modelAndView.addObject("model",saml20Details);
 
 		return modelAndView;
@@ -92,8 +92,8 @@ public class SAML20DetailsController   extends BaseAppContorller {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		saml20DetailsService.insert(saml20Details);
-		if (appsService.insertApp(saml20Details)) {
+		saml20DetailsService.save(saml20Details);
+		if (appsService.save(saml20Details)) {
 			  new Message(WebContext.getI18nValue(ConstantsOperateMessage.INSERT_SUCCESS),MessageType.success);
 
 		} else {
@@ -127,8 +127,8 @@ public class SAML20DetailsController   extends BaseAppContorller {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		saml20DetailsService.update(saml20Details);
-		if (appsService.updateApp(saml20Details)) {
+		saml20DetailsService.updateById(saml20Details);
+		if (appsService.updateById(saml20Details)) {
 			 new Message(WebContext.getI18nValue(ConstantsOperateMessage.UPDATE_SUCCESS),MessageType.success);
 
 		} else {
@@ -142,7 +142,7 @@ public class SAML20DetailsController   extends BaseAppContorller {
 	@RequestMapping(value={"/delete/{id}"})
 	public Message delete(@PathVariable("id") String id) {
 		_logger.debug("-delete  application :" + id);
-		if (saml20DetailsService.remove(id)&&appsService.remove(id)) {
+		if (saml20DetailsService.removeById(id)&&appsService.removeById(id)) {
 			return  new Message(WebContext.getI18nValue(ConstantsOperateMessage.DELETE_SUCCESS),MessageType.success);
 
 		} else {

@@ -1,19 +1,19 @@
 /*
  * Copyright [2020] [MaxKey of copyright http://www.maxkey.top]
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
 
 package org.maxkey.util;
 
@@ -31,7 +31,7 @@ public final class StringUtils {
 
     /**
      * avoid null, and return value trim.
-     * 
+     *
      * @param value string value.
      * @return the trim of value.
      */
@@ -99,7 +99,7 @@ public final class StringUtils {
 
     /**
      * 对url进行编码�?
-     * 
+     *
      * @param ori_url 要编码的url
      * @return 返回url
      */
@@ -115,7 +115,7 @@ public final class StringUtils {
 
     /**
      * 编码url
-     * 
+     *
      * @param ori_url
      * @return
      */
@@ -132,7 +132,7 @@ public final class StringUtils {
 
     /**
      * �?��字符串是否包含特殊字�?
-     * 
+     *
      * @param str
      * @return
      */
@@ -192,7 +192,7 @@ public final class StringUtils {
 
     /**
      * 密码不包含全部或部分的用户账户名 �?��str2中是否包含str中全部或部分的数�?
-     * 
+     *
      * @param str
      * @param str2
      * @return
@@ -214,7 +214,7 @@ public final class StringUtils {
 
     /**
      * 返回字符串中包含的大写字母的
-     * 
+     *
      * @param str
      * @return
      */
@@ -308,7 +308,7 @@ public final class StringUtils {
 
     /**
      * 处理如id=name形式的字符串
-     * 
+     *
      * @param proValue
      * @param key
      * @param value
@@ -332,7 +332,7 @@ public final class StringUtils {
 
     /**
      * 获得集合对象中某�?��性字段的值，中间用split隔开
-     * 
+     *
      * @param list     集合对象
      * @param propName 属�?名称
      * @param split    分隔�?
@@ -352,7 +352,7 @@ public final class StringUtils {
 
     /**
      * 将对象类型的集合转换为String类型的集�?
-     * 
+     *
      * @param list
      * @param propName
      * @return
@@ -368,7 +368,7 @@ public final class StringUtils {
 
     /**
      * 将对象类型的集合转换为String类型的Map集合
-     * 
+     *
      * @param list
      * @param propNames
      * @return
@@ -423,7 +423,7 @@ public final class StringUtils {
 
     /**
      * 汉字转换位汉语拼音
-     * 
+     *
      * @param hanYu Chinese
      * @param first true is Convert first,else all
      * @return 拼音
@@ -461,7 +461,7 @@ public final class StringUtils {
 
     /**
      * 处理AD域中的用户名，将域名去掉
-     * 
+     *
      * @param str
      * @return
      */
@@ -480,7 +480,7 @@ public final class StringUtils {
         }
         return null;
     }
-    
+
     /**
      * 验证是否为正确的邮箱号
      *
@@ -519,7 +519,7 @@ public final class StringUtils {
     }
 
     public static ArrayList<String> sqlInjection = null;
-    
+
     static{
         sqlInjection = new ArrayList<String>();
         sqlInjection.add("--");
@@ -537,7 +537,7 @@ public final class StringUtils {
         sqlInjection.add("and");
         sqlInjection.add("or");
     }
-    
+
     public static boolean filtersSQLInjection(String filters) {
         for(String s : sqlInjection) {
             if(filters.indexOf(s)>-1) {
@@ -546,5 +546,47 @@ public final class StringUtils {
         }
         return false;
     }
-    
+
+
+    public static String underscoreToCamelCase(String underscore) {
+        String[] ss = underscore.split("_");
+        if (ss.length == 1) {
+            return underscore;
+        } else {
+            StringBuffer sb = new StringBuffer();
+            sb.append(ss[0]);
+
+            for(int i = 1; i < ss.length; ++i) {
+                sb.append(upperFirstCase(ss[i]));
+            }
+
+            return sb.toString();
+        }
+    }
+
+    public static String toLine(String camelCase) {
+        Pattern humpPattern = Pattern.compile("[A-Z]");
+        Matcher matcher = humpPattern.matcher(camelCase);
+        StringBuffer sb = new StringBuffer();
+
+        while(matcher.find()) {
+            matcher.appendReplacement(sb, "_" + matcher.group(0).toLowerCase());
+        }
+
+        matcher.appendTail(sb);
+        return sb.toString();
+    }
+
+    private static String lowerFirstCase(String str) {
+        char[] chars = str.toCharArray();
+        chars[0] = (char)(chars[0] + 32);
+        return String.valueOf(chars);
+    }
+
+    private static String upperFirstCase(String str) {
+        char[] chars = str.toCharArray();
+        chars[0] = (char)(chars[0] - 32);
+        return String.valueOf(chars);
+    }
+
 }

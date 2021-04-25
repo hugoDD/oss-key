@@ -28,7 +28,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 /**
  * JdbcAuthenticationRealm.
- * @author Crystal.Sea
+ * @author hugoDD
  *
  */
 public class JdbcAuthenticationRealm extends DefaultJdbcAuthenticationRealm {

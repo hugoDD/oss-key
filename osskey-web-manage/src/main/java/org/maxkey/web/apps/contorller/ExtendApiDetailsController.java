@@ -46,7 +46,7 @@ public class ExtendApiDetailsController  extends BaseAppContorller {
 	public ModelAndView forwardAdd() {
 		ModelAndView modelAndView=new ModelAndView("apps/extendapi/appAdd");
 		AppsExtendApiDetails extendApiDetails=new AppsExtendApiDetails();
-		extendApiDetails.setId(extendApiDetails.generateId());
+//		extendApiDetails.setId(extendApiDetails.generateId());
 		extendApiDetails.setProtocol(ConstantsProtocols.EXTEND_API);
 		extendApiDetails.setSecret(ReciprocalUtils.generateKey(""));
 
@@ -60,7 +60,7 @@ public class ExtendApiDetailsController  extends BaseAppContorller {
 
 		transform(extendApiDetails);
 
-		if (appsService.insert(extendApiDetails)) {
+		if (appsService.save(extendApiDetails)) {
 			  new Message(WebContext.getI18nValue(ConstantsOperateMessage.INSERT_SUCCESS),MessageType.success);
 
 		} else {
@@ -72,7 +72,7 @@ public class ExtendApiDetailsController  extends BaseAppContorller {
 	@RequestMapping(value = { "/forwardUpdate/{id}" })
 	public ModelAndView forwardUpdate(@PathVariable("id") String id) {
 		ModelAndView modelAndView=new ModelAndView("apps/extendapi/appUpdate");
-		Apps application= appsService.get(id);
+		Apps application= appsService.getById(id);
 		super.decoderSecret(application);
 		AppsExtendApiDetails extendApiDetails=new AppsExtendApiDetails();
 		BeanUtils.copyProperties(application, extendApiDetails);
@@ -93,7 +93,7 @@ public class ExtendApiDetailsController  extends BaseAppContorller {
 		_logger.debug("-update  extendApiDetails :" + extendApiDetails);
 		transform(extendApiDetails);
 
-		if (appsService.update(extendApiDetails)) {
+		if (appsService.updateById(extendApiDetails)) {
 			  new Message(WebContext.getI18nValue(ConstantsOperateMessage.UPDATE_SUCCESS),MessageType.success);
 
 		} else {
@@ -107,7 +107,7 @@ public class ExtendApiDetailsController  extends BaseAppContorller {
 	@RequestMapping(value={"/delete/{id}"})
 	public Message delete(@PathVariable("id") String id) {
 		_logger.debug("-delete  application :" + id);
-		if (appsService.remove(id)) {
+		if (appsService.removeById(id)) {
 			return  new Message(WebContext.getI18nValue(ConstantsOperateMessage.DELETE_SUCCESS),MessageType.success);
 
 		} else {

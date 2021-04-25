@@ -28,7 +28,7 @@ import java.io.Serializable;
 /**
  * .
  *
- * @author Crystal.Sea
+ * @author hugoDD
  */
 @Data
 @AllArgsConstructor
@@ -52,6 +52,9 @@ public class HistoryLogs implements Serializable {
     private String endDate;
 
 
+    public HistoryLogs() {
+    }
+
     /**
      * HistoryLogs.
      * @param serviceName String
@@ -68,7 +71,6 @@ public class HistoryLogs implements Serializable {
                        String message, String content,
                        String messageType,String operateType,
                        String createdBy, String username, String cname) {
-        super();
         this.serviceName = serviceName;
         this.code = code;
         this.message = message;

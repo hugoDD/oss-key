@@ -22,7 +22,7 @@ import java.io.Serializable;
 
 /**
  * Saml20Metadata.
- * @author Crystal.Sea
+ * @author hugoDD
  *
  */
 public class Saml20Metadata  implements Serializable {

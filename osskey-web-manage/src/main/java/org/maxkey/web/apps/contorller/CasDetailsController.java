@@ -1,19 +1,19 @@
 /*
  * Copyright [2020] [MaxKey of copyright http://www.maxkey.top]
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
 
 package org.maxkey.web.apps.contorller;
 
@@ -40,37 +40,36 @@ import org.springframework.web.servlet.ModelAndView;
 @RequestMapping(value={"/apps/cas"})
 public class CasDetailsController  extends BaseAppContorller {
 	final static Logger _logger = LoggerFactory.getLogger(CasDetailsController.class);
-	
+
 	@Autowired
 	AppsCasDetailsService casDetailsService;
-	
+
 	@RequestMapping(value = { "/forwardAdd" })
 	public ModelAndView forwardAdd() {
 		ModelAndView modelAndView=new ModelAndView("apps/cas/appAdd");
 		AppsCasDetails casDetails =new AppsCasDetails();
-		casDetails.setId(casDetails.generateId());
+		//casDetails.setId(casDetails.generateId());
 		casDetails.setProtocol(ConstantsProtocols.CAS);
 		casDetails.setSecret(ReciprocalUtils.generateKey(ReciprocalUtils.Algorithm.DES));
 		modelAndView.addObject("model",casDetails);
 		return modelAndView;
 	}
-	
-	
+
+
 	@RequestMapping(value={"/add"})
 	public ModelAndView insert(@ModelAttribute("casDetails") AppsCasDetails casDetails) {
 		_logger.debug("-Add  :" + casDetails);
 
 		transform(casDetails);
-		
-		if (casDetailsService.insert(casDetails)&&appsService.insertApp(casDetails)) {
+
+		if (casDetailsService.save(casDetails)&&appsService.save(casDetails)) {
 			  new Message(WebContext.getI18nValue(ConstantsOperateMessage.INSERT_SUCCESS),MessageType.success);
-			
 		} else {
 			  new Message(WebContext.getI18nValue(ConstantsOperateMessage.INSERT_SUCCESS),MessageType.error);
 		}
 		return   WebContext.forward("forwardUpdate/"+casDetails.getId());
 	}
-	
+
 	@RequestMapping(value = { "/forwardUpdate/{id}" })
 	public ModelAndView forwardUpdate(@PathVariable("id") String id) {
 		ModelAndView modelAndView=new ModelAndView("apps/cas/appUpdate");
@@ -81,39 +80,39 @@ public class CasDetailsController  extends BaseAppContorller {
 		modelAndView.addObject("model",casDetails);
 		return modelAndView;
 	}
-	
+
 	/**
 	 * modify
-	 * @param application
+	 * @param casDetails
 	 * @return
 	 */
-	@RequestMapping(value={"/update"})  
+	@RequestMapping(value={"/update"})
 	public ModelAndView update(@ModelAttribute("casDetails") AppsCasDetails casDetails) {
 		//
 		_logger.debug("-update  application :" + casDetails);
 		transform(casDetails);
 
-		if (casDetailsService.update(casDetails)&&appsService.updateApp(casDetails)) {
+		if (casDetailsService.updateById(casDetails) && appsService.updateById(casDetails)) {
 			  new Message(WebContext.getI18nValue(ConstantsOperateMessage.UPDATE_SUCCESS),MessageType.success);
-			
+
 		} else {
 			  new Message(WebContext.getI18nValue(ConstantsOperateMessage.UPDATE_ERROR),MessageType.error);
 		}
 		return   WebContext.forward("forwardUpdate/"+casDetails.getId());
 	}
-	
+
 
 	@ResponseBody
 	@RequestMapping(value={"/delete/{id}"})
 	public Message delete(@PathVariable("id") String id) {
 		_logger.debug("-delete  application :" + id);
-		if (casDetailsService.remove(id)&&appsService.remove(id)) {
+		if (casDetailsService.removeById(id) && appsService.removeById(id)) {
 			return  new Message(WebContext.getI18nValue(ConstantsOperateMessage.DELETE_SUCCESS),MessageType.success);
-			
+
 		} else {
 			return  new Message(WebContext.getI18nValue(ConstantsOperateMessage.DELETE_SUCCESS),MessageType.error);
 		}
 	}
-	
-	
+
+
 }

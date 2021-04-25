@@ -27,7 +27,7 @@ import org.maxkey.exception.PasswordPolicyException;
 import javax.validation.constraints.NotNull;
 
 /**
- * @author Crystal.Sea
+ * @author hugoDD
  */
 
 @Data

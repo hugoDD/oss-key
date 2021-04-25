@@ -1,22 +1,22 @@
 /*
  * Copyright [2020] [MaxKey of copyright http://www.maxkey.top]
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
 
 /**
- * 
+ *
  */
 package org.maxkey.client.crypto;
 
@@ -35,20 +35,20 @@ import org.maxkey.client.utils.StringGenerator;
 
 /**
  * Reciprocal cipher or Symmetric-key algorithm
- * 
+ *
  * algorithm Support DES,DESede,Blowfish and AES
- *  
+ *
  * default key value use ReciprocalUtils.defaultKey
- * 
+ *
  * generateKey  is generate random key for algorithm
- * 
- * @author Crystal.Sea
+ *
+ * @author hugoDD
  *
  */
 public final class ReciprocalUtils {
-	
+
 	 private static final String defaultKey= "1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";   //
-	
+
 	 public final class Algorithm {
 			public static final String DES 		= 	"DES";
 			public static final String DESede 	= 	"DESede";
@@ -121,7 +121,7 @@ public final class ReciprocalUtils {
 			}
 			return null;
 		}
-		
+
 		private static SecretKey generatorDefaultKey(String algorithm) {
 			try {
 				Security.addProvider(new com.sun.crypto.provider.SunJCE());
@@ -145,9 +145,9 @@ public final class ReciprocalUtils {
 			}
 			return null;
 		}
-		
 
-	 
+
+
 	private static boolean keyLengthCheck(String secretKey,String algorithm){
 		boolean lengthCheck=false;
 		if(algorithm.equals(Algorithm.DES)){
@@ -177,7 +177,7 @@ public final class ReciprocalUtils {
 		}
 		return lengthCheck;
 	}
-	
+
 	public static byte[] encodeByDefaultKey(String simple, String algorithm) {
 		SecretKey key = generatorDefaultKey(algorithm);
 		return encode(simple.getBytes(), key, algorithm);
@@ -211,10 +211,10 @@ public final class ReciprocalUtils {
 		return simple;
 
 	}
-	
+
 	/**
 	 * encode by defaultKey with Algorithm.AES
-	 * 
+	 *
 	 * @param simple
 	 * @return Hex
 	 */
@@ -224,15 +224,15 @@ public final class ReciprocalUtils {
 
 	/**
 	 * decoder by defaultKey with Algorithm.AES
-	 * 
+	 *
 	 * @param ciphers is HEX
-	 *            
+	 *
 	 * @return
 	 */
 	public static String decoder(String ciphers) {
 		return decoderHexByDefaultKey(ciphers, Algorithm.AES);
 	}
-	 
+
 	 public static String  generateKey(String algorithm){
 	 	if(algorithm.equals(Algorithm.DES)){
 	 		return (new StringGenerator(8)).randomGenerate();
@@ -246,5 +246,5 @@ public final class ReciprocalUtils {
 			return (new StringGenerator()).uniqueGenerate();
 		}
 	 }
-	 
+
 }

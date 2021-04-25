@@ -1,19 +1,19 @@
 /*
  * Copyright [2020] [MaxKey of copyright http://www.maxkey.top]
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
 
 package org.maxkey.password.onetimepwd.algorithm;
 
@@ -25,8 +25,8 @@ import javax.crypto.spec.SecretKeySpec;
 /**
  * IETF RFC 4226 http://tools.ietf.org/html/rfc4226 HOTP Include HmacOTP's
  * implement same as HmacOTP's, when addChecksum = false & truncationOffset = -1
- * 
- * @author Crystal.Sea
+ *
+ * @author hugoDD
  *
  */
 public class HOTP {
@@ -78,7 +78,7 @@ public class HOTP {
      *
      */
 
-    public static byte[] hmac_sha1(byte[] 
+    public static byte[] hmac_sha1(byte[]
             keyBytes, byte[] text) throws NoSuchAlgorithmException, InvalidKeyException {
         // try {
         Mac hmacSha1;
@@ -94,7 +94,7 @@ public class HOTP {
         // throw new UndeclaredThrowableException(gse);
         // }
     }
-    
+
     // 0 1 2 3 4 5 6 7 8
     private static final int[] DIGITS_POWER
             = { 1, 10, 100, 1000, 10000, 100000, 1000000, 10000000, 100000000 };
@@ -108,21 +108,21 @@ public class HOTP {
      * @param codeDigits       the number of digits in the OTP, not including the
      *                         checksum, if any.
      * @param addChecksum      a flag that indicates if a checksum digit
-     * 
-     * 
-     * 
+     *
+     *
+     *
      *                         M'Raihi, et al. Informational [Page 29]
-     * 
+     *
      *                         RFC 4226 HOTP Algorithm December 2005
-     * 
-     * 
+     *
+     *
      *                         should be appended to the OTP.
      * @param truncationOffset the offset into the MAC result to begin truncation.
      *                         If this value is out of the range of 0 ... 15, then
      *                         dynamic truncation will be used. Dynamic truncation
      *                         is when the last 4 bits of the last byte of the MAC
      *                         are used to determine the start offset.
-     * @return A numeric String in base 10 that includes {@link codeDigits} digits  
+     * @return A numeric String in base 10 that includes {@link codeDigits} digits
      * @throws NoSuchAlgorithmException if no provider makes either HmacSHA1 or
      *                                  HMAC-SHA-1 digest algorithms available.
      * @throws InvalidKeyException      The secret provided was not a valid
@@ -130,7 +130,7 @@ public class HOTP {
      *
      *         plus the optional checksum digit if requested.
      */
-    public static String generateOTP(byte[] 
+    public static String generateOTP(byte[]
             secret, long movingFactor, int codeDigits, boolean addChecksum,
             int truncationOffset) throws NoSuchAlgorithmException, InvalidKeyException {
         // put movingFactor value into text byte array

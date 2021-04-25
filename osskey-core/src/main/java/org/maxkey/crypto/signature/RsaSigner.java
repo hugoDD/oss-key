@@ -1,22 +1,22 @@
 /*
  * Copyright [2020] [MaxKey of copyright http://www.maxkey.top]
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
 
 /**
- * 
+ *
  */
 package org.maxkey.crypto.signature;
 
@@ -35,7 +35,7 @@ import org.maxkey.crypto.KeyPairType;
  * default signature  algorithm is SHA1withRSA
  * default key size is 1024
  * RsaSigner support MD5withRSA and MD5withRSA
- * @author Crystal.Sea
+ * @author hugoDD
  *
  */
 
@@ -64,7 +64,7 @@ public final class RsaSigner implements ISigner {
 
 		return signature.sign();
 	}
-	
+
 	public byte[] sign(byte[] dataBytes, byte[] privateKeyBytes) throws Exception {
 		return sign(dataBytes,privateKeyBytes,SIGNATURE_ALGORITHM);
 	}
@@ -97,10 +97,10 @@ public final class RsaSigner implements ISigner {
 		// verify
 		return signature.verify(signBytes);
 	}
-	
+
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see com.connsec.crypto.signature.Signer#verify(java.lang.String,
 	 * java.lang.String, java.lang.String)
 	 */
