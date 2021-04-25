@@ -15,9 +15,9 @@
  */
 
 
-package com.rains.oss.authkey.contorller;
+package org.maxkey.osskey.contorller;
 
-import com.rains.oss.authkey.vo.LoginConfigVO;
+import org.maxkey.osskey.vo.LoginConfigVO;
 import org.maxkey.authn.AbstractAuthenticationProvider;
 import org.maxkey.authn.LoginCredential;
 import org.maxkey.authn.SigninPrincipal;
@@ -38,12 +38,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;

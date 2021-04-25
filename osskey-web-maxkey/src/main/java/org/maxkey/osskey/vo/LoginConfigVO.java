@@ -1,4 +1,4 @@
-package com.rains.oss.authkey.vo;
+package org.maxkey.osskey.vo;
 
 import lombok.Data;
 import org.maxkey.authn.support.socialsignon.service.SocialSignOnProvider;
