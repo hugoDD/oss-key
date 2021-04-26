@@ -19,6 +19,8 @@ package org.maxkey.persistence.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.maxkey.domain.RoleMember;
 import org.maxkey.domain.Roles;
@@ -42,5 +44,10 @@ public class RoleMemberService  extends ServiceImpl<RoleMemberMapper,RoleMember>
 		UpdateWrapper<RoleMember> updateWrapper = new UpdateWrapper<>();
 		updateWrapper.lambda().eq(RoleMember::getRoleId,roleId);
 		return baseMapper.delete(updateWrapper);
+    }
+
+
+    public Page<RoleMember> queryPageResults(IPage<Object> newPage, RoleMember roleMember) {
+       return null;
     }
 }

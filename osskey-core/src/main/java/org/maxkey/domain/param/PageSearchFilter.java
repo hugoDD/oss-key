@@ -33,6 +33,6 @@ public class PageSearchFilter extends  SearchFilter{
         }else if("desc".equalsIgnoreCase(this.sortOrder)){
             page.addOrder( OrderItem.desc(this.sortField));
         }
-        return page;
+        return  page;
     }
 }

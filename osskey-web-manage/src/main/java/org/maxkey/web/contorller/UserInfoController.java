@@ -65,13 +65,14 @@ public class UserInfoController {
 
 	/**
 	 * 查询用户列表
-	 * @param user
+	 * @param userInfo
 	 * @return
 	 */
 	@RequestMapping(value={"/grid"})
 	@ResponseBody
 	public Page<UserInfo> forwardUsersList(@ModelAttribute("userInfo") UserInfo userInfo){
-		return userInfoService.queryPageResults(userInfo);
+		//return userInfoService.queryPageResults(userInfo);
+		return null;
 
 	}
 
@@ -110,7 +111,7 @@ public class UserInfoController {
 			// new Message(WebContext.getValidErrorText(),result);
 		}
 
-		userInfo.setId(userInfo.generateId());
+		//userInfo.setId(userInfo.generateId());
 		//userInfo.setNameZHShortSpell(StringUtils.hanYu2Pinyin(userInfo.getDisplayName(), true));
 		//userInfo.setNameZHSpell(StringUtils.hanYu2Pinyin(userInfo.getDisplayName(), false));
 		if( userInfoService.insert(userInfo)) {
@@ -124,7 +125,7 @@ public class UserInfoController {
 	@RequestMapping(value={"/forwardUpdate/{id}"})
 	public ModelAndView forwardUpdateUsers(@PathVariable("id")String id){
 		ModelAndView modelAndView=new ModelAndView("/userinfo/userUpdate");
-		UserInfo userInfo=userInfoService.get(id);
+		UserInfo userInfo=userInfoService.getById(id);
 		if(userInfo.getPicture()!=null){
 			WebContext.getSession().setAttribute(userInfo.getId(), userInfo.getPicture());
 		}
@@ -142,7 +143,7 @@ public class UserInfoController {
 	@RequestMapping(value="/getUsers/{id}")
 	public UserInfo getUserInfo(@PathVariable("id")String id) {
 		_logger.debug(id);
-		UserInfo userInfo = userInfoService.get(id);
+		UserInfo userInfo = userInfoService.getById(id);
 		if(userInfo!=null&&userInfo.getDecipherable()!=null){
 			try{
 				userInfo.setPassword(ReciprocalUtils.decoder(userInfo.getDecipherable()));
@@ -197,7 +198,7 @@ public class UserInfoController {
 	@RequestMapping(value="/batchDelete")
 	public Message batchDeleteUsers(@RequestParam("id")String id) {
 		_logger.debug(id);
-		if(userInfoService.batchDelete(StringUtils.string2List(id, ","))) {
+		if(userInfoService.removeByIds(StringUtils.string2List(id, ","))) {
 			return  new Message(WebContext.getI18nValue(ConstantsOperateMessage.DELETE_SUCCESS),MessageType.success);
 
 		} else {
@@ -215,7 +216,7 @@ public class UserInfoController {
 	@RequestMapping(value="/delete")
 	public Message deleteUsersById(@RequestParam("id") String id) {
 		_logger.debug(id);
-		if(userInfoService.batchDelete(StringUtils.string2List(id, ","))) {
+		if(userInfoService.removeByIds(StringUtils.string2List(id, ","))) {
 			//provisioningPrepare.prepare(userInfo, OPERATEACTION.DELETE_ACTION);
 			return  new Message(WebContext.getI18nValue(ConstantsOperateMessage.DELETE_SUCCESS),MessageType.success);
 		} else {
@@ -239,7 +240,7 @@ public class UserInfoController {
 	@RequestMapping(value={"/forwardChangePassword/{id}"})
 	public ModelAndView forwardChangePassword(@PathVariable("id")String id){
 		ModelAndView modelAndView=new ModelAndView("/userinfo/changePassword");
-		UserInfo userInfo=userInfoService.get(id);
+		UserInfo userInfo=userInfoService.getById(id);
 
 		modelAndView.addObject("model", userInfo);
 		return modelAndView;
@@ -248,7 +249,7 @@ public class UserInfoController {
 	@RequestMapping(value={"/forwardChangeUserinfoStatus/{id}"})
 	public ModelAndView forwardChangeUserinfoStatus(@PathVariable("id")String id){
 		ModelAndView modelAndView=new ModelAndView("/userinfo/changeUserinfoStatus");
-		UserInfo userInfo=userInfoService.get(id);
+		UserInfo userInfo=userInfoService.getById(id);
 
 		modelAndView.addObject("model", userInfo);
 		return modelAndView;

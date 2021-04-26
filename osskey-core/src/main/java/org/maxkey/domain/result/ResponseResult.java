@@ -14,17 +14,19 @@ public class ResponseResult<T> {
     private int code=2000;
     private T data;
 
-    public <T> ResponseResult setData(T data){
-        this.setData(data);
-        return this;
+    private ResponseResult(){
+
     }
+
 
     public static  <T> ResponseResult<T> newInstance(){
         return new ResponseResult<>();
     }
 
     public static  <T> ResponseResult<T> newInstance(T data){
-        return new ResponseResult<>().setData(data);
+        ResponseResult<T> responseResult =   new ResponseResult<>();
+        responseResult.setData(data);
+        return  responseResult;
     }
 
 

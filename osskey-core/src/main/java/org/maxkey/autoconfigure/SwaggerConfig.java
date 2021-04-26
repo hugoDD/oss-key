@@ -24,13 +24,13 @@ public class SwaggerConfig {
 
     @Value("${maxkey.swagger.title}")
     String title;
-    
+
     @Value("${maxkey.swagger.description}")
     String description;
-    
+
     @Value("${maxkey.swagger.version}")
     String version;
-    
+
     @Value("${maxkey.swagger.enable}")
     boolean enable;
 
@@ -41,8 +41,8 @@ public class SwaggerConfig {
                 .apiInfo(apiInfo())
                 .select()
                 .apis(RequestHandlerSelectors.basePackage("org.maxkey")
-                        .and(RequestHandlerSelectors.withClassAnnotation(Api.class))
-                        .and(RequestHandlerSelectors.withMethodAnnotation(ApiOperation.class)))
+                        /*.and(RequestHandlerSelectors.withClassAnnotation(Api.class))
+                        .and(RequestHandlerSelectors.withMethodAnnotation(ApiOperation.class))*/)
                 .paths(PathSelectors.any())
                 .build();
         }else {
@@ -50,14 +50,14 @@ public class SwaggerConfig {
         }
 
     }
-    
+
     //    配置swagger信息
     private ApiInfo apiInfo() {
         Contact contact = new Contact(
-                                "MaxKey.top", 
-                                "https://www.maxkey.top/", 
+                                "MaxKey.top",
+                                "https://www.maxkey.top/",
                                 "maxkeysupport@163.com");
-        
+
         return new ApiInfo(
                 title,
                 description,

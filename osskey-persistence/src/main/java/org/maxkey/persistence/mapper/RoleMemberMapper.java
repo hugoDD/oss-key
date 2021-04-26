@@ -21,6 +21,8 @@
 package org.maxkey.persistence.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.maxkey.domain.RoleMember;
 import org.maxkey.domain.Roles;
 
@@ -43,4 +45,5 @@ public  interface RoleMemberMapper extends BaseMapper<RoleMember> {
      int deleteDynamicRoleMember(Roles dynamicRole);
 
      int deleteByRoleId(String roleId);
+     
 }

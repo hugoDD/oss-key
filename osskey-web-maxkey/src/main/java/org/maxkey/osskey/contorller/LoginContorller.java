@@ -15,9 +15,9 @@
  */
 
 
-package com.rains.oss.authkey.contorller;
+package org.maxkey.osskey.contorller;
 
-import com.rains.oss.authkey.vo.LoginConfigVO;
+import org.maxkey.osskey.vo.LoginConfigVO;
 import org.maxkey.authn.AbstractAuthenticationProvider;
 import org.maxkey.authn.LoginCredential;
 import org.maxkey.authn.SigninPrincipal;
@@ -38,12 +38,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
@@ -110,12 +105,12 @@ public class LoginContorller {
         //Object loginErrorMessage=WebContext.getAttribute(WebConstants.LOGIN_ERROR_SESSION_MESSAGE);
         // modelAndView.addObject("loginErrorMessage", loginErrorMessage==null?"":loginErrorMessage);
         // WebContext.removeAttribute(WebConstants.LOGIN_ERROR_SESSION_MESSAGE);
-        return ResponseResult.newInstance().setData(modelAndView);
+        return ResponseResult.newInstance(modelAndView);
     }
 
     @PostMapping(value = {"/logon"})
     public ResponseResult<TokenVO> logon(
-            @ModelAttribute("loginCredential") LoginCredential loginCredential) {
+           @RequestBody LoginCredential loginCredential) {
 
         TokenVO tokenVO = new TokenVO();
         Authentication authentication =  authenticationProvider.authenticate(loginCredential);
@@ -124,14 +119,14 @@ public class LoginContorller {
             UserInfo userInfo = ((SigninPrincipal)authentication.getPrincipal()).getUserInfo();
             List<String> roles = authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList());
             tokenVO.setAccessToken(token);
-            tokenVO.setAvatar(Base64.getEncoder().encodeToString(userInfo.getPicture()));
+            if(userInfo.getPicture()!=null){
+                tokenVO.setAvatar(Base64.getEncoder().encodeToString(userInfo.getPicture()));
+            }
             tokenVO.setEmail(userInfo.getEmail());
             tokenVO.setIntroduction(userInfo.getDescription());
             tokenVO.setName(userInfo.getUsername());
             tokenVO.setPhone(userInfo.getMobile());
             tokenVO.setRoles(roles);
-
-
         }
 
 

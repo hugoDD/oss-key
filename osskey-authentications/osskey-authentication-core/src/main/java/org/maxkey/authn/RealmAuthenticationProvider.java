@@ -76,7 +76,7 @@ public class RealmAuthenticationProvider extends AbstractAuthenticationProvider 
 
         _logger.debug("authentication " + loginCredential);
 
-        sessionValid(loginCredential.getSessionId());
+        //sessionValid(loginCredential.getSessionId());
 
         //jwtTokenValid(j_jwtToken);
 

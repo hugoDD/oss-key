@@ -17,6 +17,8 @@
 
 package org.maxkey.persistence.service;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.maxkey.domain.Resources;
 import org.maxkey.persistence.mapper.ResourcesMapper;
@@ -31,5 +33,11 @@ public class ResourcesService  extends ServiceImpl<ResourcesMapper,Resources> {
 
 	public List<Resources> queryResourcesTree(Resources resource){
 	   return  baseMapper.queryPageResults(resource);
+	}
+
+
+
+	public Page<Resources> queryPageResults(IPage<Resources> newPage, Resources resources) {
+		return baseMapper.queryPageResults(newPage,resources);
 	}
 }

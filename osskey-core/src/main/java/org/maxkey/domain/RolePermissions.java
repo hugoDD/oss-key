@@ -41,4 +41,17 @@ public class RolePermissions implements Serializable {
     private int status = ConstantsStatus.ACTIVE;
 
 
+    public RolePermissions(String appId, String roleId) {
+        this.appId = appId;
+        this.roleId = roleId;
+    }
+
+    public RolePermissions(String appId, String roleId, String resourceId) {
+        this(appId,roleId);
+        this.resourceId = resourceId;
+    }
+
+    public String getUniqueId() {
+        return  appId + "_" + roleId + "_" + resourceId;
+    }
 }
