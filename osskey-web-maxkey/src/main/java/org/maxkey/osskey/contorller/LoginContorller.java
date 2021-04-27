@@ -17,7 +17,6 @@
 
 package org.maxkey.osskey.contorller;
 
-import org.maxkey.osskey.vo.LoginConfigVO;
 import org.maxkey.authn.AbstractAuthenticationProvider;
 import org.maxkey.authn.LoginCredential;
 import org.maxkey.authn.SigninPrincipal;
@@ -27,6 +26,7 @@ import org.maxkey.configuration.ApplicationConfig;
 import org.maxkey.domain.UserInfo;
 import org.maxkey.domain.result.ResponseResult;
 import org.maxkey.domain.vo.TokenVO;
+import org.maxkey.osskey.vo.LoginConfigVO;
 import org.maxkey.password.onetimepwd.AbstractOtpAuthn;
 import org.maxkey.persistence.service.UserInfoService;
 import org.maxkey.util.BeanUtil;
@@ -39,6 +39,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
 import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
@@ -72,6 +73,7 @@ public class LoginContorller {
 
     /**
      * 获取当前登录配置
+     *
      * @return
      */
     @RequestMapping(value = {"/loginConfig"})
@@ -110,25 +112,58 @@ public class LoginContorller {
 
     @PostMapping(value = {"/logon"})
     public ResponseResult<TokenVO> logon(
-           @RequestBody LoginCredential loginCredential) {
+            @RequestBody LoginCredential loginCredential) {
 
         TokenVO tokenVO = new TokenVO();
-        Authentication authentication =  authenticationProvider.authenticate(loginCredential);
-        if(authentication.isAuthenticated()){
-           String token =  ((SigninPrincipal)authentication.getPrincipal()).getOnlineTicket().getTicketId();
-            UserInfo userInfo = ((SigninPrincipal)authentication.getPrincipal()).getUserInfo();
+        Authentication authentication = authenticationProvider.authenticate(loginCredential);
+        if (authentication.isAuthenticated()) {
+            String token = ((SigninPrincipal) authentication.getPrincipal()).getOnlineTicket().getTicketId();
+            UserInfo userInfo = ((SigninPrincipal) authentication.getPrincipal()).getUserInfo();
             List<String> roles = authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList());
             tokenVO.setAccessToken(token);
-            if(userInfo.getPicture()!=null){
+            if (userInfo.getPicture() != null) {
                 tokenVO.setAvatar(Base64.getEncoder().encodeToString(userInfo.getPicture()));
             }
             tokenVO.setEmail(userInfo.getEmail());
             tokenVO.setIntroduction(userInfo.getDescription());
             tokenVO.setName(userInfo.getUsername());
             tokenVO.setPhone(userInfo.getMobile());
-            tokenVO.setRoles(roles);
+            tokenVO.setRoles(Arrays.asList("admin"));
         }
 
+
+        return ResponseResult.newInstance(tokenVO);
+
+//        if (WebContext.isAuthenticated()) {
+//            return WebContext.redirect("/forwardindex");
+//        } else {
+//            return WebContext.redirect("/login");
+//        }
+
+    }
+
+    @PostMapping(value = {"/userInfo"})
+    public ResponseResult<TokenVO> userInfo() {
+
+        TokenVO tokenVO = new TokenVO();
+        // UserInfo userInfo = WebContext.getUserInfo();
+        Authentication authentication = WebContext.getAuthentication();//  authenticationProvider.authenticate(loginCredential);
+        if(authentication==null){
+            return ResponseResult.newInstance(tokenVO);
+        }
+
+       // String token = ((SigninPrincipal) authentication.getPrincipal()).getOnlineTicket().getTicketId();
+        UserInfo userInfo = ((SigninPrincipal) authentication.getPrincipal()).getUserInfo();
+        List<String> roles = authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList());
+        //tokenVO.setAccessToken(token);
+        if (userInfo.getPicture() != null) {
+            tokenVO.setAvatar(Base64.getEncoder().encodeToString(userInfo.getPicture()));
+        }
+        tokenVO.setEmail(userInfo.getEmail());
+        tokenVO.setIntroduction(userInfo.getDescription());
+        tokenVO.setName(userInfo.getUsername());
+        tokenVO.setPhone(userInfo.getMobile());
+        tokenVO.setRoles(Arrays.asList("admin"));
 
 
         return ResponseResult.newInstance(tokenVO);

@@ -79,6 +79,8 @@ public class PermissionAdapter  implements AsyncHandlerInterceptor  {
             HttpServletResponse response, Object handler)
             throws Exception {
         _logger.trace("PermissionAdapter preHandle");
+        String ticketId = request.getParameter("X-Access-Token");
+        OnlineTicket onlineTicket = onlineTicketServices.get(ticketId);
 
         Object passwordSetTypeAttribute=WebContext.getSession().getAttribute(WebConstants.CURRENT_LOGIN_USER_PASSWORD_SET_TYPE);
 
@@ -104,7 +106,7 @@ public class PermissionAdapter  implements AsyncHandlerInterceptor  {
             }
         }
 
-        Authentication authentication = WebContext.getAuthentication();
+        Authentication authentication = onlineTicket.getAuthentication();//WebContext.getAuthentication();
         //save  first protected url
         SavedRequest  firstSavedRequest = (SavedRequest)WebContext.getAttribute(WebConstants.FIRST_SAVED_REQUEST_PARAMETER);
         // 判断用户是否登录, 判断用户和角色，判断用户是否登录用户
@@ -138,8 +140,8 @@ public class PermissionAdapter  implements AsyncHandlerInterceptor  {
         boolean hasAccess = true;
 
         if(authentication.getPrincipal() instanceof SigninPrincipal) {
-            SigninPrincipal signinPrincipal = (SigninPrincipal)authentication.getPrincipal();
-            OnlineTicket onlineTicket = signinPrincipal.getOnlineTicket();
+           // SigninPrincipal signinPrincipal = (SigninPrincipal)authentication.getPrincipal();
+           // OnlineTicket onlineTicket = signinPrincipal.getOnlineTicket();
             onlineTicketServices.refresh(onlineTicket.getTicketId());
         }
         /*

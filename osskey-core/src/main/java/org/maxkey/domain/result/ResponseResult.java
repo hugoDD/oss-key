@@ -11,7 +11,7 @@ public class ResponseResult<T> {
     // code == 50003: access token expired
     // code == 50004: invalid user (user not exist)
     // code == 50005: username or password is incorrect
-    private int code=2000;
+    private int code=20000;
     private T data;
 
     private ResponseResult(){
