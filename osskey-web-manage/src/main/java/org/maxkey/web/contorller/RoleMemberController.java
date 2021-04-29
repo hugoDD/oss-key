@@ -21,6 +21,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.maxkey.constants.ConstantsOperateMessage;
 import org.maxkey.domain.RoleMember;
 import org.maxkey.domain.Roles;
+import org.maxkey.domain.param.PageSearchFilter;
 import org.maxkey.persistence.service.RoleMemberService;
 import org.maxkey.persistence.service.RolesService;
 import org.maxkey.web.WebContext;
@@ -61,11 +62,11 @@ public class RoleMemberController {
 
 	@RequestMapping(value = { "/grid" })
 	@ResponseBody
-	public Page<RoleMember> grid(@ModelAttribute("roleMember") RoleMember roleMember) {
+	public Page<RoleMember> grid(PageSearchFilter search, @ModelAttribute("roleMember") RoleMember roleMember) {
 		if(roleMember.getRoleId()==null||roleMember.getRoleId().equals("")){
 			return null;
 		}
-		return roleMemberService.queryPageResults(roleMember);
+		return roleMemberService.queryPageResults(search.newPage(),roleMember);
 	}
 
 
@@ -73,26 +74,28 @@ public class RoleMemberController {
 	@ResponseBody
 	public Page<RoleMember> queryMemberInRole(@ModelAttribute("roleMember")  RoleMember roleMember) {
 		_logger.debug("roleMember : "+roleMember);
-		if(roleMember.getRoleId()==null||roleMember.getRoleId().equals("")||roleMember.getRoleId().equals("ALL_USER_ROLE")){
-			return roleMemberService.queryPageResults("allMemberInRole",roleMember);
-		}else{
-			return roleMemberService.queryPageResults("memberInRole",roleMember);
-		}
+//		if(roleMember.getRoleId()==null||roleMember.getRoleId().equals("")||roleMember.getRoleId().equals("ALL_USER_ROLE")){
+//			return roleMemberService.queryPageResults("allMemberInRole",roleMember);
+//		}else{
+//			return roleMemberService.queryPageResults("memberInRole",roleMember);
+//		}
+		return new Page<>();
 	}
 
 
 	@RequestMapping(value={"/addRoleAppsList/{roleId}"})
 	public ModelAndView addGroupAppsList(@PathVariable("roleId") String roleId){
 		ModelAndView modelAndView=new ModelAndView("roleusers/addRoleUsersList");
-		Roles role=rolesService.get(roleId);
+		Roles role=rolesService.getById(roleId);
 		modelAndView.addObject("role", role);
 		return modelAndView;
 	}
 
 	@RequestMapping(value = { "/queryMemberNotInRole" })
 	@ResponseBody
-	public Page<RoleMember> queryMemberNotInGroupGrid(@ModelAttribute("roleMember")  RoleMember roleMember) {
-			return roleMemberService.queryPageResults("memberNotInRole",roleMember);
+	public Page<RoleMember> queryMemberNotInGroupGrid(PageSearchFilter searchFilter,@ModelAttribute("roleMember")  RoleMember roleMember) {
+		return null;
+			//return roleMemberService.queryPageResults("memberNotInRole",roleMember);
 	}
 
 
@@ -114,8 +117,8 @@ public class RoleMemberController {
 
 			for (int i = 0; i < arrMemberIds.length; i++) {
 				RoleMember newRoleMember = new RoleMember(groupId,roleMember.getRoleName(), arrMemberIds[i], arrMemberNames[i],"USER");
-				newRoleMember.setId(newRoleMember.generateId());
-				result = roleMemberService.insert(newRoleMember);
+				//newRoleMember.setId(newRoleMember.generateId());
+				result = roleMemberService.save(newRoleMember);
 			}
 			if(!result) {
 				return  new Message(WebContext.getI18nValue(ConstantsOperateMessage.INSERT_ERROR),MessageType.error);
@@ -138,7 +141,7 @@ public class RoleMemberController {
 		if (roleMemberIds != null) {
 			String[] arrMemberIds = roleMemberIds.split(",");
 			for (int i = 0; i < arrMemberIds.length; i++) {
-				roleMemberService.remove(arrMemberIds[i]);
+				roleMemberService.removeById(arrMemberIds[i]);
 			}
 			if(!result) {
 				return  new Message(WebContext.getI18nValue(ConstantsOperateMessage.INSERT_ERROR),MessageType.error);

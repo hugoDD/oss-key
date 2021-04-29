@@ -62,7 +62,8 @@ public class RolesController {
 	@ResponseBody
 	public Page<Roles> queryDataGrid(@ModelAttribute("roles") Roles roles) {
 		_logger.debug(""+roles);
-		return rolesService.queryPageResults(roles);
+		//return rolesService.queryPageResults(roles);
+		return null;
 	}
 
 
@@ -74,7 +75,7 @@ public class RolesController {
 	@RequestMapping(value = { "/forwardUpdate/{id}" })
 	public ModelAndView forwardUpdate(@PathVariable("id") String id) {
 		ModelAndView modelAndView=new ModelAndView("roles/roleUpdate");
-		Roles role=rolesService.get(id);
+		Roles role=rolesService.getById(id);
 		modelAndView.addObject("model",role);
 		return modelAndView;
 	}
@@ -84,7 +85,7 @@ public class RolesController {
 	public Message insert(@ModelAttribute("role") Roles role) {
 		_logger.debug("-Add  :" + role);
 
-		if (rolesService.insert(role)) {
+		if (rolesService.save(role)) {
 		    rolesService.refreshDynamicRoles(role);
 			return  new Message(WebContext.getI18nValue(ConstantsOperateMessage.INSERT_SUCCESS),MessageType.success);
 
@@ -103,7 +104,7 @@ public class RolesController {
 	@RequestMapping(value={"/query"})
 	public Message query(@ModelAttribute("role") Roles role) {
 		_logger.debug("-query  :" + role);
-		if (rolesService.load(role)!=null) {
+		if (rolesService.getById(role)!=null) {
 			return  new Message(WebContext.getI18nValue(ConstantsOperateMessage.INSERT_SUCCESS),MessageType.success);
 
 		} else {
@@ -122,7 +123,7 @@ public class RolesController {
 	public Message update(@ModelAttribute("role") Roles role) {
 		_logger.debug("-update  role :" + role);
 
-		if (rolesService.update(role)) {
+		if (rolesService.updateById(role)) {
 		    rolesService.refreshDynamicRoles(role);
 			return  new Message(WebContext.getI18nValue(ConstantsOperateMessage.UPDATE_SUCCESS),MessageType.success);
 

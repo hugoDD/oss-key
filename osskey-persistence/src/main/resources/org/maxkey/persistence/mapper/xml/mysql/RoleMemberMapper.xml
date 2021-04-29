@@ -208,7 +208,8 @@
 		</if>
 	</select>
 
-	<update id="addDynamicRoleMember" parameterType="Roles" >
+
+    <update id="addDynamicRoleMember" parameterType="Roles" >
     	INSERT INTO MXK_ROLE_MEMBER(
     		ID,
     		ROLEID,

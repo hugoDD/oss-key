@@ -52,13 +52,13 @@ public class PasswordPolicyController {
 		 */
 		@RequestMapping(value={"/forward"})
 		public ModelAndView sysConfig(){
-			PasswordPolicy passwordPolicy = passwordPolicyService.get("1");
+			PasswordPolicy passwordPolicy = passwordPolicyService.getById("1");
 			return new ModelAndView("config/passwordpolicy/passwordpolicy","model",passwordPolicy);
 		}
 
 		/**
 		 * 更新
-		 * @param sysConfig
+		 * @param passwordPolicy
 		 * @return
 		 */
 		@RequestMapping(value={"/update"})
@@ -69,7 +69,7 @@ public class PasswordPolicyController {
 			if(message != null) {
 				return message;
 			}
-			if(passwordPolicyService.update(passwordPolicy)) {
+			if(passwordPolicyService.updateById(passwordPolicy)) {
 				return new Message(WebContext.getI18nValue(ConstantsOperateMessage.UPDATE_SUCCESS),MessageType.success);
 			} else {
 				return new Message(WebContext.getI18nValue(ConstantsOperateMessage.UPDATE_ERROR),MessageType.error);

@@ -58,7 +58,8 @@ public class UserAdjointController {
 	@ResponseBody
 	public Page<UserInfoAdjoint> queryDataGrid(@ModelAttribute("userInfoAdjoint") UserInfoAdjoint userInfoAdjoint) {
 		_logger.debug(""+userInfoAdjoint);
-		return userInfoAdjointService.queryPageResults(userInfoAdjoint);
+		//return userInfoAdjointService.queryPageResults(userInfoAdjoint);
+		return null;
 	}
 
 
@@ -72,7 +73,7 @@ public class UserAdjointController {
 	@RequestMapping(value = { "/forwardUpdate/{id}" })
 	public ModelAndView forwardUpdate(@PathVariable("id") String id) {
 		ModelAndView modelAndView=new ModelAndView("userinfo/userinfoAdjointUpdate");
-		UserInfoAdjoint userInfoAdjoint=userInfoAdjointService.get(id);
+		UserInfoAdjoint userInfoAdjoint=userInfoAdjointService.getById(id);
 		modelAndView.addObject("model",userInfoAdjoint);
 		return modelAndView;
 	}
@@ -82,7 +83,7 @@ public class UserAdjointController {
 	public Message insert(@ModelAttribute("userInfoAdjoint") UserInfoAdjoint userInfoAdjoint) {
 		_logger.debug("-Add  :" + userInfoAdjoint);
 
-		if (userInfoAdjointService.insert(userInfoAdjoint)) {
+		if (userInfoAdjointService.save(userInfoAdjoint)) {
 			return  new Message(WebContext.getI18nValue(ConstantsOperateMessage.INSERT_SUCCESS),MessageType.success);
 
 		} else {
@@ -93,14 +94,14 @@ public class UserAdjointController {
 
 	/**
 	 * 查询
-	 * @param group
+	 * @param userInfoAdjoint
 	 * @return
 	 */
 	@ResponseBody
 	@RequestMapping(value={"/query"})
 	public Message query(@ModelAttribute("userInfoAdjoint") UserInfoAdjoint userInfoAdjoint) {
 		_logger.debug("-query  :" + userInfoAdjoint);
-		if (userInfoAdjointService.load(userInfoAdjoint)!=null) {
+		if (userInfoAdjointService.getById(userInfoAdjoint)!=null) {
 			return  new Message(WebContext.getI18nValue(ConstantsOperateMessage.INSERT_SUCCESS),MessageType.success);
 
 		} else {
@@ -111,7 +112,7 @@ public class UserAdjointController {
 
 	/**
 	 * 修改
-	 * @param group
+	 * @param userInfoAdjoint
 	 * @return
 	 */
 	@ResponseBody
@@ -119,7 +120,7 @@ public class UserAdjointController {
 	public Message update(@ModelAttribute("userInfoAdjoint") UserInfoAdjoint userInfoAdjoint) {
 		_logger.debug("-update  userInfoAdjoint :" + userInfoAdjoint);
 
-		if (userInfoAdjointService.update(userInfoAdjoint)) {
+		if (userInfoAdjointService.updateById(userInfoAdjoint)) {
 			return  new Message(WebContext.getI18nValue(ConstantsOperateMessage.UPDATE_SUCCESS),MessageType.success);
 
 		} else {
@@ -134,7 +135,7 @@ public class UserAdjointController {
 	public Message delete(@ModelAttribute("userInfoAdjoint") UserInfoAdjoint userInfoAdjoint) {
 		_logger.debug("-delete  group :" + userInfoAdjoint);
 
-		if (userInfoAdjointService.remove(userInfoAdjoint.getId())) {
+		if (userInfoAdjointService.removeById(userInfoAdjoint.getId())) {
 			return  new Message(WebContext.getI18nValue(ConstantsOperateMessage.DELETE_SUCCESS),MessageType.success);
 
 		} else {

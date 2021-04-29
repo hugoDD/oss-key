@@ -51,5 +51,12 @@ public class RoleMember extends UserInfo implements Serializable {
     private String type;// User or Roles
 
 
+    public RoleMember(String groupId, String roleName, String arrMemberId, String arrMemberName, String user) {
+        this.roleId = groupId;
+        this.roleName = roleName;
+        this.memberId = arrMemberId;
+        this.memberName = arrMemberName;
+        this.userType = user;
 
+    }
 }

@@ -19,7 +19,9 @@ package org.maxkey.web.contorller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.maxkey.constants.ConstantsOperateMessage;
+import org.maxkey.domain.PageResults;
 import org.maxkey.domain.Resources;
+import org.maxkey.domain.param.PageSearchFilter;
 import org.maxkey.persistence.service.ResourcesService;
 import org.maxkey.web.WebContext;
 import org.maxkey.web.component.TreeNode;
@@ -62,9 +64,10 @@ public class ResourcesController {
 
 	@RequestMapping(value = { "/grid" })
 	@ResponseBody
-	public Page<Resources> queryDataGrid(@ModelAttribute("resources") Resources resources) {
+	public PageResults<Resources> queryDataGrid(PageSearchFilter search, @ModelAttribute("resources") Resources resources) {
 		_logger.debug(""+resources);
-		return resourcesService.queryPageResults(resources);
+		Page<Resources> page =  resourcesService.queryPageResults(search.newPage(),resources);
+		return new PageResults<>(page);
 	}
 
 
@@ -76,7 +79,7 @@ public class ResourcesController {
 	@RequestMapping(value = { "/forwardUpdate/{id}" })
 	public ModelAndView forwardUpdate(@PathVariable("id") String id) {
 		ModelAndView modelAndView=new ModelAndView("resources/resourceUpdate");
-		Resources resource=resourcesService.get(id);
+		Resources resource=resourcesService.getById(id);
 		modelAndView.addObject("model",resource);
 		return modelAndView;
 	}
@@ -86,7 +89,7 @@ public class ResourcesController {
 	public Message insert(@ModelAttribute("resource") Resources resource) {
 		_logger.debug("-Add  :" + resource);
 
-		if (resourcesService.insert(resource)) {
+		if (resourcesService.save(resource)) {
 			return  new Message(WebContext.getI18nValue(ConstantsOperateMessage.INSERT_SUCCESS),MessageType.success);
 
 		} else {
@@ -104,7 +107,7 @@ public class ResourcesController {
 	@RequestMapping(value={"/query"})
 	public Message query(@ModelAttribute("resource") Resources resource) {
 		_logger.debug("-query  :" + resource);
-		if (resourcesService.load(resource)!=null) {
+		if (resourcesService.getById(resource)!=null) {
 			return  new Message(WebContext.getI18nValue(ConstantsOperateMessage.INSERT_SUCCESS),MessageType.success);
 
 		} else {
@@ -123,7 +126,7 @@ public class ResourcesController {
 	public Message update(@ModelAttribute("resource") Resources resource) {
 		_logger.debug("-update  resource :" + resource);
 
-		if (resourcesService.update(resource)) {
+		if (resourcesService.updateById(resource)) {
 			return  new Message(WebContext.getI18nValue(ConstantsOperateMessage.UPDATE_SUCCESS),MessageType.success);
 
 		} else {
@@ -138,7 +141,7 @@ public class ResourcesController {
 	public Message delete(@ModelAttribute("resource") Resources resource) {
 		_logger.debug("-delete  resource :" + resource);
 
-		if (resourcesService.remove(resource.getId())) {
+		if (resourcesService.removeById(resource.getId())) {
 			return  new Message(WebContext.getI18nValue(ConstantsOperateMessage.DELETE_SUCCESS),MessageType.success);
 
 		} else {
