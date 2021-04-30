@@ -63,11 +63,11 @@ public class HistoryLoginAppAdapter  implements AsyncHandlerInterceptor  {
         if(authentication.getPrincipal() instanceof SigninPrincipal) {
             SigninPrincipal signinPrincipal = (SigninPrincipal)authentication.getPrincipal() ;
             if(signinPrincipal.getGrantedAuthorityApps().contains(new SimpleGrantedAuthority(app.getId()))) {
-                _logger.trace("preHandle have authority access " + app);
+                _logger.trace("preHandle have authority access " + app.getId());
                 return true;
             }
         }
-        _logger.debug("preHandle not have authority access " + app);
+        _logger.debug("preHandle not have authority access " + app.getId());
         return false;
     }
 

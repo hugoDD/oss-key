@@ -7,6 +7,7 @@ import java.util.List;
 @Data
 public class TokenVO {
     private String accessToken;
+    private String sessionId;
     private List<String> roles;
     private String name;
     private String avatar;

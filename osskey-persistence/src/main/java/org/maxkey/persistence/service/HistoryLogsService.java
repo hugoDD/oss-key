@@ -21,11 +21,12 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.maxkey.domain.HistoryLogs;
+import org.maxkey.log.IOperLog;
 import org.maxkey.persistence.mapper.HistoryLogsMapper;
 import org.springframework.stereotype.Service;
 
 @Service
-public class HistoryLogsService  extends ServiceImpl<HistoryLogsMapper,HistoryLogs> {
+public class HistoryLogsService  extends ServiceImpl<HistoryLogsMapper,HistoryLogs> implements IOperLog {
 
 
     public Page<HistoryLogs> queryPageResults(IPage<HistoryLogs> page, HistoryLogs historyLogs) {

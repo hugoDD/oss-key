@@ -129,6 +129,7 @@ public class LoginContorller {
             tokenVO.setName(userInfo.getUsername());
             tokenVO.setPhone(userInfo.getMobile());
             tokenVO.setRoles(Arrays.asList("admin"));
+            tokenVO.setSessionId(WebContext.getSession().getId());
         }
 
 

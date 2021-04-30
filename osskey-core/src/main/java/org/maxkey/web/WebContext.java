@@ -77,6 +77,7 @@ public final class WebContext {
      */
     public static void setUserInfo(UserInfo userInfo) {
         setAttribute(WebConstants.CURRENT_USER, userInfo);
+        getRequest().setAttribute(WebConstants.CURRENT_USER, userInfo);
     }
 
     /**
@@ -120,7 +121,7 @@ public final class WebContext {
 
     public static void setAuthentication(Authentication authentication) {
         setAttribute(WebConstants.AUTHENTICATION, authentication);
-        setAttribute(getSession().getId(),authentication);
+        getRequest().setAttribute(WebConstants.AUTHENTICATION, authentication);
     }
 
     public static Authentication getAuthenticationByToken(String token ) {
@@ -244,6 +245,7 @@ public final class WebContext {
      * @param value String
      */
     public static void setAttribute(String name, Object value) {
+        getRequest().setAttribute(name,value);
         getSession().setAttribute(name, value);
     }
 
@@ -254,6 +256,9 @@ public final class WebContext {
      * @return
      */
     public static Object getAttribute(String name) {
+        if(getRequest().getAttribute(name)!=null){
+            return getRequest().getAttribute(name);
+        }
         return getSession().getAttribute(name);
     }
 
@@ -444,6 +449,12 @@ public final class WebContext {
         LogFactory.getLog(WebContext.class).debug(
                 "getRequestIpAddress() RequestIpAddress:" + ipAddress);
         return ipAddress;
+    }
+
+    public static String getCaptchavalid(){
+        String captcha = WebContext.getSession().getAttribute(
+                WebConstants.KAPTCHA_SESSION_KEY).toString();
+        return captcha;
     }
 
     /**

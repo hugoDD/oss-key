@@ -17,6 +17,8 @@
 
 package org.maxkey.domain.apps;
 
+import java.util.Base64;
+
 /**
  * UserApps .
  * @author hugoDD
@@ -31,8 +33,17 @@ public class UserApps extends Apps {
 
     private String displayName;
 
+
+
     public UserApps() {
 
+    }
+
+    public String getIconImg(){
+        if(this.getIcon()!=null){
+           return  Base64.getEncoder().encodeToString(this.getIcon());
+        }
+        return null;
     }
 
     public String getUsername() {

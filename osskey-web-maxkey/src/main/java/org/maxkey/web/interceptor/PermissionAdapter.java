@@ -28,6 +28,7 @@ import org.maxkey.authn.online.OnlineTicket;
 import org.maxkey.authn.online.OnlineTicketServices;
 import org.maxkey.configuration.ApplicationConfig;
 import org.maxkey.constants.ConstantsPasswordSetType;
+import org.maxkey.util.StringUtils;
 import org.maxkey.web.WebConstants;
 import org.maxkey.web.WebContext;
 import org.slf4j.Logger;
@@ -79,8 +80,15 @@ public class PermissionAdapter  implements AsyncHandlerInterceptor  {
             HttpServletResponse response, Object handler)
             throws Exception {
         _logger.trace("PermissionAdapter preHandle");
-        String ticketId = request.getParameter("X-Access-Token");
-        OnlineTicket onlineTicket = onlineTicketServices.get(ticketId);
+        String ticketId = request.getHeader("X-Access-Token");
+        Authentication authentication;
+        if(StringUtils.isNotEmpty(ticketId)){
+            OnlineTicket onlineTicket = onlineTicketServices.get(ticketId);
+            authentication = onlineTicket==null? null:onlineTicket.getAuthentication();
+        }else {
+            authentication = WebContext.getAuthentication();
+        }
+
 
         Object passwordSetTypeAttribute=WebContext.getSession().getAttribute(WebConstants.CURRENT_LOGIN_USER_PASSWORD_SET_TYPE);
 
@@ -106,7 +114,7 @@ public class PermissionAdapter  implements AsyncHandlerInterceptor  {
             }
         }
 
-        Authentication authentication = onlineTicket.getAuthentication();//WebContext.getAuthentication();
+       // Authentication authentication = onlineTicket.getAuthentication();//WebContext.getAuthentication();
         //save  first protected url
         SavedRequest  firstSavedRequest = (SavedRequest)WebContext.getAttribute(WebConstants.FIRST_SAVED_REQUEST_PARAMETER);
         // 判断用户是否登录, 判断用户和角色，判断用户是否登录用户
@@ -125,7 +133,9 @@ public class PermissionAdapter  implements AsyncHandlerInterceptor  {
             }
 
             _logger.trace("No Authentication ... forward to /login");
+
             RequestDispatcher dispatcher = request.getRequestDispatcher("/login");
+            //response.sendRedirect("/login");
             dispatcher.forward(request, response);
             return false;
         }
@@ -140,8 +150,10 @@ public class PermissionAdapter  implements AsyncHandlerInterceptor  {
         boolean hasAccess = true;
 
         if(authentication.getPrincipal() instanceof SigninPrincipal) {
-           // SigninPrincipal signinPrincipal = (SigninPrincipal)authentication.getPrincipal();
-           // OnlineTicket onlineTicket = signinPrincipal.getOnlineTicket();
+            SigninPrincipal signinPrincipal = (SigninPrincipal)authentication.getPrincipal();
+            OnlineTicket onlineTicket = signinPrincipal.getOnlineTicket();
+            WebContext.setAuthentication(authentication);
+            WebContext.setUserInfo(signinPrincipal.getUserInfo());
             onlineTicketServices.refresh(onlineTicket.getTicketId());
         }
         /*

@@ -140,6 +140,7 @@ public class MaxKeyMvcConfig implements WebMvcConfigurer {
         }
 
         registry.addInterceptor(permissionAdapter)
+                .addPathPatterns("/auth/manage/**")
                 .addPathPatterns("/auth/osskey/userInfo")
                 .addPathPatterns("/index/**")
                 .addPathPatterns("/logs/**")
