@@ -93,7 +93,7 @@ public class UserInfo implements Serializable {
     protected int gender;
 
     protected String birthDate;
-    @JsonIgnore
+
     protected byte[] picture;
     @JsonIgnore
     @TableField(exist = false)
