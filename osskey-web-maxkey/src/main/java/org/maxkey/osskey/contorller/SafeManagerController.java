@@ -24,6 +24,7 @@ import org.maxkey.constants.ConstantsTimeInterval;
 import org.maxkey.crypto.ReciprocalUtils;
 import org.maxkey.domain.UserInfo;
 import org.maxkey.domain.result.ResponseResult;
+import org.maxkey.persistence.db.PasswordPolicyValidator;
 import org.maxkey.persistence.service.UserInfoService;
 import org.maxkey.util.StringUtils;
 import org.maxkey.web.WebConstants;
@@ -62,7 +63,8 @@ public class SafeManagerController {
         if (userInfoService.changePassword(oldPassword, newPassword, confirmPassword)) {
             return ResponseResult.newInstance(WebContext.getI18nValue(ConstantsOperateMessage.UPDATE_SUCCESS));
         } else {
-            return ResponseResult.newInstance(ConstantsCode.update_fail, WebContext.getI18nValue(ConstantsOperateMessage.UPDATE_ERROR));
+            String errorMessage = (String)WebContext.getAttribute(PasswordPolicyValidator.PASSWORD_POLICY_VALIDATE_RESULT);
+            return ResponseResult.newInstance(ConstantsCode.update_fail,errorMessage);
         }
     }
 

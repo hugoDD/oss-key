@@ -25,15 +25,19 @@ public class PageSearchFilter extends  SearchFilter{
     private String sortField;
     private String sortOrder;
 
-
-
-    public <T> IPage<T> newPage(){
-        Page<T> page =  new Page<>(this.pageNumber,this.pageSize);
+    public <T> IPage<T> newPage(long limit){
+        Page<T> page =  new Page<>(this.pageNumber,limit);
         if("asc".equalsIgnoreCase(this.sortOrder)){
             page.addOrder( OrderItem.asc(this.sortField));
         }else if("desc".equalsIgnoreCase(this.sortOrder)){
             page.addOrder( OrderItem.desc(this.sortField));
         }
         return  page;
+    }
+
+
+    public <T> IPage<T> newPage(){
+
+        return  this.newPage(this.pageSize);
     }
 }

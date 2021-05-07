@@ -52,9 +52,7 @@ public class HistoryLogin implements Serializable {
     private String loginUrl;
     private String loginTime;
     private String logoutTime;
-
-    private String startDate;
-    private String endDate;
+    
 
 
 }

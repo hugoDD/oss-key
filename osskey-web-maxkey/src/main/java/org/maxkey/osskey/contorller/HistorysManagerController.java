@@ -70,8 +70,8 @@ public class HistorysManagerController {
      * @param search
      * @return
      */
-    @GetMapping(value = { "/history/logs" })
-    public PageResult<HistoryLogs> logsDataGrid(PageSearchFilter search) {
+    @PostMapping(value = { "/history/logs" })
+    public PageResult<HistoryLogs> historyLogs(@RequestBody  PageSearchFilter search) {
 
         IPage<HistoryLogs> page =historyLogsService.page(search.newPage(),search.rqslToQuery(HistoryLogs.class));
 
@@ -84,8 +84,8 @@ public class HistorysManagerController {
      * @param search
      * @return
      */
-    @GetMapping(value = { "/login/log" })
-    public PageResult<HistoryLogin> logAuthsGrid(PageSearchFilter search) {
+    @PostMapping(value = { "/login/log" })
+    public PageResult<HistoryLogin> LogigLogPage(@RequestBody PageSearchFilter search) {
        IPage<HistoryLogin> page =  historyLoginService.page(search.newPage(),search.rqslToQuery(HistoryLogin.class));
         return PageResult.newInstance(page.getTotal(),page.getRecords());
     }
@@ -97,8 +97,8 @@ public class HistorysManagerController {
      * @param search
      * @return
      */
-    @GetMapping(value = { "/loginApps/log" })
-    public PageResult<HistoryLoginApps> logsSsoGrid(PageSearchFilter search) {
+    @PostMapping(value = { "/loginApps/log" })
+    public PageResult<HistoryLoginApps> loginAppsLog(PageSearchFilter search) {
        IPage<HistoryLoginApps> page =  historyLoginAppsService.page(search.newPage(),search.rqslToQuery(HistoryLoginApps.class));
 
         return PageResult.newInstance(page.getTotal(),page.getRecords());
