@@ -20,6 +20,7 @@ package org.maxkey.web.contorller;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.maxkey.domain.HistoryLogin;
 import org.maxkey.domain.HistoryLoginApps;
@@ -98,7 +99,8 @@ public class HistorysController {
     public PageResults<HistoryLogin> logAuthsGrid(PageSearchFilter search, @ModelAttribute("historyLogin") HistoryLogin historyLogin) {
         _logger.debug("history/login/grid/ logsGrid() " + historyLogin);
         historyLogin.setUid(WebContext.getUserInfo().getId());
-        Page<HistoryLogin> historyLoginPage = historyLoginService.queryPageResults(search.newPage(),historyLogin);
+        IPage<HistoryLogin> historyLoginPage =historyLoginService.page(search.newPage(),search.rqslToQuery(HistoryLogin.class));
+        //Page<HistoryLogin> historyLoginPage = historyLoginService.queryPageResults(search.newPage(),historyLogin);
         PageResults<HistoryLogin> pageResults = new PageResults<>((int)historyLoginPage.getCurrent(),(int)historyLoginPage.getSize(),historyLoginPage.getTotal(),historyLoginPage.getRecords());
         return pageResults;
     }

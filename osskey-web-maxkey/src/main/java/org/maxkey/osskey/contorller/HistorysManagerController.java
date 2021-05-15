@@ -70,7 +70,7 @@ public class HistorysManagerController {
      * @param search
      * @return
      */
-    @PostMapping(value = { "/history/logs" })
+    @PostMapping(value = { "/opt/logs" })
     public PageResult<HistoryLogs> historyLogs(@RequestBody  PageSearchFilter search) {
 
         IPage<HistoryLogs> page =historyLogsService.page(search.newPage(),search.rqslToQuery(HistoryLogs.class));
@@ -97,7 +97,7 @@ public class HistorysManagerController {
      * @param search
      * @return
      */
-    @PostMapping(value = { "/loginApps/log" })
+    @PostMapping(value = { "/appAccess/log" })
     public PageResult<HistoryLoginApps> loginAppsLog(PageSearchFilter search) {
        IPage<HistoryLoginApps> page =  historyLoginAppsService.page(search.newPage(),search.rqslToQuery(HistoryLoginApps.class));
 

@@ -74,6 +74,12 @@
 			<version>1.0</version>
 		</dependency>
 
+		<dependency>
+			<groupId>com.github.jsonzou</groupId>
+			<artifactId>jmockdata</artifactId>
+			<version>4.3.0</version>
+		</dependency>
+
 
         <!-- compile project(":osskey-authentications") compile project(":osskey-protocols:osskey-protocol-authorize")
             compile project(":osskey-protocols:osskey-protocol-cas") compile project(":osskey-protocols:osskey-protocol-desktop")

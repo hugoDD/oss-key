@@ -25,6 +25,14 @@ public class PageSearchFilter extends  SearchFilter{
     private String sortField;
     private String sortOrder;
 
+    public void setPage(long page){
+        this.pageNumber = page;
+    }
+    public void setLimit(long limit){
+        this.pageSize = limit;
+    }
+
+
     public <T> IPage<T> newPage(long limit){
         Page<T> page =  new Page<>(this.pageNumber,limit);
         if("asc".equalsIgnoreCase(this.sortOrder)){
