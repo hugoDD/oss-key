@@ -1,19 +1,19 @@
 /*
  * Copyright [2020] [MaxKey of copyright http://www.maxkey.top]
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
 
 package org.maxkey;
 
@@ -48,47 +48,47 @@ import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 @PropertySource(ConstantsProperties.maxKeyPropertySource)
 public class MaxKeyMvcConfig implements WebMvcConfigurer {
     private static final  Logger _logger = LoggerFactory.getLogger(MaxKeyMvcConfig.class);
-    
+
     @Autowired
   	@Qualifier("applicationConfig")
   	ApplicationConfig applicationConfig;
-    
+
     @Autowired
     @Qualifier("authenticationProvider")
     AbstractAuthenticationProvider authenticationProvider ;
-    
+
     @Autowired
 	@Qualifier("remeberMeService")
 	AbstractRemeberMeService remeberMeService;
-    
+
     @Autowired
 	@Qualifier("kerberosService")
     KerberosService kerberosService;
-    
+
     @Autowired
     PermissionAdapter permissionAdapter;
-    
+
     @Autowired
     HistoryLogsAdapter historyLogsAdapter;
-    
+
     @Autowired
     LocaleChangeInterceptor localeChangeInterceptor;
-    
+
     @Autowired
     PreLoginAppAdapter preLoginAppAdapter;
-    
+
     @Autowired
     HistoryLoginAppAdapter historyLoginAppAdapter;
-    
+
     @Value("${config.support.httpheader.enable:false}")
     private boolean httpHeaderEnable;
-    
+
     @Value("${config.support.httpheader.headername:iv-user}")
     private String httpHeaderName;
-    
+
     @Value("${config.support.basic.enable:false}")
     private boolean basicEnable;
-    
+
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
     	_logger.debug("addResourceHandlers");
@@ -98,17 +98,17 @@ public class MaxKeyMvcConfig implements WebMvcConfigurer {
         _logger.debug("add templates");
         registry.addResourceHandler("/templates/**")
                 .addResourceLocations("classpath:/templates/");
-        
+
         _logger.debug("add swagger");
         registry.addResourceHandler("swagger-ui.html")
                 .addResourceLocations("classpath:/META-INF/resources/");
         registry.addResourceHandler("/webjars/**")
                 .addResourceLocations("classpath:/META-INF/resources/webjars/");
-        
+
         _logger.debug("add knife4j");
         registry.addResourceHandler("doc.html").addResourceLocations("classpath:/META-INF/resources/");
         registry.addResourceHandler("/webjars/**").addResourceLocations("classpath:/META-INF/resources/webjars/");
-        
+
         _logger.debug("addResourceHandler finished .");
     }
 
@@ -120,26 +120,28 @@ public class MaxKeyMvcConfig implements WebMvcConfigurer {
         registry.addInterceptor(new HttpRemeberMeEntryPoint(
         			authenticationProvider,remeberMeService,applicationConfig,true))
         		.addPathPatterns("/login");
-        
+
         _logger.debug("add HttpKerberosEntryPoint");
         registry.addInterceptor(new HttpKerberosEntryPoint(
     			authenticationProvider,kerberosService,applicationConfig,true))
     		.addPathPatterns("/login");
-        
-        
+
+
         if(httpHeaderEnable) {
             registry.addInterceptor(new HttpHeaderEntryPoint(httpHeaderName,httpHeaderEnable))
                     .addPathPatterns("/*");
             _logger.debug("add HttpHeaderEntryPoint");
         }
-        
+
         if(basicEnable) {
             registry.addInterceptor(new BasicEntryPoint(basicEnable))
                     .addPathPatterns("/*");
             _logger.debug("add BasicEntryPoint");
         }
-        
+
         registry.addInterceptor(permissionAdapter)
+                .addPathPatterns("/auth/manage/**")
+                .addPathPatterns("/auth/osskey/userInfo")
                 .addPathPatterns("/index/**")
                 .addPathPatterns("/logs/**")
                 .addPathPatterns("/userinfo/**")
@@ -149,7 +151,7 @@ public class MaxKeyMvcConfig implements WebMvcConfigurer {
                 .addPathPatterns("/appList")
                 .addPathPatterns("/appList/**")
                 .addPathPatterns("/socialsignon/**")
-                
+
                 .addPathPatterns("/authz/basic/*")
                 .addPathPatterns("/authz/ltpa/*")
                 .addPathPatterns("/authz/desktop/*")
@@ -178,18 +180,18 @@ public class MaxKeyMvcConfig implements WebMvcConfigurer {
                 //rest
                 .excludePathPatterns("/authz/cas/v1/tickets")
                 .excludePathPatterns("/authz/cas/v1/tickets/*")
-                
+
                 //OAuth
                 .addPathPatterns("/oauth/v20/authorize")
                 .addPathPatterns("/oauth/v20/authorize/*")
-                
+
                 //online ticket Validate
                 .excludePathPatterns("/onlineticket/ticketValidate")
                 .excludePathPatterns("/onlineticket/ticketValidate/*")
                 ;
-        
+
         _logger.debug("add PermissionAdapter");
-        
+
         registry.addInterceptor(historyLogsAdapter)
                 .addPathPatterns("/safe/changePassword/**")
                 ;
@@ -207,7 +209,7 @@ public class MaxKeyMvcConfig implements WebMvcConfigurer {
                 .addPathPatterns("/authz/cas/granting")
         ;
         _logger.debug("add PreLoginAppAdapter");
-        
+
         registry.addInterceptor(historyLoginAppAdapter)
                 .addPathPatterns("/authz/basic/*")
                 .addPathPatterns("/authz/ltpa/*")
@@ -219,11 +221,11 @@ public class MaxKeyMvcConfig implements WebMvcConfigurer {
                 .addPathPatterns("/authz/cas/granting")
         ;
         _logger.debug("add HistoryLoginAppAdapter");
-        
-       
+
+
         registry.addInterceptor(localeChangeInterceptor);
         _logger.debug("add LocaleChangeInterceptor");
-        
+
 
     }
 

@@ -17,6 +17,7 @@
 
 package org.maxkey.domain;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -92,9 +93,10 @@ public class UserInfo implements Serializable {
     protected int gender;
 
     protected String birthDate;
-    @JsonIgnore
+
     protected byte[] picture;
     @JsonIgnore
+    @TableField(exist = false)
     protected MultipartFile pictureFile;
 
     protected int idType;
@@ -126,6 +128,7 @@ public class UserInfo implements Serializable {
     protected String appLoginPassword;
     protected String protectedApps;
     @JsonIgnore
+    @TableField(exist = false)
     protected HashMap<String, String> protectedAppsMap;
 
     protected String passwordLastSetTime;
@@ -228,6 +231,7 @@ public class UserInfo implements Serializable {
     protected String extraAttributeName;
     protected String extraAttributeValue;
     @JsonIgnore
+    @TableField(exist = false)
     protected HashMap<String, String> extraAttributeMap;
 
     protected int online;

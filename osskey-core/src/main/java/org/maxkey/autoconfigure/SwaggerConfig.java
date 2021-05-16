@@ -4,7 +4,10 @@ import java.util.ArrayList;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import com.github.xiaoymin.knife4j.spring.annotations.EnableKnife4j;
 import springfox.documentation.builders.PathSelectors;
+import springfox.documentation.builders.RequestHandlerSelectors;
+import springfox.documentation.oas.annotations.EnableOpenApi;
 import springfox.documentation.service.ApiInfo;
 import springfox.documentation.service.Contact;
 import springfox.documentation.spi.DocumentationType;
@@ -13,6 +16,8 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @Configuration
 @EnableSwagger2
+@EnableOpenApi
+@EnableKnife4j
 public class SwaggerConfig {
 
     @Value("${maxkey.swagger.title}")
@@ -33,9 +38,9 @@ public class SwaggerConfig {
             return new Docket(DocumentationType.SWAGGER_2)
                 .apiInfo(apiInfo())
                 .select()
-//                .apis(RequestHandlerSelectors.basePackage("org.maxkey")
-//                        .and(RequestHandlerSelectors.withClassAnnotation(Api.class))
-//                        .and(RequestHandlerSelectors.withMethodAnnotation(ApiOperation.class)))
+                .apis(RequestHandlerSelectors.basePackage("org.maxkey")
+                        /*.and(RequestHandlerSelectors.withClassAnnotation(Api.class))
+                        .and(RequestHandlerSelectors.withMethodAnnotation(ApiOperation.class))*/)
                 .paths(PathSelectors.any())
                 .build();
         }else {

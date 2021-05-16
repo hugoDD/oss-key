@@ -30,4 +30,6 @@ public enum OperateType {
 	delete,//删除
 	audit,//审核
 	view,//查看
+
+
 }

@@ -27,6 +27,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import org.maxkey.constants.Boolean;
@@ -66,7 +67,7 @@ public class Apps  implements Serializable {
     /*
      * Login url
      */
-
+    @TableField("LOGINURL")
     private String loginUrl;
 
     private String category;
@@ -79,6 +80,7 @@ public class Apps  implements Serializable {
      */
 
     private byte[] icon;
+    @TableField(exist = false)
     private MultipartFile iconFile;
 
     private int visible;
@@ -101,9 +103,7 @@ public class Apps  implements Serializable {
     private int credential;
 
     private String sharedUsername;
-
     private String sharedPassword;
-
     private String systemUserAttr;
 
     // 获取第三方token凭证
@@ -128,13 +128,12 @@ public class Apps  implements Serializable {
      * SignaturePrivateKey issuer is domain name subject is app id append domain
      * name
      */
-
     private int isSignature;
-
     private int isAdapter;
 
     private String adapter;
 
+    @TableField(exist = false)
     protected Accounts appUser;
 
     protected int sortIndex;
@@ -153,8 +152,7 @@ public class Apps  implements Serializable {
     protected String description;
 
 
-    protected String loginDateTime;
-
+    @TableField(exist = false)
     protected String onlineTicket;
 
     public Apps() {
@@ -545,13 +543,7 @@ public class Apps  implements Serializable {
     }
 
 
-    public String getLoginDateTime() {
-        return loginDateTime;
-    }
 
-    public void setLoginDateTime(String loginDateTime) {
-        this.loginDateTime = loginDateTime;
-    }
 
     public String getOnlineTicket() {
         return onlineTicket;

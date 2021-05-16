@@ -56,6 +56,7 @@ public class HistoryLogsAdapter  implements AsyncHandlerInterceptor  {
 	@Override
 	public void postHandle(HttpServletRequest request,HttpServletResponse response, Object handler,ModelAndView modelAndView) throws Exception {
 		Message message = WebContext.getMessage();//读取session中message
+		String method = request.getMethod();
 
 		if(message != null){
 			if(message.getMessageScope() == MessageScope.DB || message.getMessageScope() == MessageScope.DB_CLIENT) {//判断message类型
