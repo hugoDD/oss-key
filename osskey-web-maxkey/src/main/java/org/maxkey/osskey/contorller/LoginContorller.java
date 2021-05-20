@@ -76,7 +76,7 @@ public class LoginContorller {
      *
      * @return
      */
-    @RequestMapping(value = {"/loginConfig"})
+    @GetMapping(value = {"/loginConfig"})
     public ResponseResult<LoginConfigVO> loginConfig() {
         _logger.debug("LoginController /login.");
         boolean isAuthenticated = WebContext.isAuthenticated();
@@ -178,8 +178,7 @@ public class LoginContorller {
     }
 
 
-    @RequestMapping("/login/{username}")
-    @ResponseBody
+    @GetMapping("/login/{username}")
     public HashMap<String, Object> queryLoginUserAuth(@PathVariable("username") String username) {
 // 		UserInfo userInfo=new UserInfo();
 // 		userInfo.setUsername(username);
@@ -192,8 +191,7 @@ public class LoginContorller {
         return authnType;
     }
 
-    @RequestMapping("/login/otp/{username}")
-    @ResponseBody
+    @GetMapping("/login/otp/{username}")
     public String produceOtp(@PathVariable("username") String username) {
         UserInfo userInfo = new UserInfo();
         userInfo.setUsername(username);

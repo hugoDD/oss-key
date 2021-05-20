@@ -22,8 +22,10 @@ public class MybatisPlusQueryVisitor<T> extends ContextualNodeVisitor<Wrapper<T>
     protected final Function<Object, Object> normalizer = Function.identity();
     private Type type;
     private Class<T> classType;
+    private boolean toLine =true;
 
-    public MybatisPlusQueryVisitor() {
+    public MybatisPlusQueryVisitor(boolean toLine) {
+        this.toLine = toLine;
         Type superClass = this.getClass().getGenericSuperclass();
         this.type = ((ParameterizedType) superClass).getActualTypeArguments()[0];
         if (this.type instanceof ParameterizedType) {
@@ -59,7 +61,8 @@ public class MybatisPlusQueryVisitor<T> extends ContextualNodeVisitor<Wrapper<T>
         ComparisonOperator operator = node.getOperator();
         AbstractWrapper queryWrapper = context.wrapper.getSubWrapper();
         Collection<?> values = (Collection) node.getValues().stream().map(this.normalizer).collect(Collectors.toList());
-        String key = StringUtils.toLine(node.getField().asKey());
+
+        String key =toLine? StringUtils.toLine(node.getField().asKey()):node.getField().asKey();
         if (ComparisonOperator.EQ.equals(operator)) {
             if ("asc".equals(this.single(node.getValues())) && !context.isUpdate) {
                 ((AbstractWrapper) context.wrapper).orderByAsc(key);

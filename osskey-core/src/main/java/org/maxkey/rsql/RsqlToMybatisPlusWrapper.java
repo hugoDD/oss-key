@@ -35,10 +35,14 @@ public class RsqlToMybatisPlusWrapper {
     }
 
     public <T> Wrapper<T> rsqlToWrapper(String filter, Class<T> clazz) {
-        return rsqlToWrapper(filter, clazz, false);
+        return rsqlToWrapper(filter, clazz,true, false);
     }
 
-    public <T> Wrapper<T> rsqlToWrapper(String filter, Class<T> clazz, boolean isUpdate) {
+    public <T> Wrapper<T> rsqlToWrapper(String filter, Class<T> clazz, boolean toLine) {
+        return rsqlToWrapper(filter, clazz,toLine, false);
+    }
+
+    public <T> Wrapper<T> rsqlToWrapper(String filter, Class<T> clazz,boolean toLine, boolean isUpdate) {
         if (StringUtils.isEmpty(filter)) {
             return new QueryWrapper<>();
         }
@@ -46,7 +50,7 @@ public class RsqlToMybatisPlusWrapper {
         //QueryRequest<T> q = new QueryRequest<>();
         Condition<GeneralQueryBuilder> condition = pipeline.apply(filter, clazz);
 
-        MybatisPlusQueryVisitor<T> visitor = new MybatisPlusQueryVisitor<>();
+        MybatisPlusQueryVisitor<T> visitor = new MybatisPlusQueryVisitor<>(toLine);
         MybatisPlusQueryVisitor.Context<T> context = new MybatisPlusQueryVisitor.Context<>(isUpdate);
         Wrapper<T> rootWrapper = condition.query(visitor, context);
         Wrapper<T> converted = context.getWrapper().mergeNested(rootWrapper);

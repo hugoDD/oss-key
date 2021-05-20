@@ -21,7 +21,14 @@ public class SearchFilter implements Serializable {
         if(StringUtils.isNullOrBlank(rsqlFilter)&& WebContext.getUserInfo()!=null){
             rsqlFilter = "uid=="+ WebContext.getUserInfo().getId();
         }
-       return  (QueryWrapper)RsqlToMybatisPlusWrapper.getInstance().rsqlToWrapper(this.rsqlFilter,clazz);
+       return  (QueryWrapper)RsqlToMybatisPlusWrapper.getInstance().rsqlToWrapper(this.rsqlFilter,clazz,false);
+    }
+
+    public <T> QueryWrapper<T> toLineRqslToQuery(Class<T> clazz){
+        if(StringUtils.isNullOrBlank(rsqlFilter)&& WebContext.getUserInfo()!=null){
+            rsqlFilter = "uid=="+ WebContext.getUserInfo().getId();
+        }
+        return  (QueryWrapper)RsqlToMybatisPlusWrapper.getInstance().rsqlToWrapper(this.rsqlFilter,clazz);
     }
 
 }
