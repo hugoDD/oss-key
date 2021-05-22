@@ -48,8 +48,7 @@ public class HistoryLogs implements Serializable {
     private String createdDate;
     private String modifiedBy;
     private String modifiedDate;
-    private String startDate;
-    private String endDate;
+
 
 
     public HistoryLogs() {

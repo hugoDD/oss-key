@@ -98,7 +98,7 @@ public class HistorysManagerController {
      * @return
      */
     @PostMapping(value = { "/appAccess/log" })
-    public PageResult<HistoryLoginApps> loginAppsLog(PageSearchFilter search) {
+    public PageResult<HistoryLoginApps> loginAppsLog(@RequestBody PageSearchFilter search) {
        IPage<HistoryLoginApps> page =  historyLoginAppsService.page(search.newPage(),search.rqslToQuery(HistoryLoginApps.class));
 
         return PageResult.newInstance(page.getTotal(),page.getRecords());

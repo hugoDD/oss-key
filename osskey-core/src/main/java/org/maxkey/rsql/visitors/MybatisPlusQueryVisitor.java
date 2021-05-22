@@ -99,6 +99,7 @@ public class MybatisPlusQueryVisitor<T> extends ContextualNodeVisitor<Wrapper<T>
             queryWrapper.notIn(key, values);
             return queryWrapper;
         } else if (ComparisonOperator.RE.equals(operator)) {
+
             queryWrapper.apply(key + " REGEXP {0}", new Object[]{this.single(values)});
             return queryWrapper;
         } else if (MybatisComparisonOperator.ORDERBY.equals(operator)) {

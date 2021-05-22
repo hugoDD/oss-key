@@ -46,6 +46,9 @@ public class RsqlToMybatisPlusWrapper {
         if (StringUtils.isEmpty(filter)) {
             return new QueryWrapper<>();
         }
+        if(filter.endsWith(";") || filter.endsWith(",")){
+            filter = filter.substring(0,filter.length()-1);
+        }
 
         //QueryRequest<T> q = new QueryRequest<>();
         Condition<GeneralQueryBuilder> condition = pipeline.apply(filter, clazz);

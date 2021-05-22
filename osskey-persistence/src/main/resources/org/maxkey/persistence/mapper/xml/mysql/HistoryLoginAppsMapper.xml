@@ -24,12 +24,6 @@
 		<if test="historyLoginApps.displayName != null and historyLoginApps.displayName != ''">
 			AND	DISPLAYNAME	LIKE CONCAT('%',#{historyLoginApps.displayName},'%')
 		</if>
-		<if test="historyLoginApps.startDate != null and historyLoginApps.startDate != ''">
-			AND	LOGINTIME	>=	#{historyLoginApps.startDate}
-		</if>
-		<if test="historyLoginApps.endDate != null and historyLoginApps.endDate != ''">
-			AND	 #{historyLoginApps.endDate}	>=	LOGINTIME
-		</if>
 
     </sql>
 

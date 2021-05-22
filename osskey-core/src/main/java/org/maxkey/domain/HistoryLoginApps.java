@@ -51,7 +51,5 @@ public class HistoryLoginApps implements Serializable {
 
 	private String loginTime;
 
-	private String startDate;
-	private String endDate;
 
 }

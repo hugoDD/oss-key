@@ -74,6 +74,9 @@ public class MergeQueryWrapper<T> extends QueryWrapper<T> implements IMegeWrappe
 
     public QueryWrapper<T> mergeNested(Wrapper<T> queryWrapper) {
         List<ISqlSegment> sqlSegments = queryWrapper.getExpression().getNormal();
+        if(sqlSegments.size() ==1){
+            return (QueryWrapper<T>) queryWrapper;
+        }
 //        sqlSegments.add(0, RainsWrapperKeyword.LEFT_BRACKET);
 //        sqlSegments.add(RainsWrapperKeyword.RIGHT_BRACKET);
         return this.doIt(true, sqlSegments.toArray(new ISqlSegment[sqlSegments.size()]));
