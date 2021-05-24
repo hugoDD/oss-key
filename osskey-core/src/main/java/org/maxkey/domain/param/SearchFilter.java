@@ -18,9 +18,9 @@ public class SearchFilter implements Serializable {
 
 
     public <T> QueryWrapper<T> rqslToQuery(Class<T> clazz){
-        if(StringUtils.isNullOrBlank(rsqlFilter)&& WebContext.getUserInfo()!=null){
-            rsqlFilter = "uid=="+ WebContext.getUserInfo().getId();
-        }
+//        if(StringUtils.isNullOrBlank(rsqlFilter)&& WebContext.getUserInfo()!=null){
+//            rsqlFilter = "uid=="+ WebContext.getUserInfo().getId();
+//        }
        return  (QueryWrapper)RsqlToMybatisPlusWrapper.getInstance().rsqlToWrapper(this.rsqlFilter,clazz,false);
     }
 
