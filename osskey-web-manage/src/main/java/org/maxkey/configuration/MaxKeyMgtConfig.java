@@ -18,6 +18,7 @@
 package org.maxkey.configuration;
 
 import org.maxkey.authn.realm.jdbc.JdbcAuthenticationRealm;
+import org.maxkey.authn.support.rememberme.AbstractRemeberMeService;
 import org.maxkey.authz.oauth2.provider.client.JdbcClientDetailsService;
 import org.maxkey.authz.oauth2.provider.token.DefaultTokenServices;
 import org.maxkey.authz.oauth2.provider.token.TokenStore;
@@ -26,6 +27,9 @@ import org.maxkey.authz.oauth2.provider.token.store.JdbcTokenStore;
 import org.maxkey.authz.oauth2.provider.token.store.RedisTokenStore;
 import org.maxkey.constants.ConstantsProperties;
 import org.maxkey.password.onetimepwd.impl.TimeBasedOtpAuthn;
+import org.maxkey.persistence.db.LoginHistoryService;
+import org.maxkey.persistence.db.LoginService;
+import org.maxkey.persistence.db.PasswordPolicyValidator;
 import org.maxkey.persistence.redis.RedisConnectionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -99,11 +103,31 @@ public class MaxKeyMgtConfig  implements InitializingBean {
 
 
 	//以下内容可以注释掉后再xml中配置,xml引入在MaxKeyMgtApplication中
-	@Bean(name = "authenticationRealm")
-    public JdbcAuthenticationRealm JdbcAuthenticationRealm(
-                JdbcTemplate jdbcTemplate) {
-        JdbcAuthenticationRealm authenticationRealm = new JdbcAuthenticationRealm(jdbcTemplate);
-        _logger.debug("JdbcAuthenticationRealm inited.");
+//	@Bean(name = "authenticationRealm")
+//    public JdbcAuthenticationRealm JdbcAuthenticationRealm(
+//                JdbcTemplate jdbcTemplate) {
+//        JdbcAuthenticationRealm authenticationRealm = new JdbcAuthenticationRealm(jdbcTemplate);
+//        _logger.debug("JdbcAuthenticationRealm inited.");
+//        return authenticationRealm;
+//    }
+    //可以在此实现其他的登陆认证方式，请实现AbstractAuthenticationRealm
+    @Bean(name = "authenticationRealm")
+    public JdbcAuthenticationRealm authenticationRealm(
+            PasswordEncoder passwordEncoder,
+            PasswordPolicyValidator passwordPolicyValidator,
+            LoginService loginService,
+            LoginHistoryService loginHistoryService,
+            AbstractRemeberMeService remeberMeService,
+            JdbcTemplate jdbcTemplate) {
+
+        JdbcAuthenticationRealm authenticationRealm = new JdbcAuthenticationRealm(
+                passwordEncoder,
+                passwordPolicyValidator,
+                loginService,
+                loginHistoryService,
+                remeberMeService,
+                jdbcTemplate);
+
         return authenticationRealm;
     }
 

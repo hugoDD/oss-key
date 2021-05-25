@@ -17,6 +17,7 @@
 
 package org.maxkey.domain;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
@@ -55,6 +56,7 @@ public class Organizations  implements Serializable {
     private String sortIndex;
     private String description;
 
+    @TableField(exist = false)
     private String sortOrder;
 
     private String status;
