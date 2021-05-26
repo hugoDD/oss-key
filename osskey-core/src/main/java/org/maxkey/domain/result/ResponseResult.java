@@ -1,6 +1,7 @@
 package org.maxkey.domain.result;
 
 import lombok.Data;
+import org.maxkey.web.WebContext;
 
 @Data
 public class ResponseResult<T> {
@@ -41,6 +42,21 @@ public class ResponseResult<T> {
         ResponseResult<T> responseResult =   new ResponseResult<>();
         responseResult.setCode(code);
         responseResult.setData(data);
+        return  responseResult;
+    }
+
+    public static ResponseResult<String> newI18nInstance(String i18nCode){
+        ResponseResult<String> responseResult =   new ResponseResult<>();
+        String message = WebContext.getI18nValue(i18nCode);
+        responseResult.setData(message);
+        return  responseResult;
+    }
+
+    public static ResponseResult<String> newI18nInstance(int code,String i18nCode){
+        ResponseResult<String> responseResult =   new ResponseResult<>();
+        String message = WebContext.getI18nValue(i18nCode);
+        responseResult.setCode(code);
+        responseResult.setData(message);
         return  responseResult;
     }
 

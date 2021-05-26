@@ -18,6 +18,7 @@
 package org.maxkey.domain;
 
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
@@ -116,6 +117,7 @@ public class PasswordPolicy implements java.io.Serializable {
 
     private int occurances;
 
+    @TableField(exist = false)
     private int randomPasswordLength;
 
 

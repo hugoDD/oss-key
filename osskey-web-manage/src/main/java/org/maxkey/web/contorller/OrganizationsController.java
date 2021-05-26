@@ -17,10 +17,12 @@
 
 package org.maxkey.web.contorller;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.maxkey.constants.ConstantsOperateMessage;
 import org.maxkey.domain.ExcelImport;
 import org.maxkey.domain.Organizations;
+import org.maxkey.domain.PageResults;
 import org.maxkey.domain.param.PageSearchFilter;
 import org.maxkey.persistence.service.OrganizationsService;
 import org.maxkey.web.WebContext;
@@ -89,8 +91,9 @@ public class OrganizationsController {
 
 	@RequestMapping(value = { "/pageresults" })
 	@ResponseBody
-	public Page<Organizations> pageResults(PageSearchFilter page , @ModelAttribute("orgs") Organizations orgs) {
-		return organizationsService.queryPageResults(page.newPage(),orgs);
+	public PageResults<Organizations> pageResults(PageSearchFilter page , @ModelAttribute("orgs") Organizations orgs) {
+       IPage<Organizations> rs = organizationsService.page(page.newPage(),page.rqslToQuery(Organizations.class));
+		return new PageResults<>(rs);
 
 	}
 

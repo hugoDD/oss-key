@@ -3,17 +3,17 @@
 <mapper namespace="org.maxkey.persistence.mapper.AccountsMapper">
 
 	<sql id="where_statement">
-    	<if test="id != null and id != ''">
-			AND	ID	=	#{id}
+    	<if test="appAccounts.id != null and appAccounts.id != ''">
+			AND	ID	=	#{appAccounts.id}
 		</if>
-		<if test="appId != null and appId != ''">
-			AND	APPID	=	#{appId}
+		<if test="appAccounts.appId != null and appAccounts.appId != ''">
+			AND	APPID	=	#{appAccounts.appId}
 		</if>
-		<if test="username != null and username != ''">
-			AND	USERNAME	=	#{username}
+		<if test="appAccounts.username != null and appAccounts.username != ''">
+			AND	USERNAME	=	#{appAccounts.username}
 		</if>
-		<if test="relatedUsername != null and relatedUsername != ''">
-			AND	RELATEDUSERNAME	=	#{relatedUsername}
+		<if test="appAccounts.relatedUsername != null and appAccounts.relatedUsername != ''">
+			AND	RELATEDUSERNAME	=	#{appAccounts.relatedUsername}
 		</if>
     </sql>
 

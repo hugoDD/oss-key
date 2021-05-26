@@ -3,23 +3,23 @@
 <mapper namespace="org.maxkey.persistence.mapper.AppsMapper">
 
     <sql id="where_statement">
-        <if test="id != null and id != ''">
-            AND ID = #{id}
+        <if test="applications.id != null and applications.id != ''">
+            AND ID = #{applications.id}
         </if>
-        <if test="name != null and name != ''">
-            AND NAME LIKE '%${name}%'
+        <if test="applications.name != null and applications.name != ''">
+            AND NAME LIKE '%${applications.name}%'
         </if>
-        <if test="protocol != null and protocol != ''">
-            AND PROTOCOL = #{protocol}
+        <if test="applications.protocol != null and applications.protocol != ''">
+            AND PROTOCOL = #{applications.protocol}
         </if>
-        <if test="credential != null and credential != ''">
-            AND CREDENTIAL = #{credential}
+        <if test="applications.credential != null and applications.credential != ''">
+            AND CREDENTIAL = #{applications.credential}
         </if>
-        <if test="category != null and category != ''">
-            AND CATEGORY = #{category}
+        <if test="applications.category != null and applications.category != ''">
+            AND CATEGORY = #{applications.category}
         </if>
-        <if test="vendor != null and vendor != ''">
-            AND VENDOR = #{vendor}
+        <if test="applications.vendor != null and applications.vendor != ''">
+            AND VENDOR = #{applications.vendor}
         </if>
     </sql>
 

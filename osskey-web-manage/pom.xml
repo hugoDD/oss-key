@@ -70,6 +70,12 @@
             <artifactId>osskey-authentication-core</artifactId>
             <version>1.0</version>
         </dependency>
+        <dependency>
+            <groupId>com.rains</groupId>
+            <artifactId>osskey-authentication-social</artifactId>
+            <version>1.0</version>
+            <scope>compile</scope>
+        </dependency>
 
 
     </dependencies>

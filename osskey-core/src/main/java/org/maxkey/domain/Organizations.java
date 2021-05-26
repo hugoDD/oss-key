@@ -26,11 +26,11 @@ import java.io.Serializable;
 
 @Data
 @TableName("MXK_ORGANIZATIONS")
-public class Organizations  implements Serializable {
+public class Organizations implements ITree, Serializable {
 
     private static final long serialVersionUID = 5085413816404119803L;
 
-   @TableId
+    @TableId
     private String id;
     private String code;
     private String name;
@@ -62,6 +62,13 @@ public class Organizations  implements Serializable {
     private String status;
 
 
+    @Override
+    public boolean isOpen() {
+        return this.getHasChild() != null && this.getHasChild().startsWith("Y");
+    }
 
-
+    @Override
+    public String getPId() {
+        return this.parentId;
+    }
 }

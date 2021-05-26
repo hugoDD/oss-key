@@ -17,11 +17,14 @@
 
 package org.maxkey.web.contorller;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.maxkey.constants.ConstantsOperateMessage;
 import org.maxkey.crypto.ReciprocalUtils;
 import org.maxkey.domain.ExcelImport;
+import org.maxkey.domain.PageResults;
 import org.maxkey.domain.UserInfo;
+import org.maxkey.domain.param.PageSearchFilter;
 import org.maxkey.persistence.service.UserInfoService;
 import org.maxkey.util.JsonUtils;
 import org.maxkey.util.StringUtils;
@@ -65,14 +68,15 @@ public class UserInfoController {
 
 	/**
 	 * 查询用户列表
-	 * @param userInfo
+	 * @param page
 	 * @return
 	 */
 	@RequestMapping(value={"/grid"})
 	@ResponseBody
-	public Page<UserInfo> forwardUsersList(@ModelAttribute("userInfo") UserInfo userInfo){
+	public PageResults<UserInfo> forwardUsersList(PageSearchFilter page){
 		//return userInfoService.queryPageResults(userInfo);
-		return null;
+		IPage<UserInfo> rs = userInfoService.page(page.newPage());
+		return new PageResults<>(rs);
 
 	}
 

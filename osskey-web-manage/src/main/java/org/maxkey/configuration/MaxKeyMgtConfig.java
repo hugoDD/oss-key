@@ -131,13 +131,12 @@ public class MaxKeyMgtConfig  implements InitializingBean {
         return authenticationRealm;
     }
 
-	@Bean
+	@Bean(name = "tfaOtpAuthn")
     public TimeBasedOtpAuthn tfaOptAuthn() {
 	    TimeBasedOtpAuthn tfaOptAuthn = new TimeBasedOtpAuthn();
 	    _logger.debug("TimeBasedOtpAuthn inited.");
         return tfaOptAuthn;
     }
-
 
 
 

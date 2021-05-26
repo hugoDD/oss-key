@@ -35,6 +35,7 @@ import java.util.Date;
 @SpringBootApplication
 @ComponentScan(basePackages = {
     "org.maxkey.web.interceptor",
+    "org.maxkey.mgt",
     "org.maxkey.configuration",
     "org.maxkey.domain",
     "org.maxkey.domain.apps",
