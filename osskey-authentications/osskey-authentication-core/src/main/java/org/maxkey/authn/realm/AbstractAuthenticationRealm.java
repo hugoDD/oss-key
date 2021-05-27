@@ -29,6 +29,7 @@ import org.maxkey.web.WebContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.core.GrantedAuthority;
 
 import javax.servlet.http.HttpServletResponse;
@@ -123,6 +124,7 @@ public abstract class AbstractAuthenticationRealm {
      * @param code
      * @param message
      */
+    @Async
     public boolean insertLoginHistory(UserInfo userInfo, String type, String provider, String code, String message) {
         String sessionId = WebContext.genId();
         WebContext.setAttribute(WebConstants.CURRENT_USER_SESSION_ID, sessionId);

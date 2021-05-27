@@ -22,6 +22,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
 
 /**
@@ -50,9 +51,9 @@ public class HistoryLogin implements Serializable {
     private String platform;
     private String application;
     private String loginUrl;
-    private String loginTime;
-    private String logoutTime;
-    
+    private LocalDateTime loginTime;
+    private LocalDateTime logoutTime;
+
 
 
 }

@@ -38,7 +38,8 @@ public  interface ReportMapper  {
 
 	 List<Map<String,Object>> analysisDayHour(String reportParameter);
 
-	 List<Map<String,Object>> analysisMonth(String reportParameter);
+	 List<Map<String,Object>> analysisActiveUsersOfWeek(String startDate,String endDate);
+	 List<Map<String,Object>> analysisMonth(String startDate,String endDate);
 
 	 List<Map<String,Object>> analysisBrowser(Map<String, Object> reportParameter);
 

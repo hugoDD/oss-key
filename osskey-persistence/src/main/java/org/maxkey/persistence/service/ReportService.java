@@ -19,61 +19,83 @@ package org.maxkey.persistence.service;
 
 
 import org.maxkey.persistence.mapper.ReportMapper;
+import org.maxkey.util.DateTimeUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 @Service
-public class ReportService  {
+public class ReportService {
 
 
-	private  ReportMapper reportMapper;
+    private ReportMapper reportMapper;
 
-	@Autowired
-	public ReportService(ReportMapper reportMapper) {
-		this.reportMapper = reportMapper;
-	}
+    @Autowired
+    public ReportService(ReportMapper reportMapper) {
+        this.reportMapper = reportMapper;
+    }
 
-	public ReportMapper getMapper() {
-		return reportMapper;
-	}
+    public ReportMapper getMapper() {
+        return reportMapper;
+    }
 
-	public Integer analysisDay(String reportParameter) {
-		return getMapper().analysisDay(reportParameter);
-	};
+    public Integer analysisDay(String reportParameter) {
+        return getMapper().analysisDay(reportParameter);
+    }
 
-	public Integer analysisNewUsers(String reportParameter) {
-		return getMapper().analysisNewUsers(reportParameter);
-	};
+    ;
 
-	public Integer analysisOnlineUsers(String reportParameter) {
-		return getMapper().analysisOnlineUsers(reportParameter);
-	};
+    public Integer analysisNewUsers(String reportParameter) {
+        return getMapper().analysisNewUsers(reportParameter);
+    }
 
-	public Integer analysisActiveUsers(String reportParameter) {
-		return getMapper().analysisActiveUsers(reportParameter);
-	};
+    ;
 
-	public List<Map<String,Object>> analysisDayHour(String reportParameter){
-		return getMapper().analysisDayHour(reportParameter);
-	}
+    public Integer analysisOnlineUsers(String reportParameter) {
+        return getMapper().analysisOnlineUsers(reportParameter);
+    }
 
-	public List<Map<String,Object>> analysisMonth(String reportParameter){
-		return getMapper().analysisMonth(reportParameter);
-	}
+    ;
+
+    public Integer analysisActiveUsers(String reportParameter) {
+        return getMapper().analysisActiveUsers(reportParameter);
+    }
+
+    ;
+
+    public List<Map<String, Object>> analysisDayHour(String reportParameter) {
+        return getMapper().analysisDayHour(reportParameter);
+    }
+
+    public List<Map<String, Object>> analysisMonth(String reportParameter) {
+        String startDate = DateTimeUtil.getWeekBeginTimeString(false);
+        String endDate = DateTimeUtil.getWeekEndTimeString(false);
+
+        List<Map<String, Object>> map = getMapper().analysisMonth(startDate, endDate);
 
 
-	public List<Map<String,Object>> analysisBrowser(Map<String,Object> reportParameter){
-		return getMapper().analysisBrowser(reportParameter);
-	}
+        return map;
+    }
 
-	public List<Map<String,Object>> analysisApp(Map<String,Object> reportParameter){
-		return getMapper().analysisApp(reportParameter);
-	}
+    public List<Map<String, Object>> analysisActiveUsersOfWeek(String reportParameter) {
+        String startDate = DateTimeUtil.getWeekBeginTimeString(false);
+        String endDate = DateTimeUtil.getWeekEndTimeString(false);
+
+        return getMapper().analysisActiveUsersOfWeek(startDate, endDate);
+    }
 
 
+    public List<Map<String, Object>> analysisBrowser(Map<String, Object> reportParameter) {
+        return getMapper().analysisBrowser(reportParameter);
+    }
+
+    public List<Map<String, Object>> analysisApp(Map<String, Object> reportParameter) {
+        return getMapper().analysisApp(reportParameter);
+    }
 
 
 }

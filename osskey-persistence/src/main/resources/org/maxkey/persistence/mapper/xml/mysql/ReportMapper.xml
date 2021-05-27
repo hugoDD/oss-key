@@ -27,6 +27,14 @@
 		WHERE
 		DATE(LASTLOGINTIME) >date_add(curdate(), interval - day(curdate()) -31 day)
     </select>
+	<!-- 一周内每天活跃用户统计 -->
+    <select id="analysisActiveUsersOfWeek" parameterType="java.lang.String" resultType="java.util.Map">
+    	SELECT COUNT(*) REPORTCOUNT, DATE(LASTLOGINTIME) REPORTSTRING FROM MXK_USERINFO
+		WHERE
+			LASTLOGINTIME BETWEEN #{startDate} and #{endDate}
+		GROUP BY REPORTSTRING
+		ORDER BY REPORTSTRING
+    </select>
 
     <!-- DAY HOUR COUNT 当天每小时 -->
 	<select id="analysisDayHour" parameterType="java.lang.String" resultType="java.util.Map">
@@ -44,7 +52,7 @@
     		COUNT(ID) REPORTCOUNT, DATE(LOGINTIME) REPORTSTRING
     	FROM MXK_history_login
     	WHERE
-    		DATE(LOGINTIME) >date_add(curdate(), interval - day(curdate()) -31 day)
+			LOGINTIME BETWEEN #{startDate} and #{endDate}
     	GROUP BY REPORTSTRING
     	ORDER BY REPORTSTRING
     </select>
