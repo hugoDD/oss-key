@@ -23,8 +23,6 @@ import org.maxkey.util.DateTimeUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -81,9 +79,7 @@ public class ReportService {
         return map;
     }
 
-    public List<Map<String, Object>> analysisActiveUsersOfWeek(String reportParameter) {
-        String startDate = DateTimeUtil.getWeekBeginTimeString(false);
-        String endDate = DateTimeUtil.getWeekEndTimeString(false);
+    public List<Map<String, Object>> analysisActiveUsersOfWeek(String startDate,String endDate) {
 
         return getMapper().analysisActiveUsersOfWeek(startDate, endDate);
     }
@@ -95,6 +91,10 @@ public class ReportService {
 
     public List<Map<String, Object>> analysisApp(Map<String, Object> reportParameter) {
         return getMapper().analysisApp(reportParameter);
+    }
+
+    public List<Map<String, Object>> analysisAppOfWeek(String startDate,String endDate) {
+        return getMapper().analysisAppOfWeek(startDate,endDate);
     }
 
 

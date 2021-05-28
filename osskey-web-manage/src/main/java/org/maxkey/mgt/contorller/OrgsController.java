@@ -37,7 +37,7 @@ public class OrgsController {
     private OrganizationsService organizationsService;
 
 
-    @RequestMapping({"/tree"})
+    @GetMapping({"/tree"})
     public ResponseResult<List<? extends ITree>> organizationsTree(SearchFilter searchFilter) {
         List<Organizations> organizationsList = this.organizationsService.list(searchFilter.rqslToQuery(Organizations.class));
         List<? extends ITree> trees = organizationsList;

@@ -40,6 +40,7 @@ public  interface ReportMapper  {
 
 	 List<Map<String,Object>> analysisActiveUsersOfWeek(String startDate,String endDate);
 	 List<Map<String,Object>> analysisMonth(String startDate,String endDate);
+	 List<Map<String,Object>> analysisAppOfWeek(String startDate,String endDate);
 
 	 List<Map<String,Object>> analysisBrowser(Map<String, Object> reportParameter);
 
