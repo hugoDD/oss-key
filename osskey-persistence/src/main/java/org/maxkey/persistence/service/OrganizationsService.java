@@ -60,7 +60,7 @@ public class OrganizationsService  extends ServiceImpl<OrganizationsMapper,Organ
 	 }
 
 	 public boolean update(Organizations organization) {
-	     if(update(organization)){
+	     if(this.baseMapper.updateById(organization)>0){
 	    	 kafkaPersistService.send(
                      KafkaIdentityTopic.ORG_TOPIC, organization, KafkaIdentityAction.UPDATE_ACTION);
              return true;

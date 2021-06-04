@@ -17,18 +17,30 @@
 
 package org.maxkey.configuration;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalTimeSerializer;
 import org.maxkey.web.interceptor.HistoryLogsAdapter;
 import org.maxkey.web.interceptor.PermissionAdapter;
 import org.maxkey.web.interceptor.RestApiPermissionAdapter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.jackson.Jackson2ObjectMapperBuilderCustomizer;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 
 @Configuration
 @EnableWebMvc
@@ -60,6 +72,8 @@ public class MaxKeyMgtMvcConfig implements WebMvcConfigurer {
         //addPathPatterns 用于添加拦截规则 ， 先把所有路径都加入拦截， 再一个个排除
         //excludePathPatterns 表示改路径不用拦截
         registry.addInterceptor(permissionAdapter)
+                .addPathPatterns("/auth/manage/**")
+                .addPathPatterns("/auth/osskey/userInfo")
                 .addPathPatterns("/main/**")
                 .addPathPatterns("/orgs/**")
                 .addPathPatterns("/userinfo/**")
@@ -102,5 +116,28 @@ public class MaxKeyMgtMvcConfig implements WebMvcConfigurer {
         _logger.debug("add RestApiPermissionAdapter");
 
     }
+    @Bean(name = "mapperObject")
+    public ObjectMapper getObjectMapper() {
+        ObjectMapper om = new ObjectMapper();
+        JavaTimeModule javaTimeModule = new JavaTimeModule();
+        javaTimeModule.addSerializer(LocalDateTime.class, new LocalDateTimeSerializer(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+        javaTimeModule.addSerializer(LocalDate.class, new LocalDateSerializer(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+        javaTimeModule.addSerializer(LocalTime.class, new LocalTimeSerializer(DateTimeFormatter.ofPattern("HH:mm:ss")));
+        om.registerModule(javaTimeModule);
+        return om;
+    }
+
+    @Bean
+    public Jackson2ObjectMapperBuilderCustomizer jsonCustomizer() {
+        return builder -> {
+            builder.simpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            builder.serializers(new LocalDateSerializer(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+            builder.serializers(new LocalDateTimeSerializer(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+            builder.serializers(new LocalTimeSerializer(DateTimeFormatter.ofPattern("HH:mm:ss")));
+        };
+    }
+
+
+
 
 }

@@ -21,12 +21,14 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.io.Serializable;
 
 @Data
+@EqualsAndHashCode(callSuper = true)
 @TableName("MXK_ORGANIZATIONS")
-public class Organizations implements ITree, Serializable {
+public class Organizations extends AbstractBaseDomain implements ITree, Serializable {
 
     private static final long serialVersionUID = 5085413816404119803L;
 
@@ -54,7 +56,6 @@ public class Organizations implements ITree, Serializable {
     private String fax;
     private String email;
     private String sortIndex;
-    private String description;
 
     @TableField(exist = false)
     private String sortOrder;

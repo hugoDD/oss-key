@@ -118,6 +118,7 @@ public class LoginContorller {
             String token = ((SigninPrincipal) authentication.getPrincipal()).getOnlineTicket().getTicketId();
             UserInfo userInfo = ((SigninPrincipal) authentication.getPrincipal()).getUserInfo();
             List<String> roles = authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList());
+            List<String> perms = authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList());
             tokenVO.setAccessToken(token);
             if (userInfo.getPicture() != null) {
                 tokenVO.setAvatar(Base64.getEncoder().encodeToString(userInfo.getPicture()));
