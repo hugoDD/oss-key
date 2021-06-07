@@ -18,15 +18,14 @@
 package org.maxkey.domain;
 
 import java.io.Serializable;
+import java.util.Date;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
 
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
+import lombok.Data;
 import org.maxkey.domain.apps.Apps;
+
 
 
 /*
@@ -35,87 +34,23 @@ import org.maxkey.domain.apps.Apps;
    MENUID                varchar(40)	                   null
    constraint PK_ROLES primary key clustered (ID)
  */
-@Entity
-@Table(name = "MXK_GROUP_PRIVILEGES")
-public class GroupPrivileges extends Apps implements Serializable{
+@Data
+@TableName("MXK_GROUP_PRIVILEGES")
+public class GroupPrivileges  implements Serializable{
 
 	/**
 	 *
 	 */
 	private static final long serialVersionUID = 8634166407201007340L;
-	@Id
 
-	@GeneratedValue(strategy=GenerationType.AUTO,generator="uuid")
-	String id;
+	@TableId
+	private String id;
 
 	private String groupId;
 
 	private String appId;
 
-	public GroupPrivileges(){
-		super();
-	}
 
-
-	/**
-	 * @param groupId
-	 * @param appId
-	 */
-	public GroupPrivileges(String groupId, String appId) {
-		super();
-		this.groupId = groupId;
-		this.appId = appId;
-	}
-
-
-	/**
-	 * @return the groupId
-	 */
-	public String getGroupId() {
-		return groupId;
-	}
-	/**
-	 * @param groupId the groupId to set
-	 */
-	public void setGroupId(String groupId) {
-		this.groupId = groupId;
-	}
-	/**
-	 * @return the appId
-	 */
-	public String getAppId() {
-		return appId;
-	}
-	/**
-	 * @param appId the appId to set
-	 */
-	public void setAppId(String appId) {
-		this.appId = appId;
-	}
-
-
-	public String getId() {
-		return id;
-	}
-
-
-	public void setId(String id) {
-		this.id = id;
-	}
-
-
-	@Override
-    public String toString() {
-        StringBuilder builder = new StringBuilder();
-        builder.append("GroupPrivileges [id=");
-        builder.append(id);
-        builder.append(", groupId=");
-        builder.append(groupId);
-        builder.append(", appId=");
-        builder.append(appId);
-        builder.append("]");
-        return builder.toString();
-    }
-
+	private Date createdDate;
 
 }

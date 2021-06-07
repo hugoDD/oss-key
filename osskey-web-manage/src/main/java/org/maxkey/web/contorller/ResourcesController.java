@@ -17,11 +17,13 @@
 
 package org.maxkey.web.contorller;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.maxkey.constants.ConstantsOperateMessage;
 import org.maxkey.domain.PageResults;
 import org.maxkey.domain.Resources;
 import org.maxkey.domain.param.PageSearchFilter;
+import org.maxkey.domain.result.PageResult;
 import org.maxkey.persistence.service.ResourcesService;
 import org.maxkey.web.WebContext;
 import org.maxkey.web.component.TreeNode;
@@ -64,10 +66,10 @@ public class ResourcesController {
 
 	@RequestMapping(value = { "/grid" })
 	@ResponseBody
-	public PageResults<Resources> queryDataGrid(PageSearchFilter search, @ModelAttribute("resources") Resources resources) {
+	public PageResult<Resources> queryDataGrid(PageSearchFilter search, @ModelAttribute("resources") Resources resources) {
 		_logger.debug(""+resources);
-		Page<Resources> page =  resourcesService.queryPageResults(search.newPage(),resources);
-		return new PageResults<>(page);
+		IPage<Resources> page =  resourcesService.page(search.newPage(),search.rqslToQuery(Resources.class));
+		return PageResult.newInstance(page.getTotal(),page.getRecords());
 	}
 
 

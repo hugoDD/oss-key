@@ -70,12 +70,11 @@ public class OrgsController {
 
 
     @GetMapping({"/query/{id}"})
-    public ResponseResult<String> query(@PathVariable("id") String id) {
+    public ResponseResult<Organizations> query(@PathVariable("id") String id) {
         _logger.debug("-query  :{}" + id);
-        if (this.organizationsService.getById(id) != null) {
-            return ResponseResult.newI18nInstance("message.action.insert.success");
-        }
-        return ResponseResult.newInstance(ConstantsCode.update_fail, "message.action.insert.error");
+        Organizations org = this.organizationsService.getById(id);
+            return ResponseResult.newInstance(org);
+
     }
 
 

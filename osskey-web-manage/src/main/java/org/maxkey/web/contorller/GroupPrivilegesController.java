@@ -17,11 +17,13 @@
 
 package org.maxkey.web.contorller;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.maxkey.constants.ConstantsOperateMessage;
 import org.maxkey.domain.GroupPrivileges;
 import org.maxkey.domain.apps.Apps;
 import org.maxkey.domain.param.PageSearchFilter;
+import org.maxkey.domain.result.PageResult;
 import org.maxkey.persistence.service.GroupPrivilegesService;
 import org.maxkey.web.WebContext;
 import org.maxkey.web.message.Message;
@@ -57,18 +59,18 @@ public class GroupPrivilegesController {
 
 	@RequestMapping(value = { "/queryAppsInGroup" })
 	@ResponseBody
-	public Page<GroupPrivileges> queryAppsInGroup(PageSearchFilter page, @ModelAttribute("groupApp") GroupPrivileges groupApp) {
+	public PageResult<GroupPrivileges> queryAppsInGroup(PageSearchFilter page, @ModelAttribute("groupApp") GroupPrivileges groupApp) {
 
-		Page<GroupPrivileges> jqGridApp;
+		IPage<GroupPrivileges> list = groupPrivilegesService.page(page.newPage(),page.rqslToQuery(GroupPrivileges.class));
 
-		jqGridApp= groupPrivilegesService.queryPageResults(page.newPage(),groupApp);
+//		jqGridApp= groupPrivilegesService.queryPageResults(page.newPage(),groupApp);
 //
 //		if(jqGridApp!=null&&jqGridApp.getRows()!=null){
 //			for (Apps app : jqGridApp.getRows()){
 //				WebContext.setAttribute(app.getId(), app.getIcon());
 //			}
 //		}
-		return jqGridApp;
+		return PageResult.newInstance(list.getTotal(),list.getRecords());
 
 	}
 
@@ -112,7 +114,9 @@ public class GroupPrivilegesController {
 			String[] arrAppIds = appIds.split(",");
 
 			for (int i = 0; i < arrAppIds.length; i++) {
-				GroupPrivileges newGroupApp = new GroupPrivileges(groupId, arrAppIds[i]);
+				GroupPrivileges newGroupApp = new GroupPrivileges();
+				newGroupApp.setGroupId(groupId);
+				newGroupApp.setAppId(arrAppIds[i]);
 				//newGroupApp.setId(newGroupApp.generateId());
 				result = groupPrivilegesService.save(newGroupApp);
 			}

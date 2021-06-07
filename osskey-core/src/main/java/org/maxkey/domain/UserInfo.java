@@ -21,338 +21,241 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import java.io.IOException;
-import java.io.Serializable;
-import java.util.HashMap;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
-
-
 import org.maxkey.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.io.Serializable;
+import java.util.HashMap;
+
 /**
  * .
- * @author hugoDD
  *
+ * @author hugoDD
  */
 
 @TableName("MXK_USERINFO")
 public class UserInfo implements Serializable {
     private static final long serialVersionUID = 6402443942083382236L;
     @TableId
-    String id;
+    private String id;
 
-    protected String username;
+    private String username;
 
-    protected String password;
+    private String password;
 
-    protected String decipherable;
+    private String decipherable;
 
-    protected String sharedSecret;
+    private String sharedSecret;
 
-    protected String sharedCounter;
+    private String sharedCounter;
     /**
      * "Employee", "Supplier","Dealer","Contractor",Partner,Customer "Intern",
      * "Temp", "External", and "Unknown" .
      */
 
-    protected String userType;
+    private String userType;
 
-    protected String windowsAccount;
+    private String windowsAccount;
 
     // for user name
 
-    protected String displayName;
+    private String displayName;
 
-    protected String nickName;
+    private String nickName;
 
-    protected String nameZhSpell;
+    private String nameZhSpell;
 
-    protected String nameZhShortSpell;
+    private String nameZhShortSpell;
 
-    protected String givenName;
+    private String givenName;
 
-    protected String middleName;
+    private String middleName;
 
-    protected String familyName;
+    private String familyName;
 
-    protected String honorificPrefix;
+    private String honorificPrefix;
 
-    protected String honorificSuffix;
+    private String honorificSuffix;
 
-    protected String formattedName;
+    private String formattedName;
 
 
-    protected int married;
+    private int married;
 
-    protected int gender;
+    private int gender;
 
-    protected String birthDate;
+    private String birthDate;
 
-    protected byte[] picture;
+    private byte[] picture;
     @JsonIgnore
     @TableField(exist = false)
-    protected MultipartFile pictureFile;
+    private MultipartFile pictureFile;
 
-    protected int idType;
+    private int idType;
 
-    protected String idCardNo;
+    private String idCardNo;
 
-    protected String webSite;
+    private String webSite;
 
-    protected String startWorkDate;
+    private String startWorkDate;
 
     // for security
 
-    protected int authnType;
+    private int authnType;
 
-    protected String email;
+    private String email;
 
-    protected int emailVerified;
+    private int emailVerified;
 
-    protected String mobile;
+    private String mobile;
 
-    protected int mobileVerified;
+    private int mobileVerified;
 
-    protected String passwordQuestion;
+    private String passwordQuestion;
 
-    protected String passwordAnswer;
+    private String passwordAnswer;
 
-    // for apps login protected
-    protected int appLoginAuthnType;
-    protected String appLoginPassword;
-    protected String protectedApps;
+    // for apps login private
+    private int appLoginAuthnType;
+    private String appLoginPassword;
+    private String protectedApps;
     @JsonIgnore
     @TableField(exist = false)
-    protected HashMap<String, String> protectedAppsMap;
+    private HashMap<String, String> protectedAppsMap;
 
-    protected String passwordLastSetTime;
-    protected int badPasswordCount;
-    protected String badPasswordTime;
-    protected String unLockTime;
-    protected int isLocked;
-    protected String lastLoginTime;
-    protected String lastLoginIp;
-    protected String lastLogoffTime;
-    protected int passwordSetType;
-    protected Integer loginCount;
+    private String passwordLastSetTime;
+    private int badPasswordCount;
+    private String badPasswordTime;
+    private String unLockTime;
+    private int isLocked;
+    private String lastLoginTime;
+    private String lastLoginIp;
+    private String lastLogoffTime;
+    private int passwordSetType;
+    private Integer loginCount;
 
 
-    protected String locale;
+    private String locale;
 
-    protected String timeZone;
+    private String timeZone;
 
-    protected String preferredLanguage;
+    private String preferredLanguage;
 
     // for work
 
-    protected String workCountry;
+    private String workCountry;
 
-    protected String workRegion;// province;
+    private String workRegion;// province;
 
-    protected String workLocality;// city;
+    private String workLocality;// city;
 
-    protected String workStreetAddress;
+    private String workStreetAddress;
 
-    protected String workAddressFormatted;
+    private String workAddressFormatted;
 
-    protected String workEmail;
+    private String workEmail;
 
-    protected String workPhoneNumber;
+    private String workPhoneNumber;
 
-    protected String workPostalCode;
+    private String workPostalCode;
 
-    protected String workFax;
+    private String workFax;
     // for home
 
-    protected String homeCountry;
+    private String homeCountry;
 
-    protected String homeRegion;// province;
+    private String homeRegion;// province;
 
-    protected String homeLocality;// city;
+    private String homeLocality;// city;
 
-    protected String homeStreetAddress;
+    private String homeStreetAddress;
 
-    protected String homeAddressFormatted;
+    private String homeAddressFormatted;
 
-    protected String homeEmail;
+    private String homeEmail;
 
-    protected String homePhoneNumber;
+    private String homePhoneNumber;
 
-    protected String homePostalCode;
+    private String homePostalCode;
 
-    protected String homeFax;
+    private String homeFax;
     // for company
 
-    protected String employeeNumber;
+    private String employeeNumber;
 
-    protected String costCenter;
+    private String costCenter;
 
-    protected String organization;
+    private String organization;
 
-    protected String division;
+    private String division;
 
-    protected String departmentId;
+    private String departmentId;
 
-    protected String department;
+    private String department;
 
-    protected String jobTitle;
+    private String jobTitle;
 
-    protected String jobLevel;
+    private String jobLevel;
 
-    protected String managerId;
+    private String managerId;
 
-    protected String manager;
+    private String manager;
 
-    protected String assistantId;
+    private String assistantId;
 
-    protected String assistant;
+    private String assistant;
 
-    protected String entryDate;
+    private String entryDate;
 
-    protected String quitDate;
+    private String quitDate;
 
     // for social contact
 
-    protected String defineIm;
-    protected int weixinFollow;
+    private String defineIm;
+    private int weixinFollow;
 
-    protected String theme;
+    private String theme;
     /*
      * for extended Attribute from userType extraAttribute for database
      * extraAttributeName & extraAttributeValue for page submit
      */
-    protected String extraAttribute;
-    protected String extraAttributeName;
-    protected String extraAttributeValue;
+    private String extraAttribute;
     @JsonIgnore
     @TableField(exist = false)
-    protected HashMap<String, String> extraAttributeMap;
+    private String extraAttributeName;
+    @JsonIgnore
+    @TableField(exist = false)
+    private String extraAttributeValue;
+    @JsonIgnore
+    @TableField(exist = false)
+    private HashMap<String, String> extraAttributeMap;
 
-    protected int online;
+    private int online;
+    @TableField(exist = false)
+    private String ldapDn;
 
-    protected String ldapDn;
-
-    protected int gridList;
-
-
-    String createdBy;
-
-    String createdDate;
-
-    String modifiedBy;
-
-    String modifiedDate;
-
-    int status;
-
-    String description;
+    private int gridList;
 
 
+    private String createdBy;
 
-    public static class ONLINE {
-        // 在线
-        public static final int ONLINE = 1;
-        // 下线
-        public static final int OFFLINE = 0;
-    }
+    private String createdDate;
 
-    public static class MARRIED {
-        // 未知
-        public static final int UNKNOWN = 0;
-        // 单身
-        public static final int SINGLE = 1;
-        // 结婚
-        public static final int MARRIED = 2;
-        // 离异
-        public static final int DIVORCE = 3;
-        // 丧偶
-        public static final int WIDOWED = 4;
+    private String modifiedBy;
 
-    }
+    private String modifiedDate;
 
-    public static class GENDER {
-        // 未知
-        public static final int UNKNOWN = 0;
-        // 女性
-        public static final int FEMALE = 1;
-        // 男性
-        public static final int MALE = 2;
-    }
+    private int status;
 
-    public static class IDTYPE {
-        // 未知
-        public static final int UNKNOWN = 0;
-        // 身份证
-        public static final int IDCARD = 1;
-        // 护照
-        public static final int PASSPORT = 2;
-        // 学生证
-        public static final int STUDENTCARD = 3;
-        // 军人证
-        public static final int MILITARYCARD = 4;
-    }
+    private String description;
 
-    public static class AUTHNTYPE {
-        // 用户名密码
-        public static final int NORMAL = 1;
-        // 手机
-        public static final int MOBILE = 2;
-        // 短信
-        public static final int SMS = 3;
-        // 邮箱
-        public static final int EMAIL = 4;
-
-        public static final int TIMEBASED_OPT = 5;
-
-        public static final int COUNTERBASED_OPT = 6;
-
-        public static final int HOTP_OPT = 7;
-
-        public static final int RSA_OPT = 8;
-        // 证书
-        public static final int CERTIFICATE = 9;
-        // usb证书
-        public static final int USBKEY = 10;
-
-    }
-
-    public static class EMPLOYMENTSTATUS {
-        // 在册人员
-        public static final int ACTIVE = 1;
-        // 离职人员
-        public static final int WITHDRAWN = 2;
-        // 停薪留职人员
-        public static final int INACTIVE = 3;
-        // 退休人员
-        public static final int RETIREE = 4;
-
-    }
 
     /**
      *
      */
     public UserInfo() {
         super();
-    }
-
-    /**
-     * @return the id
-     */
-    public String getId() {
-        return id;
-    }
-
-    /**
-     * @param id the id to set
-     */
-    public void setId(String id) {
-        this.id = id;
     }
 
     /**
@@ -373,6 +276,20 @@ public class UserInfo implements Serializable {
         this.password = password;
     }
 
+    /**
+     * @return the id
+     */
+    public String getId() {
+        return id;
+    }
+
+    /**
+     * @param id the id to set
+     */
+    public void setId(String id) {
+        this.id = id;
+    }
+
     public byte[] getPicture() {
         if (pictureFile != null && !pictureFile.isEmpty()) {
             try {
@@ -382,6 +299,10 @@ public class UserInfo implements Serializable {
             }
         }
         return picture;
+    }
+
+    public void setPicture(byte[] picture) {
+        this.picture = picture;
     }
 
     /**
@@ -401,7 +322,9 @@ public class UserInfo implements Serializable {
         return protectedAppsMap;
     }
 
-    // auto gen setter and getter
+    public void setProtectedAppsMap(HashMap<String, String> protectedAppsMap) {
+        this.protectedAppsMap = protectedAppsMap;
+    }
 
     public String getUsername() {
         return username;
@@ -418,6 +341,8 @@ public class UserInfo implements Serializable {
     public void setPassword(String password) {
         this.password = password;
     }
+
+    // auto gen setter and getter
 
     public String getDecipherable() {
         return decipherable;
@@ -474,8 +399,6 @@ public class UserInfo implements Serializable {
     public void setNickName(String nickName) {
         this.nickName = nickName;
     }
-
-
 
     public String getNameZhSpell() {
         return nameZhSpell;
@@ -1077,14 +1000,6 @@ public class UserInfo implements Serializable {
         this.ldapDn = ldapDn;
     }
 
-    public void setPicture(byte[] picture) {
-        this.picture = picture;
-    }
-
-    public void setProtectedAppsMap(HashMap<String, String> protectedAppsMap) {
-        this.protectedAppsMap = protectedAppsMap;
-    }
-
     public String getLastLoginIp() {
         return lastLoginIp;
     }
@@ -1152,7 +1067,6 @@ public class UserInfo implements Serializable {
     public void setDescription(String description) {
         this.description = description;
     }
-
 
     /**
      * @return the createdBy
@@ -1421,6 +1335,85 @@ public class UserInfo implements Serializable {
         builder.append(description);
         builder.append("]");
         return builder.toString();
+    }
+
+    public static class ONLINE {
+        // 在线
+        public static final int ONLINE = 1;
+        // 下线
+        public static final int OFFLINE = 0;
+    }
+
+    public static class MARRIED {
+        // 未知
+        public static final int UNKNOWN = 0;
+        // 单身
+        public static final int SINGLE = 1;
+        // 结婚
+        public static final int MARRIED = 2;
+        // 离异
+        public static final int DIVORCE = 3;
+        // 丧偶
+        public static final int WIDOWED = 4;
+
+    }
+
+    public static class GENDER {
+        // 未知
+        public static final int UNKNOWN = 0;
+        // 女性
+        public static final int FEMALE = 1;
+        // 男性
+        public static final int MALE = 2;
+    }
+
+    public static class IDTYPE {
+        // 未知
+        public static final int UNKNOWN = 0;
+        // 身份证
+        public static final int IDCARD = 1;
+        // 护照
+        public static final int PASSPORT = 2;
+        // 学生证
+        public static final int STUDENTCARD = 3;
+        // 军人证
+        public static final int MILITARYCARD = 4;
+    }
+
+    public static class AUTHNTYPE {
+        // 用户名密码
+        public static final int NORMAL = 1;
+        // 手机
+        public static final int MOBILE = 2;
+        // 短信
+        public static final int SMS = 3;
+        // 邮箱
+        public static final int EMAIL = 4;
+
+        public static final int TIMEBASED_OPT = 5;
+
+        public static final int COUNTERBASED_OPT = 6;
+
+        public static final int HOTP_OPT = 7;
+
+        public static final int RSA_OPT = 8;
+        // 证书
+        public static final int CERTIFICATE = 9;
+        // usb证书
+        public static final int USBKEY = 10;
+
+    }
+
+    public static class EMPLOYMENTSTATUS {
+        // 在册人员
+        public static final int ACTIVE = 1;
+        // 离职人员
+        public static final int WITHDRAWN = 2;
+        // 停薪留职人员
+        public static final int INACTIVE = 3;
+        // 退休人员
+        public static final int RETIREE = 4;
+
     }
 
 }
