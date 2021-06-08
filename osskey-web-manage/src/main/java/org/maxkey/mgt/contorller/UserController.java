@@ -108,7 +108,7 @@ public class UserController {
      * @param id
      * @return
      */
-    @GetMapping(value = "/getUsers/{id}")
+    @GetMapping(value = "/query/{+id}")
     public ResponseResult<UserInfo> getUserInfo(@PathVariable("id") String id) {
         _logger.debug(id);
         UserInfo userInfo = userInfoService.getById(id);
@@ -154,7 +154,7 @@ public class UserController {
      * @return
      */
     @Log(title = "user:delete", operateType = OperateType.delete, messageScope = MessageScope.DB)
-    @DeleteMapping(value = "/batchDelete/{+id}")
+    @DeleteMapping(value = "/delete/{+id}")
     public ResponseResult<String> batchDeleteUsers(@PathVariable("id") String[] id) {
         if (userInfoService.removeByIds(Arrays.asList(id))) {
             return ResponseResult.newI18nInstance(ConstantsOperateMessage.DELETE_SUCCESS);
@@ -181,17 +181,6 @@ public class UserController {
 
 
 
-    @Log(title = "user:changePassword", operateType = OperateType.update, messageScope = MessageScope.DB)
-    @PostMapping(value = "/changePassword")
-    public ResponseResult<String> changePassword(@ModelAttribute("userInfo") UserInfo userInfo) {
-        _logger.debug(userInfo.getId());
-        if (userInfoService.changePassword(userInfo)) {
-            return ResponseResult.newI18nInstance(ConstantsOperateMessage.UPDATE_SUCCESS);
-
-        } else {
-            return ResponseResult.newI18nInstance(ConstantsCode.update_fail,ConstantsOperateMessage.UPDATE_ERROR);
-        }
-    }
 
     @RequestMapping(value = "/import",consumes = "multipart/*", headers = "content-type=multipart/form-data")
     public ResponseResult<String> importing( ExcelImport excelImportFile) {
