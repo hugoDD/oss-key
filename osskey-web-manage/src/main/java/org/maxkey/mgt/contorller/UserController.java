@@ -26,6 +26,7 @@ import org.maxkey.domain.ExcelImport;
 import org.maxkey.domain.PageResults;
 import org.maxkey.domain.UserInfo;
 import org.maxkey.domain.param.PageSearchFilter;
+import org.maxkey.domain.result.PageResult;
 import org.maxkey.domain.result.ResponseResult;
 import org.maxkey.persistence.service.UserInfoService;
 import org.maxkey.util.JsonUtils;
@@ -74,10 +75,10 @@ public class UserController {
      * @return
      */
     @PostMapping(value = {"/page"})
-    public PageResults<UserInfo> usersList(PageSearchFilter page) {
+    public PageResult<UserInfo> usersList(@RequestBody PageSearchFilter page) {
         //return userInfoService.queryPageResults(userInfo);
-        IPage<UserInfo> rs = userInfoService.page(page.newPage());
-        return new PageResults<>(rs);
+        IPage<UserInfo> rs = userInfoService.page(page.newPage(),page.rqslToQuery(UserInfo.class));
+        return PageResult.newInstance(rs.getTotal(),rs.getRecords());
 
     }
 
@@ -131,7 +132,7 @@ public class UserController {
      * @return
      */
     @Log(title = "user:update", operateType = OperateType.update, messageScope = MessageScope.DB)
-    @PostMapping(value = "/update")
+    @PutMapping(value = "/update")
     public ResponseResult<String> updateUsers(@Valid @RequestBody UserInfo userInfo) {
 
         //userInfo.setNameZHShortSpell(StringUtils.hanYu2Pinyin(userInfo.getDisplayName(), true));

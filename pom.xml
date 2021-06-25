@@ -21,6 +21,7 @@
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<java.version>1.8</java.version>
 		<poiVersion>4.1.2</poiVersion>
+		<hutool.version>5.6.5</hutool.version>
 	</properties>
 
 	<modules>

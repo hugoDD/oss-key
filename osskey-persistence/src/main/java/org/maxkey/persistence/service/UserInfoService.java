@@ -99,7 +99,7 @@ public class UserInfoService extends ServiceImpl<UserInfoMapper, UserInfo> {
 
     public boolean insert(UserInfo userInfo) {
         userInfo = passwordEncoder(userInfo);
-        if (insert(userInfo)) {
+        if (save(userInfo)) {
             kafkaPersistService.send(
                     KafkaIdentityTopic.USERINFO_TOPIC,
                     userInfo,
@@ -112,7 +112,7 @@ public class UserInfoService extends ServiceImpl<UserInfoMapper, UserInfo> {
 
     public boolean update(UserInfo userInfo) {
         userInfo = passwordEncoder(userInfo);
-        if (update(userInfo)) {
+        if (updateById(userInfo)) {
             kafkaPersistService.send(
                     KafkaIdentityTopic.USERINFO_TOPIC,
                     userInfo,
@@ -125,7 +125,7 @@ public class UserInfoService extends ServiceImpl<UserInfoMapper, UserInfo> {
     }
 
     public boolean delete(UserInfo userInfo) {
-        if (delete(userInfo)) {
+        if (removeById(userInfo)) {
             kafkaPersistService.send(
                     KafkaIdentityTopic.USERINFO_TOPIC,
                     userInfo,

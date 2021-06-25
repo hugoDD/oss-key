@@ -20,16 +20,16 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @EnableKnife4j
 public class SwaggerConfig {
 
-    @Value("${maxkey.swagger.title}")
+    @Value("${maxkey.swagger.title:}")
     String title;
 
-    @Value("${maxkey.swagger.description}")
+    @Value("${maxkey.swagger.description:}")
     String description;
 
-    @Value("${maxkey.swagger.version}")
+    @Value("${maxkey.swagger.version:v1.0}")
     String version;
 
-    @Value("${maxkey.swagger.enable}")
+    @Value("${maxkey.swagger.enable:true}")
     boolean enable;
 
     @Bean

@@ -83,4 +83,9 @@ public class WebConstants {
 
     public static final String ONLINE_TICKET_PREFIX = "OT";
 
+    /**
+     * 资源映射路径 前缀
+     */
+    public static final String RESOURCE_PREFIX = "/profile";
+
 }
